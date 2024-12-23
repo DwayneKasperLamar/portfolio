@@ -15,7 +15,7 @@ export function HackerRoom(props) {
       <mesh geometry={nodes.table_table_mat_0_1.geometry} material={materials.table_mat} />
       <mes geometry={nodes.table_table_mat_0_2.geometry} material={materials.computer_mat}>
         <meshMatcapMaterial map={monitortxt} />
-      </mes
+      </mesh
       <mesh geometry={nodes.table_table_mat_0_3.geometry} material={materials.server_mat} />
       <mesh geometry={nodes.table_table_mat_0_4.geometry} material={materials.vhsPlayer_mat} />
       <mesh geometry={nodes.table_table_mat_0_5.geometry} material={materials.stand_mat} />
