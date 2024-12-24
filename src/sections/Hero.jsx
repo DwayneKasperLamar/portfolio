@@ -1,7 +1,7 @@
-import {Canvas} from '@react-three/fiber'
-import HackerRoom from '../components/HackerRoom'
-import { Suspense } from 'react'
-import CanvasLoader from '../components/CanvasLoader'
+// // import {Canvas} from '@react-three/fiber'
+// // import HackerRoom from '../components/HackerRoom'
+// // import { Suspense } from 'react'
+// import CanvasLoader from '../components/CanvasLoader'
 
 
 const Hero = () => {
@@ -13,24 +13,23 @@ const Hero = () => {
             <p className="sm:text-3xl text-3xl font-medium text-white tex-center font-generalsans">Hi, I am Dwayne <span className="waving-hand">👋</span></p>
             <p className="hero_tag text-gray_gradient">From my Imaginations to Codes</p>
 
-            <div className="w-full h-full absolute inset-0">
-                <Canvas className="w-full h-full">    
-                    <Suspense fallback={<CanvasLoader/>}>
+             <div className="w-full h-full absolute inset-0">
+                {/* <Canvas className="w-full h-full">    
+                        <Suspense fallback={<CanvasLoader/>}>
 
-                         <perspectiveCamera makeDefault position={[0, 0, 30]}/>
+                         <perspectiveCamera makeDefault position={[0, 0, 30]}/> 
 
-                    </Suspense>
-                    <HackerRoom scale={0.05}
-                    position={[0, 0, 0]}
-                    rotation={[0, -Math.PI / 2,0]}/>
+                        </Suspense>
+                        <HackerRoom scale={0.05}
+                        position={[0, 0, 0]}
+                        rotation={[0, -Math.PI / 2,0]}/>
 
-                    <ambientLight intensity={1}/>
-                    <directionalLight position={[10, 10, 10]} intensity={0.5}/>
-                    
-                </Canvas>
+                        <ambientLight intensity={1}/>
+                        <directionalLight position={[10, 10, 10]} intensity={0.5}/> 
+                        
+               </Canvas> */}
 
             </div>
-
         </div>
         </section>
   )
