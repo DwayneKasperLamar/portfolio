@@ -1,13 +1,19 @@
-import Hero from './sections/Hero'
+// import Hero from './sections/Hero'
 import Navbar from './sections/Navbar'
 import About from './sections/About'
 
 const App = () => {
     return (
-        <main className="max-w-7xl mx-auto">
-            <Navbar/>
-            <Hero/>
-            <About/>
+        <main className="relative w-full h-screen overflow-hidden bg-[#010103]">
+            
+                <Navbar/>
+           
+            
+                {/* <Hero/> */}
+       
+           
+                <About/>
+            
         </main>
     )
 }

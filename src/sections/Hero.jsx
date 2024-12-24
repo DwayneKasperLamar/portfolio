@@ -1,14 +1,18 @@
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Environment, Preload } from '@react-three/drei'
+import { OrbitControls, Stage } from '@react-three/drei'
 import HackerRoom from '../components/HackerRoom'
 import { Suspense } from 'react'
 import CanvasLoader from '../components/CanvasLoader'
 
 const Hero = () => {
   return (
-    <section className="relative w-full h-screen mx-auto overflow-hidden">
-        <div className="absolute inset-0 top-[120px] max-w-7xl mx-auto flex flex-row items-start gap-5 px-6">
-            <div className="flex flex-col justify-center items-center mt-5 w-full">
+    <section className="relative w-full h-screen mx-auto">
+        {/* Background color */}
+        <div className="absolute inset-0 bg-[#010103]" />
+
+        {/* Content */}
+        <div className="absolute inset-0 top-[120px] max-w-7xl mx-auto sm:px-16 px-6 z-10">
+            <div className="flex flex-col justify-center items-center mt-5">
                 <p className="sm:text-3xl text-3xl font-medium text-white text-center font-generalsans">
                     Hi, I am Dwayne <span className="waving-hand">👋</span>
                 </p>
@@ -18,47 +22,39 @@ const Hero = () => {
             </div>
         </div>
 
-        <div className="absolute inset-0 w-full h-full">
+        {/* Canvas container with explicit dimensions */}
+        <div className="absolute inset-0" style={{ height: '100vh', width: '100vw' }}>
             <Canvas
-                shadows
-                dpr={[1, 2]}
-                gl={{ 
-                    preserveDrawingBuffer: true,
-                    antialias: true,
-                    alpha: true
+                style={{
+                    width: '100%',
+                    height: '100%',
+                    background: '#010103'
                 }}
                 camera={{
                     fov: 45,
                     near: 0.1,
-                    far: 200,
-                    position: [-4, 3, 6]
+                    far: 2000,
+                    position: [0, 2, 10]
                 }}
-                style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    background: 'transparent'
+                gl={{
+                    antialias: true,
+                    alpha: false
                 }}
             >    
                 <Suspense fallback={<CanvasLoader />}>
+                    <Stage
+                        environment="city"
+                        intensity={0.6}
+                        adjustCamera={false}
+                    >
+                        <HackerRoom />
+                    </Stage>
                     <OrbitControls
                         enableZoom={false}
                         maxPolarAngle={Math.PI / 2}
                         minPolarAngle={Math.PI / 2}
-                        enablePan={false}
-                        enableDamping
-                        dampingFactor={0.05}
-                        rotateSpeed={0.5}
+                        target={[0, 0, 0]}
                     />
-                    <HackerRoom
-                        scale={0.05}
-                        position={[0, -2, 0]}
-                        rotation={[0, -Math.PI / 2, 0]}
-                    />
-                    <Environment preset="city" />
-                    <Preload all />
                 </Suspense>
             </Canvas>
         </div>
