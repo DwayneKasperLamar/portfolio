@@ -15,14 +15,10 @@ const App = () => {
 
 const App = () => {
     return (
-        <main className="relative w-full h-screen overflow-hidden bg-[#010103]">
+        <main className="relative w-full h-screen">
             
                 <Navbar/>
-           
-            
                 {/* <Hero/> */}
-       
-           
                 <About/>
             
 >>>>>>> refs/remotes/origin/main
