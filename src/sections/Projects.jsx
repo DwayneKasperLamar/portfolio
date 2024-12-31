@@ -1,7 +1,11 @@
 import { Canvas } from "@react-three/fiber";
 import { myProjects } from "../constants";
 import { useState } from "react";
+import { Center } from "@react-three/drei";
+import DemoComputer from "../components/DemoComputer";
 // import  myProjects  from "../public/assets/myProjects";
+import CanvasLoader from '../components/CanvasLoader';
+import {Suspense} from "react"
 
 const projectCount = myProjects.length;
 
@@ -91,7 +95,19 @@ const Projects = () => {
 
             <div className="border bordder-black-300 bg-black-200 rounded-lg h-96 md:h-full">
             <Canvas>
-              
+              <ambientLight />
+             {/* <group position={[10, 10, 5]}>
+                  <directionalLight />
+                </group> */}
+
+              <Center>
+                <Suspense fallback={<CanvasLoader />}>
+                {/* <group scale={2} position={[0, -3, 0]} rotation={[0, -0.1, 0]}>
+                  <DemoComputer texture={currentProject.texture} />
+                </group> */}
+                </Suspense>
+                
+              </Center>
             </Canvas>
 
             </div>
@@ -101,3 +117,6 @@ const Projects = () => {
 };
 
 export default Projects;
+
+
+
