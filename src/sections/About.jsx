@@ -1,3 +1,13 @@
+<<<<<<< HEAD
+import Globe from "react-globe.gl"
+import { button } from "../components/"
+
+const About = () => {
+  return (
+    <section className="c-space my-20"> 
+        <div  className='gird xl:grid-cols-3 xl:grid-rows-6 md:grid-cols-2 grid-col-1 gap-5'>
+
+=======
 import { useState } from "react"
 import Globe from "react-globe.gl"
 import Button from "../components/Button"
@@ -17,18 +27,29 @@ const About = () => {
   return (
     <section className="c-space my-20"> 
         <div className='grid xl:grid-cols-3 xl:grid-rows-6 md:grid-cols-2 grid-col-1 gap-5'>
+>>>>>>> refs/remotes/origin/main
             <div className='col-span-1 xl:row-span-3'>
                 <div className='grid-container'>
                     <img src='/assets/grido.png'
                     alt='grid-1' className='w-full sm:h-[276px] h-fit object-contain'/>
+<<<<<<< HEAD
+
+                        <div>
+                            <p className='grid-headtext'>Hello, I'm Dwayne</p>
+=======
                         <div>
                             <p className='grid-headtext'>Hello, I&apos;m Dwayne</p>
+>>>>>>> refs/remotes/origin/main
                             <p className='grid-subtext'>
                                 with 3 years of Experience , 
                                 I have honed my skills in frontend and backend development, with a focus on animated 3D Projects 
                             </p>
                         </div>
                 </div>
+<<<<<<< HEAD
+
+=======
+>>>>>>> refs/remotes/origin/main
             </div>
             
             <div className='col-span-1 xl:row-span-3'>
@@ -36,9 +57,16 @@ const About = () => {
                     <img src="/assets/grid2.png" 
                     alt="grid-2"
                     className='w-full sm:w-[276px] h-fit object-contain' />
+<<<<<<< HEAD
+
+                    <div>
+                        <p className='grid-headtext'>Tech Stack</p>
+                         <p className='grid-subtext'>I specialize in javaScript/Typescript with a focus on React and Next,js ecosystems </p>
+=======
                     <div>
                         <p className='grid-headtext'>Tech Stack</p>
                          <p className='grid-subtext'>I specialize in javaScript/Typescript with a focus on React and Next.js ecosystems </p>
+>>>>>>> refs/remotes/origin/main
                     </div>
                 </div>
             </div>
@@ -54,6 +82,19 @@ const About = () => {
                             showGraticules
                             showAtmosphere
                             globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+<<<<<<< HEAD
+                            bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topologu/png"
+                            labelsData={[
+                                {
+                                    lat:40, lng: -100,
+                                    text: "I am Here,",
+                                    color: "white",
+                                    size:20,
+                                }
+                            ]}
+                        />
+
+=======
                             bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
                             labelsData={[
                                 {
@@ -65,19 +106,28 @@ const About = () => {
                                 }
                             ]}
                         />
+>>>>>>> refs/remotes/origin/main
                     </div>
                     <div>
                         <p className="grid-headtext">
                             I work remotely across most timezones.
                         </p>
+<<<<<<< HEAD
+
+                        <p className="grid-subtext">
+                            I'm based in Croatia, with remote work available
+=======
                         <p className="grid-subtext">
                             I&apos;m based in Croatia, with remote work available
+>>>>>>> refs/remotes/origin/main
                         </p>
                         <Button name="Contact Me" isBeam containerClass="w-full mt-10"/>
                     </div>
                 </div>
             </div>
 
+<<<<<<< HEAD
+=======
             <div className="xl:col-span-2 xl:row-span-3">
                     <div className="grid-container">
                         <img src="/assets/grid3.png" alt="grid-3"
@@ -110,6 +160,7 @@ const About = () => {
                     </div>
                 </div>
             </div>
+>>>>>>> refs/remotes/origin/main
         </div>
     </section>
   )
