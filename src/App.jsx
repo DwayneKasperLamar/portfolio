@@ -1,7 +1,11 @@
 // import Hero from './sections/Hero'
 import Navbar from './sections/Navbar'
 import About from './sections/About'
-<<<<<<< HEAD
+import Projects from './sections/projects'
+import Clients from './sections/Clients'
+import Contact from './sections/Contact'
+import Footer from './sections/Footer'
+import Experince from './sections/Experince'
 
 
 const App = () => {
@@ -11,7 +15,7 @@ const App = () => {
         <Navbar/>
         {/* <Hero/> */}
         <About/>
-=======
+
 
 const App = () => {
     return (
@@ -20,8 +24,12 @@ const App = () => {
                 <Navbar/>
                 {/* <Hero/> */}
                 <About/>
-            
->>>>>>> refs/remotes/origin/main
+                <Projects/>
+                <Clients/>
+                <Contact/>
+                <Experince/>
+                <Footer/>
+
         </main>
     )
 }

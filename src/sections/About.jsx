@@ -30,7 +30,7 @@ const About = () => {
 >>>>>>> refs/remotes/origin/main
             <div className='col-span-1 xl:row-span-3'>
                 <div className='grid-container'>
-                    <img src='/assets/grid1.png'
+                    <img src='/assets/grido.png'
                     alt='grid-1' className='w-full sm:h-[276px] h-fit object-contain'/>
 <<<<<<< HEAD
 
