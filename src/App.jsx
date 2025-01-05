@@ -7,6 +7,8 @@ import Contact from './sections/Contact'
 import Footer from './sections/Footer'
 import Experince from './sections/Experince'
 
+
+
 const App = () => {
     return (
         <main className="relative w-full h-screen">
@@ -19,7 +21,6 @@ const App = () => {
                 <Contact/>
                 <Experince/>
                 <Footer/>
-            
 
         </main>
     )
