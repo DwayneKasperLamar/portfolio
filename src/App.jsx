@@ -20,7 +20,7 @@ const App = () => {
                 <Experince/>
                 <Footer/>
             
->>>>>>> refs/remotes/origin/main
+
         </main>
     )
 }
