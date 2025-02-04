@@ -18,8 +18,8 @@ const About = () => {
     <section className="c-space my-20"> 
         <div className='grid xl:grid-cols-3 xl:grid-rows-6 md:grid-cols-2 grid-col-1 gap-5'>
             <div className='col-span-1 xl:row-span-3'>
-                <div className='grid-container'>
-                  <img src="assets/grido.png" alt="grid-1" className="w-full sm:h-[276px] h-fit object-contain" />
+                <div className='grid-container w-[276px]'>
+                  <img src="assets/grido.png" alt="grid-1" className="sm:h-[156px] object-contain rounded-lg" />
                         <div>
                             <p className='grid-headtext'>Hello, I&apos;m Dwayne</p>
                             <p className='grid-subtext'>
