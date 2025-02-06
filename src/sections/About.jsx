@@ -19,12 +19,12 @@ const About = () => {
         <div className='grid xl:grid-cols-3 xl:grid-rows-6 md:grid-cols-2 grid-col-1 gap-5'>
             <div className='col-span-1 xl:row-span-3'>
                 <div className='grid-container w-[276px]'>
-                  <img src="assets/grido.png" alt="grid-1" className="sm:h-[156px] object-contain rounded-lg" />
+                  <img src="assets/grido.png" alt="grid-1" className="sm:h-[156px] object-contain rounded-lg"/>
                         <div>
                             <p className='grid-headtext'>Hello, I&apos;m Dwayne</p>
                             <p className='grid-subtext'>
                                 with 3 years of Experience , 
-                                I have honed my skills in frontend and backend development, with a focus on animated 3D Projects 
+                                I have honed my skills in frontend and backend development, with a focus on  solving real world problems
                             </p>
                         </div>
                 </div>
@@ -37,7 +37,7 @@ const About = () => {
                     className='w-full sm:w-[276px] h-fit object-contain' />
                     <div>
                         <p className='grid-headtext'>Tech Stack</p>
-                         <p className='grid-subtext'>I specialize in javaScript/Typescript with a focus on React and Next.js ecosystems </p>
+                         <p className='grid-subtext'>I specialize in javaScript/Typescript with a focus on React and Next.js ecosystems including a variety of frameworks, tools and technologies. </p>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,8 @@ const About = () => {
                             I work remotely across most timezones.
                         </p>
                         <p className="grid-subtext">
-                            I&apos;m based in Nigeria, with remote work available
+                            I&apos;m based in Nigeria, and open to work remotely and collabrate with people from around the world.
+                            i love immersive work and work on max 15 hours daily
                         </p>
                         <Button name="Contact Me" isBeam containerClass="w-full mt-10"/>
                     </div>
@@ -86,7 +87,7 @@ const About = () => {
                                 Why i code
                             </p>
                             <p className="grid-subtext">
-                                Professional Neccesity
+                                the idea that i can create solutions and innovate existing solutions through programming and technology seems Godlike to me, building products and brands that enhacne humans and life  is what drives me.
                             </p>
                         </div>
                     </div>
