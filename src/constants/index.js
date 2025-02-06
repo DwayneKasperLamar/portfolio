@@ -264,7 +264,7 @@ export const workExperiences = [
     pos: 'Lead Developer/mobile',
     duration: '2022 - Present',
     title: "onCollos is an interior company that produces high-quality furniture and innovates existing home designes. it combines craftsmanship with creativiy to offer customers a platform to customize thier spaces.",
-    icon: '/assets/framer.svg',
+    icon: '/assets/oncollos.svg',
     animation: 'victory',
   },
   {
