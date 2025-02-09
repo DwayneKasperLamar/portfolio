@@ -8,24 +8,21 @@ const Footer = () => {
             <p>privacy Policy</p>
         </div>
 
-        q   <div className="flex gap-3">
-            <div className="social-icon">
-            <a href="https://github.com/DwaynekasperLamar" target="_blank" rel="noreferrer"> </a>
+           <div className="flex gap-3">
+            <a className="social-icon" href="https://github.com/DwaynekasperLamar" target="_blank" rel="noreferrer"> 
             <img src="/assets/github.svg" 
             alt="github"
             className="w-1/2 h-1/2" />
-            </div>
+            </a>
         </div>
 
 
          <div className="flex gap-3">
-            <div className="social-icon">
-            <a href="https://twitter.com/Dwaynekasper_" target="_blank" rel="noreferrer"> </a>
+            <a className="social-icon" href="https://twitter.com/Dwaynekasper_" target="_blank" rel="noreferrer"> 
             <img src="/assets/twitter.svg" 
             alt="github"
-            
             className="w-1/2 h-1/2" />
-            </div>
+            </a>
         </div>
 
 

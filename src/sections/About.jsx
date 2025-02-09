@@ -19,7 +19,7 @@ const About = () => {
         <div className='grid xl:grid-cols-3 xl:grid-rows-6 md:grid-cols-2 grid-col-1 gap-5'>
             <div className='col-span-1 xl:row-span-3'>
                 <div className='grid-container w-[276px]'>
-                  <img src="assets/grido.png" alt="grid-1" className="sm:h-[156px] object-contain rounded-lg"/>
+                  <img src="assets/grido.png" alt="grid1" className="sm:h-[156px] object-contain rounded-lg"/>
                         <div>
                             <p className='grid-headtext'>Hello, I&apos;m Dwayne</p>
                             <p className='grid-subtext'>
@@ -94,7 +94,7 @@ const About = () => {
                 </div>
             <div className="xl:col-span-1 xl:row-span-2">
                 <div className="grid-container">
-                    <img src="/assets/grid1.png" 
+                    <img src="/assets/grid4.png" 
                     alt="grid-4"
                     className="w-full md:h-[126px] sm:[276px] h-fit object-cover sm:object-top" />
                     <div className="space-y-2">
