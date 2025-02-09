@@ -10,6 +10,7 @@ const Footer = () => {
 
         q   <div className="flex gap-3">
             <div className="social-icon">
+            <a href="https://github.com/DwaynekasperLamar" target="_blank" rel="noreferrer"> </a>
             <img src="/assets/github.svg" 
             alt="github"
             className="w-1/2 h-1/2" />
@@ -19,8 +20,10 @@ const Footer = () => {
 
          <div className="flex gap-3">
             <div className="social-icon">
+            <a href="https://twitter.com/Dwaynekasper_" target="_blank" rel="noreferrer"> </a>
             <img src="/assets/twitter.svg" 
             alt="github"
+            
             className="w-1/2 h-1/2" />
             </div>
         </div>
