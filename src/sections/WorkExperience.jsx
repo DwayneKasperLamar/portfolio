@@ -1,12 +1,12 @@
-import { Suspense, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import Developer from '../components/Developer.jsx';
-import CanvasLoader from '../components/Loading.jsx';
+// import { Suspense, useState } from 'react';
+// import { Canvas } from '@react-three/fiber';
+// import { OrbitControls } from '@react-three/drei';
+// import Developer from '../components/Developer.jsx';
+// import CanvasLoader from '../components/Loading.jsx';
 import { workExperiences } from '../constants/index.js';
 
 const WorkExperience = () => {
-  const [animationName, setAnimationName] = useState('idle');
+  // const [animationName, setAnimationName] = useState('idle');
 
   return (
     <section className="c-space my-20" id="work">
@@ -15,7 +15,7 @@ const WorkExperience = () => {
 
         <div className="work-container">
           <div className="work-canvas">
-            <Canvas>
+            {/* <Canvas>
               <ambientLight intensity={7} />
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
               <directionalLight position={[10, 10, 10]} intensity={1} />
@@ -24,7 +24,7 @@ const WorkExperience = () => {
               <Suspense fallback={<CanvasLoader />}>
                 <Developer position-y={-3} scale={3} animationName={animationName} />
               </Suspense>
-            </Canvas>
+            </Canvas> */}
           </div>
 
           <div className="work-content">
