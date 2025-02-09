@@ -273,7 +273,7 @@ export const workExperiences = [
     pos: 'Mobile Developer',
     duration: '2023 - 2024',
     title: "SPACE is the Airbnb of Africa in offers more like searching for roomates if your a student, it also offers you a 3d view of houses before making rent or purchases. ",
-    icon: '/assets/sqaure.png',
+    icon: '/assets/sqaure logo.png',
     animation: 'clapping',
   },
 //   {
