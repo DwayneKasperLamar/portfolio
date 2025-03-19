@@ -53,7 +53,6 @@ const Navbar = () => {
                     <nav className="p-5">
                         <NavItems/>
                     </nav>
-
                 </div>
             </header>
     )
