@@ -62,9 +62,9 @@ export const myProjects = [
     desc: 'Uncollos is an interior company that goes beyond traditional design. it specializes in producing all kinds of furniture while making design and integral part of its broader mission .Uncollos is commited to innovating existing products and concepts, offering a unique platform that empowers clients to customise thier spaces with creativity and precision.',
     subdesc:
       'Built as a unique Software-as-a-Service app with Next.js 14, Tailwind CSS, TypeScript, Framer Motion and Convex, Uncollos is designed for optimal performance and scalability.',
-    href: 'https://www.youtube.com/watch?v=zfAb95tJvZQ',
+    href: 'https://github.com/DwayneKasperLamar/oncollos-store',
     texture: '/textures/project/project1.mp4',
-    logo: '/assets/project-logo1.png',
+    logo: '/assets/oncollos.png',
     logoStyle: {
       backgroundColor: '#2A1816',
       border: '0.2px solid #36201D',
