@@ -24,33 +24,33 @@ export const navLinks = [
 export const clientReviews = [
   {
     id: 1,
-    name: 'Emily Johnson',
+    name: 'Mrs Emily',
     position: 'Marketing Director at GreenLeaf',
-    img: 'assets/review1.png',
+    // img: 'assets/review1.png',
     review:
       ' He transformed our outdated website into a modern, user-friendly platform. His attention to detail and commitment to quality are unmatched. Highly recommend him for any web dev projects.',
   },
   {
     id: 2,
-    name: 'Mark Rogers',
+    name: 'Mr ighor',
     position: 'Founder of TechGear Shop',
-    img: 'assets/review2.png',
+    // img: 'assets/review2.png',
     review:
       'Dwayne’s expertise in web development is truly impressive. He delivered a robust and scalable solution for our e-commerce site, and our online sales have significantly increased since the launch. He’s a true professional! Fantastic work.',
   },
   {
     id: 3,
-    name: 'John Dohsas',
+    name: 'John Okafor',
     position: 'Project Manager at UrbanTech ',
-    img: 'assets/review3.png',
+    // img: 'assets/review3.png',
     review:
       'I can’t say enough good things about Dwayne. He was able to take our complex project requirements and turn them into a seamless, functional website. His problem-solving abilities are outstanding.',
   },
   {
     id: 4,
-    name: 'Ether Smith',
+    name: 'Renne Smith',
     position: 'CEO of BrightStar Enterprises',
-    img: 'assets/review4.png',
+    // img: 'assets/review4.png',
     review:
       'Dwayne was a pleasure to work with. He understood our requirements perfectly and delivered a website that exceeded our expectations. His skills in both frontend backend dev are top-notch.',
   },
@@ -89,25 +89,25 @@ export const myProjects = [
       },
       {
         id: 4,
-        name: 'Framer Motion',
-        path: '/assets/framer.png',
+        name: 'Sanity CMS',
+        path: '/assets/icon-sanity.jpg',
       },
     ],
   },
   {
-    title: 'LiveDoc - Real-Time Google Docs Clone',
-    desc: 'LiveDoc is a powerful collaborative app that elevates the capabilities of real-time document editing. As an enhanced version of Google Docs, It supports millions of collaborators simultaneously, ensuring that every change is captured instantly and accurately.',
+    title: 'Binge By Uncollos - A Movie Application',
+    desc: 'Binge is a dynamic and user-friendly movie streaming platform designed for movie lovers who want an extensive library of films at their fingertips. With a sleek, intuitive interface, Binge offers an endless selection of movies across all genres, from the latest blockbusters to timeless classics. The site’s seamless navigation makes it easy to discover new titles or revisit old favorites, with personalized recommendations tailored to your viewing history.',
     subdesc:
-      'With LiveDoc, users can experience the future of collaboration, where multiple contributors work together in real time without any lag, by using Next.js and Liveblocks newest features.',
-    href: 'https://www.youtube.com/watch?v=y5vE8y_f_OM',
+      'With multiple subscription tiers and flexible viewing options, Binge ensures that movie buffs have an optimal streaming experience anytime, anywhere.',
+    href: 'binge-brown.vercel.app',
     texture: '/textures/project/project2.mp4',
-    logo: '/assets/project-logo2.png',
+    logo: '/assets/Binge.jpg',
     logoStyle: {
       backgroundColor: '#13202F',
       border: '0.2px solid #17293E',
       boxShadow: '0px 0px 60px 0px #2F6DB54D',
     },
-    spotlight: '/assets/spotlight2.png',
+    spotlight: '/assets/spotlight2.jpg',
     tags: [
       {
         id: 1,
@@ -119,11 +119,7 @@ export const myProjects = [
         name: 'TailwindCSS',
         path: 'assets/tailwindcss.png',
       },
-      {
-        id: 3,
-        name: 'TypeScript',
-        path: '/assets/typescript.png',
-      },
+      
       {
         id: 4,
         name: 'Framer Motion',
@@ -136,7 +132,7 @@ export const myProjects = [
     desc: 'An innovative healthcare platform designed to streamline essential medical processes. It simplifies patient registration, appointment scheduling, and medical record management, providing a seamless experience for both healthcare providers and patients.',
     subdesc:
       'With a focus on efficiency, CarePulse integrantes complex forms and SMS notifications, by using Next.js, Appwrite, Twillio and Sentry that enhance operational workflows.',
-    href: 'https://www.youtube.com/watch?v=lEflo_sc82g',
+    href: '',
     texture: '/textures/project/project3.mp4',
     logo: '/assets/project-logo3.png',
     logoStyle: {
