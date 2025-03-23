@@ -99,7 +99,7 @@ export const myProjects = [
     desc: 'Binge is a dynamic and user-friendly movie streaming platform designed for movie lovers who want an extensive library of films at their fingertips. With a sleek, intuitive interface, Binge offers an endless selection of movies across all genres, from the latest blockbusters to timeless classics. The site’s seamless navigation makes it easy to discover new titles or revisit old favorites, with personalized recommendations tailored to your viewing history.',
     subdesc:
       'With multiple subscription tiers and flexible viewing options, Binge ensures that movie buffs have an optimal streaming experience anytime, anywhere.',
-    href: 'binge-brown.vercel.app',
+    href: 'https://binge-ten.vercel.app/',
     texture: '/textures/project/project2.mp4',
     logo: '/assets/Binge.jpg',
     logoStyle: {
