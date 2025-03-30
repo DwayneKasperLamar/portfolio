@@ -127,45 +127,45 @@ export const myProjects = [
       },
     ],
   },
-  // {
-  //   title: 'CarePulse - Health Management System',
-  //   desc: 'Space is a cutting-edge house renting platform that allows users to search for rental properties based on two key factors: budget and location. Whether you are  a first-time renter, relocating to a new city, or just looking for a change, Space simplifies the process by offering a personalized and user-friendly experience.',
-  //   subdesc:
-  //     'In today’s fast-paced world, finding a house that meets your budget and fits your ideal location can feel like a daunting task. That’s where Space comes in — a revolutionary house renting platform designed to make your search for the perfect home easier and more efficient.',
-  //   href: 'https://spaxe.site',
-  //   // texture: '/textures/project/project3.mp4',
-  //   logo: '/assets/project-logo3.png',
-  //   logoStyle: {
-  //     backgroundColor: '#60f5a1',
-  //     background:
-  //       'linear-gradient(0deg, #60F5A150, #60F5A150), linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(208, 213, 221, 0.8) 100%)',
-  //     border: '0.2px solid rgba(208, 213, 221, 1)',
-  //     boxShadow: '0px 0px 60px 0px rgba(35, 131, 96, 0.3)',
-  //   },
-  //   spotlight: '/assets/spotlight3.png',
-  //   tags: [
-  //     {
-  //       id: 1,
-  //       name: 'React.js',
-  //       path: '/assets/react.svg',
-  //     },
-  //     {
-  //       id: 2,
-  //       name: 'TailwindCSS',
-  //       path: 'assets/tailwindcss.png',
-  //     },
-  //     {
-  //       id: 3,
-  //       name: 'TypeScript',
-  //       path: '/assets/typescript.png',
-  //     },
-  //     {
-  //       id: 4,
-  //       name: 'Framer Motion',
-  //       path: '/assets/framer.png',
-  //     },
-  //   ],
-  // },
+  {
+    title: 'Spaxe - House Renting Platform',
+    desc: 'Space is a cutting-edge house renting platform that allows users to search for rental properties based on two key factors: budget and location. Whether you are  a first-time renter, relocating to a new city, or just looking for a change, Space simplifies the process by offering a personalized and user-friendly experience.',
+    subdesc:
+      'In today’s fast-paced world, finding a house that meets your budget and fits your ideal location can feel like a daunting task. That’s where Space comes in — a revolutionary house renting platform designed to make your search for the perfect home easier and more efficient.',
+    href: 'https://spaxe.site',
+    // texture: '/textures/project/project3.mp4',
+    logo: '/assets/spaxe.jpeg',
+    logoStyle: {
+      backgroundColor: '#60f5a1',
+      background:
+        'linear-gradient(0deg, #60F5A150, #60F5A150), linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(208, 213, 221, 0.8) 100%)',
+      border: '0.2px solid rgba(208, 213, 221, 1)',
+      boxShadow: '0px 0px 60px 0px rgba(35, 131, 96, 0.3)',
+    },
+    spotlight: '/assets/spotlight3.png',
+    tags: [
+      {
+        id: 1,
+        name: 'React.js',
+        path: '/assets/react.svg',
+      },
+      {
+        id: 2,
+        name: 'TailwindCSS',
+        path: 'assets/tailwindcss.png',
+      },
+      {
+        id: 3,
+        name: 'TypeScript',
+        path: '/assets/typescript.png',
+      },
+      {
+        id: 4,
+        name: 'Framer Motion',
+        path: '/assets/framer.png',
+      },
+    ],
+  },
   // {
   //   title: 'Horizon - Online Banking Platform',
   //   desc: 'Horizon is a comprehensive online banking platform that offers users a centralized finance management dashboard. It allows users to connect multiple bank accounts, monitor real-time transactions, and seamlessly transfer money to other users.',

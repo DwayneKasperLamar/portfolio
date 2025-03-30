@@ -5,7 +5,7 @@ const Clients = () => {
     <section className='c-space my-20'>
       <h3 className='head-text'>Clients Remarks</h3>
       <div className="client-container">
-        {clientReviews.map(({id, name, review,  ,position}) => (
+        {clientReviews.map(({id, name, review, position}) => (
             <div key={id} className="client-review">
               <div>
                 <p className="text-white font-light">{review}</p>
