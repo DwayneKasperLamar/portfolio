@@ -1,6 +1,12 @@
-import React from 'react'
+'use client';
 
-const Button = ({ name, isBeam = false, containerClass = '' }) => {
+interface ButtonProps {
+  name: string;
+  isBeam?: boolean;
+  containerClass?: string;
+}
+
+const Button = ({ name, isBeam = false, containerClass = '' }: ButtonProps) => {
   return (
     <button className={`btn ${containerClass}`}>
       {name}
@@ -11,7 +17,7 @@ const Button = ({ name, isBeam = false, containerClass = '' }) => {
         </span>
       )}
     </button>
-  )
-}
+  );
+};
 
-export default Button
+export default Button;

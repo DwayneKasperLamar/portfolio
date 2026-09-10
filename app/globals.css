@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #fdfdfb;
+  --bg-surface: #f3f3f5;
+  --bg-surface-alt: #e8e8ec;
+  --border-subtle: #e4e4e0;
+  --text-primary: #1a1a1a;
+  --text-secondary: #2a2a2a;
+  --text-muted: #888888;
+  --text-faint: #a3a3a3;
+}
+
+.dark {
+  --bg-base: #0e0e10;
+  --bg-surface: #17171a;
+  --bg-surface-alt: #232327;
+  --border-subtle: #232327;
+  --text-primary: #f1f1ee;
+  --text-secondary: #d8d8d4;
+  --text-muted: #8f8f97;
+  --text-faint: #6b6b73;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: ui-serif, Georgia, 'Times New Roman', serif;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+@layer utilities {
+  .status-dot {
+    @apply inline-block w-1.5 h-1.5 rounded-full bg-green-500;
+  }
+}

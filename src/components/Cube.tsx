@@ -1,14 +1,17 @@
+'use client';
+
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { useRef, useState } from 'react';
 import { Float, useGLTF, useTexture } from '@react-three/drei';
+import * as THREE from 'three';
 
 const Cube = ({ ...props }) => {
-  const { nodes } = useGLTF('models/cube.glb');
+  const { nodes } = useGLTF('/models/cube.glb') as any;
 
-  const texture = useTexture('textures/cube.png');
+  const texture = useTexture('/textures/cube.png');
 
-  const cubeRef = useRef();
+  const cubeRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
   useGSAP(() => {
@@ -17,7 +20,7 @@ const Cube = ({ ...props }) => {
         repeat: -1,
         repeatDelay: 0.5,
       })
-      .to(cubeRef.current.rotation, {
+      .to(cubeRef.current!.rotation, {
         y: hovered ? '+=2' : `+=${Math.PI * 2}`,
         x: hovered ? '+=2' : `-=${Math.PI * 2}`,
         duration: 2.5,
@@ -44,6 +47,6 @@ const Cube = ({ ...props }) => {
   );
 };
 
-useGLTF.preload('models/cube.glb');
+useGLTF.preload('/models/cube.glb');
 
 export default Cube;
