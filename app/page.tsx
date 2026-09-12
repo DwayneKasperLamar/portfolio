@@ -48,8 +48,13 @@ export default async function Home() {
           <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-4">Projects</h2>
           <ul className="space-y-2.5">
             {projects.map((project) => (
-              <li key={project.slug} className="flex gap-3 text-[0.95rem]">
-                <span className="text-line">&mdash;</span>
+              <li key={project.slug} className="flex items-center gap-3 text-[0.95rem]">
+                {project.logo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- arbitrary/admin-editable URL, next/image requires a static remote allowlist
+                  <img src={project.logo_url} alt="" width={20} height={20} className="rounded-sm shrink-0" />
+                ) : (
+                  <span className="text-line">&mdash;</span>
+                )}
                 <span>
                   <a
                     href={project.href}
