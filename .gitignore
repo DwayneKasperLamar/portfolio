@@ -21,8 +21,10 @@ next-env.d.ts
 # typescript
 *.tsbuildinfo
 
-# local env files
-.env*.local
+# local env files (anything starting with .env, except .env.example)
+.env*
+!.env.example
+!.env.local.example
 
 # Editor directories and files
 .vscode/*
@@ -34,3 +36,4 @@ next-env.d.ts
 *.njsproj
 *.sln
 *.sw?
+.vercel

@@ -1,5 +1,5 @@
 import ThemeToggleButton from '@/components/ThemeToggleButton';
-import TechIconRail from '@/components/TechIconRail';
+import TechIconRailLazy from '@/components/TechIconRailLazy';
 import { getProfile, getProjects, getTechItems } from '@/lib/content';
 
 export const dynamic = 'force-dynamic';
@@ -22,7 +22,7 @@ export default async function Home() {
 
   return (
     <>
-      <TechIconRail items={techItems} projects={projects} />
+      <TechIconRailLazy items={techItems} projects={projects} />
       <main className="max-w-[640px] mx-auto px-6 pt-24 pb-8">
         <div className="flex justify-between items-start gap-4 mb-10">
           <div>
