@@ -5,6 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Html } from '@react-three/drei';
 import type * as THREE from 'three';
 import type { TechItem, Project } from '@/lib/content';
+import SafeImage from '@/components/SafeImage';
 
 interface TechIconRailProps {
   items: TechItem[];
@@ -33,12 +34,8 @@ const TechIcon = ({ item, project }: { item: TechItem; project?: Project }) => {
       onPointerLeave={() => setHovered(false)}
       className="pointer-events-auto flex items-center gap-2 whitespace-nowrap cursor-pointer transition-transform duration-200"
       style={{ transform: hovered ? 'scale(1.15)' : 'scale(1)' }}>
-      {/* eslint-disable-next-line @next/next/no-img-element -- arbitrary/external, admin-editable URLs; next/image requires a static remote allowlist */}
-      <img src={`https://cdn.simpleicons.org/${item.icon_key}`} alt={item.label} width={28} height={28} />
-      {project?.logo_url && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={project.logo_url} alt={project.title} width={20} height={20} className="rounded-full" />
-      )}
+      <SafeImage src={`https://cdn.simpleicons.org/${item.icon_key}`} alt={item.label} width={28} height={28} />
+      {project?.logo_url && <SafeImage src={project.logo_url} alt={project.title} width={20} height={20} className="rounded-full" />}
       {hovered && (
         <span className="font-mono text-xs bg-surface border border-line rounded px-2 py-1 text-primary">
           {project ? `${item.label} — ${project.title}` : item.label}

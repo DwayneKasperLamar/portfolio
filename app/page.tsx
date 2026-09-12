@@ -1,5 +1,6 @@
 import ThemeToggleButton from '@/components/ThemeToggleButton';
 import TechIconRailLazy from '@/components/TechIconRailLazy';
+import ProjectBullet from '@/components/ProjectBullet';
 import { getProfile, getProjects, getTechItems } from '@/lib/content';
 
 export const dynamic = 'force-dynamic';
@@ -49,12 +50,7 @@ export default async function Home() {
           <ul className="space-y-2.5">
             {projects.map((project) => (
               <li key={project.slug} className="flex items-center gap-3 text-[0.95rem]">
-                {project.logo_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- arbitrary/admin-editable URL, next/image requires a static remote allowlist
-                  <img src={project.logo_url} alt="" width={20} height={20} className="rounded-sm shrink-0" />
-                ) : (
-                  <span className="text-line">&mdash;</span>
-                )}
+                <ProjectBullet logoUrl={project.logo_url} title={project.title} />
                 <span>
                   <a
                     href={project.href}

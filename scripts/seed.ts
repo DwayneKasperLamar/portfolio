@@ -59,7 +59,7 @@ async function main() {
       title: 'Vulttra',
       description: 'AI content generator (images, video, audio) for African SMEs.',
       href: 'https://vulltra-inc.vercel.app',
-      logo_url: 'https://www.google.com/s2/favicons?domain=vulltra-inc.vercel.app&sz=128',
+      logo_url: 'https://vulltra-inc.vercel.app/favicon.ico',
       sort_order: 4,
     },
   ];
@@ -73,7 +73,7 @@ async function main() {
     { label: 'Expo / React Native', icon_key: 'expo', category: 'stack', sort_order: 5 },
     { label: 'GSAP', icon_key: 'greensock', category: 'stack', sort_order: 6 },
     { label: 'Python', icon_key: 'python', category: 'skill', sort_order: 7 },
-    { label: 'AI tooling', icon_key: 'openai', category: 'skill', sort_order: 8 },
+    { label: 'AI tooling', icon_key: 'huggingface', category: 'skill', sort_order: 8 },
   ];
   await supabase.from('tech_items').insert(techItems);
 
