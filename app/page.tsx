@@ -1,12 +1,13 @@
 import ThemeToggleButton from '@/components/ThemeToggleButton';
 import TechIconRailLazy from '@/components/TechIconRailLazy';
 import ProjectBullet from '@/components/ProjectBullet';
-import { getProfile, getProjects, getTechItems } from '@/lib/content';
+import Link from 'next/link';
+import { getProfile, getProjects, getPublicNav, getTechItems } from '@/lib/content';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [profile, projects, techItems] = await Promise.all([getProfile(), getProjects(), getTechItems()]);
+  const [profile, projects, techItems, nav] = await Promise.all([getProfile(), getProjects(), getTechItems(), getPublicNav()]);
 
   if (!profile) {
     return (
@@ -34,6 +35,16 @@ export default async function Home() {
           </div>
           <ThemeToggleButton />
         </div>
+
+        {nav.length > 0 && (
+          <nav className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-muted mb-8">
+            {nav.map((l) => (
+              <Link key={l.href} href={l.href} className="hover:text-primary">
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+        )}
 
         <section className="mb-6">
           <p>{profile.current_role_text}</p>

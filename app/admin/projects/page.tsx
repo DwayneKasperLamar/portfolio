@@ -1,4 +1,5 @@
-import { getProjects } from '@/lib/content';
+import { getOwnerProjects } from '@/lib/content';
+import { VisibilitySelect, VisibilityBadge } from '../_ui';
 import { upsertProject, deleteProject } from '../actions';
 import type { Project } from '@/lib/content';
 
@@ -7,7 +8,7 @@ export const dynamic = 'force-dynamic';
 const fieldClass = 'w-full bg-surface-alt border border-line rounded px-3 py-2 text-primary placeholder:text-muted focus:outline-none';
 const labelClass = 'text-xs uppercase tracking-wide text-muted mb-1 block';
 
-function ProjectForm({ project }: { project?: Project }) {
+function ProjectForm({ project, withVisibility }: { project?: Project; withVisibility: boolean }) {
   return (
     <form action={upsertProject} className="flex flex-col gap-3 border border-line rounded-lg p-4">
       <label>
@@ -34,6 +35,7 @@ function ProjectForm({ project }: { project?: Project }) {
         <span className={labelClass}>Sort order</span>
         <input name="sort_order" type="number" defaultValue={project?.sort_order ?? 0} className={fieldClass} />
       </label>
+      {withVisibility && <VisibilitySelect value={project?.visibility ?? 'public'} />}
       <button type="submit" className="self-start bg-surface-alt border border-line rounded px-4 py-2 text-primary hover:border-muted transition-colors">
         {project ? 'Save' : 'Add project'}
       </button>
@@ -42,7 +44,9 @@ function ProjectForm({ project }: { project?: Project }) {
 }
 
 export default async function AdminProjectsPage() {
-  const projects = await getProjects();
+  const projects = await getOwnerProjects();
+  // The visibility column only exists after supabase/002_content_model.sql has been run.
+  const withVisibility = projects.length === 0 || projects.some((p) => p.visibility !== undefined);
 
   return (
     <div>
@@ -50,7 +54,8 @@ export default async function AdminProjectsPage() {
       <div className="flex flex-col gap-6 mb-10">
         {projects.map((project) => (
           <div key={project.slug} className="flex flex-col gap-2">
-            <ProjectForm project={project} />
+            {project.visibility && <VisibilityBadge value={project.visibility} />}
+            <ProjectForm project={project} withVisibility={withVisibility} />
             <form action={deleteProject}>
               <input type="hidden" name="slug" value={project.slug} />
               <button type="submit" className="text-xs text-red-500 hover:underline">
@@ -62,7 +67,7 @@ export default async function AdminProjectsPage() {
       </div>
 
       <h2 className="text-sm font-semibold text-primary mb-3">Add a project</h2>
-      <ProjectForm />
+      <ProjectForm withVisibility={withVisibility} />
     </div>
   );
 }

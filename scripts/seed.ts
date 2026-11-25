@@ -3,7 +3,22 @@
 // Run with: npm run seed  (after NEXT_PUBLIC_SUPABASE_URL and
 // SUPABASE_SERVICE_ROLE_KEY are set in .env.local)
 
-process.loadEnvFile?.('.env.local');
+try {
+  process.loadEnvFile?.('.env.local');
+} catch {
+  console.error(
+    'Could not find .env.local in the portfolio folder.\n' +
+      'Copy .env.local.example to a new file named exactly ".env.local" and fill in the values, then run this again.',
+  );
+  process.exit(1);
+}
+
+for (const name of ['NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']) {
+  if (!process.env[name]) {
+    console.error(`${name} is empty in .env.local. Fill it in (never paste it into chat), then run this again.`);
+    process.exit(1);
+  }
+}
 
 import { createClient } from '@supabase/supabase-js';
 import ws from 'ws';

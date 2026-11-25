@@ -1,10 +1,13 @@
 import { login } from './actions';
 
-export default function LoginPage({ searchParams }: { searchParams: { error?: string } }) {
+import { safeNextPath } from '@/lib/auth';
+
+export default function LoginPage({ searchParams }: { searchParams: { error?: string; next?: string } }) {
   return (
     <main className="max-w-sm mx-auto px-6 pt-32">
-      <h1 className="text-lg font-semibold text-primary mb-6">Admin login</h1>
+      <h1 className="text-lg font-semibold text-primary mb-6">Owner login</h1>
       <form action={login} className="flex flex-col gap-3">
+        <input type="hidden" name="next" value={safeNextPath(searchParams.next)} />
         <input
           type="password"
           name="password"
