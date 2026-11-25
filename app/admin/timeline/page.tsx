@@ -28,7 +28,7 @@ function EventForm({ event }: { event?: TimelineEvent }) {
         <textarea name="body" defaultValue={event?.body} rows={5} className={fieldClass} />
       </label>
       <label>
-        <span className={labelClass}>Photo URL (optional)</span>
+        <span className={labelClass}>Photo or video link (optional)</span>
         <input name="image_url" defaultValue={event?.image_url ?? ''} className={fieldClass} />
       </label>
       <VisibilitySelect value={event?.visibility} />

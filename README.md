@@ -7,7 +7,8 @@ Next.js 14 (App Router) + Tailwind + Supabase. Public site on top, a private are
 | Where | What | Who sees it |
 |---|---|---|
 | `/` | Intro, projects, stack, now, contact, menu | everyone |
-| `/story` | Biography timeline | public moments only |
+| `/story` | Biography as a depth walk (web) or stacked moments (phone), plus a plain list | public moments only |
+| `/gallery` | Videos and photos: living mosaic (web) or folding mosaic (phone) | public items in public "Gallery" collections |
 | `/journal`, `/journal/<slug>` | Journal | public entries only |
 | `/c/<slug>` | A collection: books, playlists, links, politics, life's works, image carousel | public collections and public items |
 | `/p/<slug>` | A free-form page | public pages only |
@@ -16,6 +17,13 @@ Next.js 14 (App Router) + Tailwind + Supabase. Public site on top, a private are
 
 Every piece of content has a **visibility**: `public` or `private`. New things default to **private**.
 The menu on the public site only lists things that exist and are public.
+
+## Adding to the Story and Gallery
+
+- **Story:** Admin > Timeline. Each moment can carry a photo or video link.
+- **Gallery:** Admin > Collections > new collection, type "Gallery (photos and videos)", visibility public, then add items.
+  "Image URL" is the photo or the still; "Link" is the video (YouTube, `.mp4`, `.webm`). Nothing is uploaded: paste links.
+- The menu shows "Story" and "Gallery" only once something public exists.
 
 ## Set up (once)
 

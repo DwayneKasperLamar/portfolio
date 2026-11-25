@@ -31,6 +31,9 @@ module.exports = {
         secondary: 'var(--text-secondary)',
         muted: 'var(--text-muted)',
         faint: 'var(--text-faint)',
+        stage: 'var(--bg-stage)',
+        veil: 'var(--veil)',
+        'on-veil': 'var(--on-veil)',
       },
       backgroundImage: {
         terminal: "url('/assets/terminal.png')",

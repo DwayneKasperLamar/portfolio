@@ -65,11 +65,11 @@ function ItemForm({ collectionSlug, item }: { collectionSlug: string; item?: Col
       </div>
       <div className="grid grid-cols-2 gap-3">
         <label>
-          <span className={labelClass}>Link (Spotify playlists show a player)</span>
+          <span className={labelClass}>Link (web page, Spotify, or a video: YouTube / .mp4)</span>
           <input name="url" defaultValue={item?.url ?? ''} className={fieldClass} />
         </label>
         <label>
-          <span className={labelClass}>Image URL (cover, photo)</span>
+          <span className={labelClass}>Image URL (cover, photo, or video still)</span>
           <input name="image_url" defaultValue={item?.image_url ?? ''} className={fieldClass} />
         </label>
       </div>

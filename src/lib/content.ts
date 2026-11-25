@@ -84,7 +84,7 @@ export const COLLECTION_KIND_LABELS: Record<CollectionKind, string> = {
   links: 'Links',
   politics: 'Politics',
   life_works: "Life's works",
-  carousel: 'Carousel (images)',
+  carousel: 'Gallery (photos and videos)',
   other: 'Other',
 };
 
@@ -238,17 +238,20 @@ export interface NavLink {
 
 /** The links shown under the header. Only things that exist AND are public appear. */
 export async function getPublicNav(): Promise<NavLink[]> {
-  const [pages, timeline, journal, collections] = await Promise.all([
+  const [pages, timeline, journal, collections, gallery] = await Promise.all([
     getPublicPages(),
     getPublicTimeline(),
     getPublicJournal(),
     getPublicCollections(),
+    getPublicGalleryItems(),
   ]);
 
   const links: NavLink[] = [];
   if (timeline.length > 0) links.push({ href: '/story', label: 'Story' });
   if (journal.length > 0) links.push({ href: '/journal', label: 'Journal' });
-  for (const c of collections) if (c.show_in_nav) links.push({ href: `/c/${c.slug}`, label: c.title });
+  if (gallery.length > 0) links.push({ href: '/gallery', label: 'Gallery' });
+  // Gallery collections are all shown together on /gallery, so they get no menu link of their own.
+  for (const c of collections) if (c.show_in_nav && c.kind !== 'carousel') links.push({ href: `/c/${c.slug}`, label: c.title });
   for (const p of pages) if (p.show_in_nav) links.push({ href: `/p/${p.slug}`, label: p.title });
   return links;
 }
@@ -303,4 +306,21 @@ export async function getLatestPublicJournalEntry(): Promise<JournalEntry | null
 export async function getWhatIDo(): Promise<CollectionItem[]> {
   const data = await getPublicCollection('what-i-do');
   return data ? data.items : [];
+}
+
+/** Everything public in collections of type "Gallery" (stored as kind `carousel`). */
+export async function getPublicGalleryItems(): Promise<CollectionItem[]> {
+  const collections = (await getPublicCollections()).filter((c) => c.kind === 'carousel');
+  if (collections.length === 0) return [];
+  return rows<CollectionItem>(
+    getSupabase()
+      .from('collection_items')
+      .select('*')
+      .in(
+        'collection_slug',
+        collections.map((c) => c.slug),
+      )
+      .eq('visibility', 'public')
+      .order('sort_order', { ascending: true }),
+  );
 }

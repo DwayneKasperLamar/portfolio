@@ -1,33 +1,27 @@
-# Memory — Portfolio: content positioning, widgets, gallery concepts
+# Memory — Portfolio: positioning live, gallery built
 
-Last updated: 2026-11-25 (evening)
+Last updated: 2026-11-25 (late)
 
-## What was built (NOT committed or pushed; live site has only commit 871e670)
-- Bigger side tech icons on a light chip; vertical spread fixed. Not yet looked at in a browser.
-- Intro rewritten as "Software Architect", detailed and direct (role, intro, Now). Applied to the database.
-- "What I do" section (public collection `what-i-do`) and "Working on now" (public collection `working-on`).
-- Books collection (public): Meditations and Crime and Punishment, status "reading now"; Open Library covers.
-- Widgets: GitHub "Latest pushes" commit feed (public repos only, cached 15 min, optional `GITHUB_TOKEN`), Reading now, Latest journal.
-- Bug fix: `src/lib/supabase.ts` now uses `cache: 'no-store'`. Next.js was serving cached rows, so the live site kept the old intro.
-- `scripts/seed-content.ts` holds PUBLIC starter content only.
-- Gallery mockup, three concepts (A light table = recommended, B depth walk, C living mosaic): https://claude.ai/artifact/B3sGQY2Fz9FHvpXBJr92SJ
-- Checks: build passes, lint clean; local run against the real database showed the new content and no private items on the home page.
+## What was built
+- Live (pushed `aa43080`, checked): software architect intro, "What I do", "Working on now", books (Meditations; Crime and Punishment), widgets with a GitHub "Latest pushes" feed, bigger side icons, the stale-data cache fix.
+- NOT yet committed: `/story` depth walk (web) and stacked moments (phone), new `/gallery` living mosaic (web) and folding mosaic (phone), full-screen viewer (photo, .mp4/.webm, YouTube). Files in `src/components/gallery/`. New colour tokens `stage`, `veil`, `on-veil`. Side icons now hide below 900px.
+- Mockups: https://claude.ai/artifact/B3sGQY2Fz9FHvpXBJr92SJ
+- Checks: build and lint pass. Both layouts screenshotted with sample data in headless Edge (before the final depth-walk spacing tweak). Touch, drag, wheel, hover and the viewer have NOT been tried by hand.
 
 ## Decisions made
-- The GitHub repository is public: no private project names or private writing in any committed file (rule added to AGENTS.md).
-- Gallery is not built until Dwayne picks a concept.
+- Repository stays public for now (Dwayne: push even while public). So no private project names or private writing in committed files.
+- Gallery = public items of collections with type "Gallery" (stored kind `carousel`, so no database change). Media are pasted links, no upload.
+- Story = timeline events; moments without media show as written cards.
 
-## Problems solved
-- Stale live content: Next data cache on Supabase requests (see above).
-- A commit was blocked by the safety check because the batch named private projects in a public repo. Files were cleaned afterwards; nothing was pushed. Commit 871e670 (already pushed) still contains two private project names in AGENTS.md, memory.md and a session post.
+## Current state
+- No public timeline events or gallery items yet, so "Story" and "Gallery" are hidden from the menu.
 
 ## Next session starts with
-1. Push: Dwayne said "push" believing the repo is private, but an anonymous check on 2026-11-25 showed it still PUBLIC. Push only after it checks as private, or after a clear yes to push it public.
-2. After deploy: check the live intro, widgets and icons. Until then, do not press Save on /admin/profile (the live form may show cached old text).
-3. Gallery: Dwayne chose C and B for different pages. Mockup v2 (web + phone layouts) published, waiting for approval. Proposed: Story page = depth walk (phone: stacked moments); Gallery page = living mosaic (phone: folding mosaic). Then build and ask for real videos and photos.
-4. GitHub widget look: waiting for Dwayne's screenshot.
+1. Ask whether to push the gallery, then check it live.
+2. Get real videos and photos (with caption and year) from Dwayne and add them.
+3. GitHub widget look: waiting for Dwayne's screenshot.
 
 ## Open questions
-- Is the page assignment and each phone layout approved?
-- Add `GITHUB_TOKEN` in Vercel?
+- Add `GITHUB_TOKEN` in Vercel (avoids GitHub's request limit)?
+- Make the repository private later?
 - Delete the unused 3D models and textures in `public/`?

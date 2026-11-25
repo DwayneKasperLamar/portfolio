@@ -10,14 +10,16 @@ interface PageShellProps {
   hideNav?: boolean;
   backHref?: string;
   backLabel?: string;
+  /** A wider column for the immersive Story and Gallery pages. */
+  wide?: boolean;
 }
 
 // Shared frame for every inner page: back link, title, navigation, theme toggle.
-const PageShell = async ({ title, subtitle, children, hideNav, backHref = '/', backLabel = '← Home' }: PageShellProps) => {
+const PageShell = async ({ title, subtitle, children, hideNav, backHref = '/', backLabel = '← Home', wide }: PageShellProps) => {
   const nav = hideNav ? [] : await getPublicNav();
 
   return (
-    <main className="max-w-[640px] mx-auto px-6 pt-16 pb-8">
+    <main className={`${wide ? 'max-w-[980px]' : 'max-w-[640px]'} mx-auto px-6 pt-16 pb-8`}>
       <div className="flex justify-between items-start gap-4 mb-8">
         <Link href={backHref} className="font-mono text-xs text-muted hover:text-primary">
           {backLabel}

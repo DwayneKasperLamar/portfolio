@@ -60,7 +60,7 @@ const TechIconRail = ({ items, projects }: TechIconRailProps) => {
   if (items.length === 0) return null;
 
   return (
-    <div className="hidden md:block fixed inset-y-0 right-0 w-48 pointer-events-none z-10" aria-hidden={false}>
+    <div className="hidden min-[900px]:block fixed inset-y-0 right-0 w-48 pointer-events-none z-10" aria-hidden={false}>
       <Canvas camera={{ position: [0, 0, 10], fov: 40 }}>
         <ambientLight intensity={1} />
         <PointerTilt>
