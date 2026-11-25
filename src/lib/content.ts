@@ -264,3 +264,43 @@ export async function getOwnerPage(slug: string): Promise<SitePage | null> {
   const { data, error } = await getSupabase().from('pages').select('*').eq('slug', slug).maybeSingle();
   return error ? null : data;
 }
+
+// ---- Home page: "Working on" and data-driven widgets ------------------------------
+
+// "Working on" is an ordinary collection with the slug `working-on`, so it is edited in
+// Admin > Collections and every item has its own public/private switch.
+export const WORKING_ON_SLUG = 'working-on';
+
+export async function getWorkingOn(): Promise<CollectionItem[]> {
+  const data = await getPublicCollection(WORKING_ON_SLUG);
+  return data ? data.items : [];
+}
+
+/** Public book items whose status contains "reading" (e.g. "reading now"). */
+export async function getReadingNow(): Promise<CollectionItem[]> {
+  const collections = (await getPublicCollections()).filter((c) => c.kind === 'books');
+  if (collections.length === 0) return [];
+  const items = await rows<CollectionItem>(
+    getSupabase()
+      .from('collection_items')
+      .select('*')
+      .in(
+        'collection_slug',
+        collections.map((c) => c.slug),
+      )
+      .eq('visibility', 'public')
+      .ilike('status', '%reading%')
+      .order('sort_order', { ascending: true }),
+  );
+  return items.slice(0, 3);
+}
+
+export async function getLatestPublicJournalEntry(): Promise<JournalEntry | null> {
+  return (await getPublicJournal())[0] ?? null;
+}
+
+/** Items of the public `what-i-do` collection, shown under the home page introduction. */
+export async function getWhatIDo(): Promise<CollectionItem[]> {
+  const data = await getPublicCollection('what-i-do');
+  return data ? data.items : [];
+}

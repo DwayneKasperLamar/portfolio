@@ -4,8 +4,8 @@ import Footer from '@/sections/Footer';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Dwayne Kasper',
-  description: 'Dwayne Kasper — software developer in Lagos, Nigeria. React, Next.js, TypeScript, Expo.',
+  title: 'Dwayne Kasper — Software Architect',
+  description: 'Dwayne Kasper — software architect in Lagos, Nigeria. Designing and building products end to end with React, Next.js, TypeScript, Expo, Python and AI.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

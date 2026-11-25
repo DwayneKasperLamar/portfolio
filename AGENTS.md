@@ -5,8 +5,7 @@ that only he can open. Next.js 14 (App Router), Tailwind, Supabase, deployed on 
 (https://portfolio-dwayne.vercel.app). `app/` pages, `src/` shared code, `supabase/` database scripts.
 
 Where things stand is in `memory.md` (root). How each session went is in `docs/sessions/`. `README.md` has setup steps
-and the privacy rules in short. This file is *how we work together*; the sibling projects (Vulttra, Kosher Spa,
-FreszBasket, Amadi-PA) use the same habits and this file was modelled on theirs.
+and the privacy rules in short. This file is *how we work together*; Dwayne's other projects use the same habits and this file was modelled on theirs.
 
 ---
 
@@ -29,7 +28,9 @@ first time they appear. Teach in the reply; keep the *changes* narrow.
 
 ## Hard rules for this repo
 
-1. **Privacy is the point of this site. Private content must never reach a public page.**
+1. **Privacy is the point of this site. Private content must never reach a public page, or a committed file.**
+   - The GitHub repository is public unless Dwayne says otherwise. Code, docs, `memory.md`, session posts and seed
+     scripts must not name private projects or contain private writing. Private content lives only in the database.
    - Every content row has `visibility`: `public` or `private`. New things default to private; anything unclear becomes private.
    - The server reads Supabase with the service-role key, which ignores database row rules. So `src/lib/content.ts` is the gate:
      `getPublic*` for public pages, `getOwner*` only behind the login. Never call a `getOwner*` function from a public page.

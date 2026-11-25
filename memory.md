@@ -1,34 +1,33 @@
-# Memory — Portfolio: private content model built, not yet live
+# Memory — Portfolio: content positioning, widgets, gallery concepts
 
-Last updated: 2026-11-25
+Last updated: 2026-11-25 (evening)
 
-## What was built
-- Content model and privacy: `supabase/002_content_model.sql` (already run by Dwayne), `src/lib/content.ts` (`getPublic*` / `getOwner*`), `src/lib/owner.ts`, `src/lib/auth.ts`, `middleware.ts`, `src/lib/safe-url.ts`.
-- Public pages: `/story`, `/journal`, `/journal/[slug]`, `/c/[slug]`, `/p/[slug]`. Owner-only: `/private`, `/private/journal/[slug]`, `/private/p/[slug]`.
-- Admin editors: pages, timeline, journal, collections (with items), projects (visibility). Actions in `app/admin/actions.ts`.
-- Project setup copied from his other projects: `AGENTS.md`, `CLAUDE.md`, `.claude/skills/` (architect, review, recover, remember, imprint), `docs/sessions/`.
-- Checks passed: tsc, lint, production build, and a local test of the login redirects with and without the admin env vars.
+## What was built (NOT committed or pushed; live site has only commit 871e670)
+- Bigger side tech icons on a light chip; vertical spread fixed. Not yet looked at in a browser.
+- Intro rewritten as "Software Architect", detailed and direct (role, intro, Now). Applied to the database.
+- "What I do" section (public collection `what-i-do`) and "Working on now" (public collection `working-on`).
+- Books collection (public): Meditations and Crime and Punishment, status "reading now"; Open Library covers.
+- Widgets: GitHub "Latest pushes" commit feed (public repos only, cached 15 min, optional `GITHUB_TOKEN`), Reading now, Latest journal.
+- Bug fix: `src/lib/supabase.ts` now uses `cache: 'no-store'`. Next.js was serving cached rows, so the live site kept the old intro.
+- `scripts/seed-content.ts` holds PUBLIC starter content only.
+- Gallery mockup, three concepts (A light table = recommended, B depth walk, C living mosaic): https://claude.ai/artifact/B3sGQY2Fz9FHvpXBJr92SJ
+- Checks: build passes, lint clean; local run against the real database showed the new content and no private items on the home page.
 
 ## Decisions made
-- Private = owner-only login. Visibility is `public` or `private`; default private.
-- Privacy enforced in code (service-role key ignores row rules); database row rules are the second lock.
-- Plain-text bodies, no markdown or HTML. Images are URLs.
-- Nothing committed or pushed yet; commit only when Dwayne says so.
+- The GitHub repository is public: no private project names or private writing in any committed file (rule added to AGENTS.md).
+- Gallery is not built until Dwayne picks a concept.
 
 ## Problems solved
-- Forgeable admin cookie when env vars were unset: now fails closed.
-- Scripted multi-line replace missed because files use CRLF: use the Edit tool.
-
-## Current state
-- Live site still shows "Content isn't set up yet". On 2026-11-25 `npm run seed` failed: no `.env.local` file exists in the portfolio folder (only `.env.local.example`). The seed script now explains this in plain words.
-- Dwayne said the SQL has been run in Supabase. Vercel env vars: not confirmed.
+- Stale live content: Next data cache on Supabase requests (see above).
+- A commit was blocked by the safety check because the batch named private projects in a public repo. Files were cleaned afterwards; nothing was pushed. Commit 871e670 (already pushed) still contains two private project names in AGENTS.md, memory.md and a session post.
 
 ## Next session starts with
-1. Confirm `.env.local` exists (check with `ls`, never read it), run `npm run seed`, confirm the four env vars in Vercel, redeploy, and check the live site.
-2. Ask whether to commit.
-3. Then fill in content with Dwayne (biography, journal, books, politics, playlists) and mock up Story / Library / Playlists before more UI.
+1. Push: Dwayne said "push" believing the repo is private, but an anonymous check on 2026-11-25 showed it still PUBLIC. Push only after it checks as private, or after a clear yes to push it public.
+2. After deploy: check the live intro, widgets and icons. Until then, do not press Save on /admin/profile (the live form may show cached old text).
+3. Gallery: Dwayne chose C and B for different pages. Mockup v2 (web + phone layouts) published, waiting for approval. Proposed: Story page = depth walk (phone: stacked moments); Gallery page = living mosaic (phone: folding mosaic). Then build and ask for real videos and photos.
+4. GitHub widget look: waiting for Dwayne's screenshot.
 
 ## Open questions
-- Delete the unused 3D models and textures in `public/` (about 12 MB)?
-- Login rate limit and image upload: wanted now or later?
-- Amadi-PA (folder `ProjectTasks`): should its to-dos or widget idea feed the portfolio?
+- Is the page assignment and each phone layout approved?
+- Add `GITHUB_TOKEN` in Vercel?
+- Delete the unused 3D models and textures in `public/`?

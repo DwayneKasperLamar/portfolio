@@ -33,11 +33,14 @@ const TechIcon = ({ item, project }: { item: TechItem; project?: Project }) => {
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
       className="pointer-events-auto flex items-center gap-2 whitespace-nowrap cursor-pointer transition-transform duration-200"
-      style={{ transform: hovered ? 'scale(1.15)' : 'scale(1)' }}>
-      <SafeImage src={`https://cdn.simpleicons.org/${item.icon_key}`} alt={item.label} width={28} height={28} />
-      {project?.logo_url && <SafeImage src={project.logo_url} alt={project.title} width={20} height={20} className="rounded-full" />}
+      style={{ transform: hovered ? 'scale(1.12)' : 'scale(1)' }}>
+      {/* Light chip behind every logo: dark logos (Next.js, Expo) vanish on the dark theme without it. */}
+      <span className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white border border-line shadow-md">
+        <SafeImage src={`https://cdn.simpleicons.org/${item.icon_key}`} alt={item.label} width={36} height={36} />
+      </span>
+      {project?.logo_url && <SafeImage src={project.logo_url} alt={project.title} width={28} height={28} className="rounded-full border border-line bg-white" />}
       {hovered && (
-        <span className="font-mono text-xs bg-surface border border-line rounded px-2 py-1 text-primary">
+        <span className="font-mono text-sm bg-surface border border-line rounded px-2.5 py-1.5 text-primary shadow-md">
           {project ? `${item.label} — ${project.title}` : item.label}
         </span>
       )}
@@ -63,7 +66,7 @@ const TechIconRail = ({ items, projects }: TechIconRailProps) => {
         <PointerTilt>
           {items.map((item, index) => {
             const project = item.project_slug ? projects.find((p) => p.slug === item.project_slug) : undefined;
-            const spread = 8;
+            const spread = 6;
             const y = items.length > 1 ? spread / 2 - index * (spread / (items.length - 1)) : 0;
 
             return (

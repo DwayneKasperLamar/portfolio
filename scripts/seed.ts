@@ -32,13 +32,13 @@ async function main() {
     id: 1,
     name: 'Dwayne Kasper',
     location: 'Lagos, Nigeria',
-    role_title: 'Software Developer',
+    role_title: 'Software Architect',
     current_role_text:
-      'I’m a software developer working mostly in React, Next.js, TypeScript and Expo — across web and mobile. Currently lead developer at Uncollos, an interior design company building a furniture customization platform.',
+      'I’m a software architect in Lagos. I take a product from a rough idea to something people use and pay for: I decide how the system fits together, design the data, wire in the payments, and build the mobile and web apps myself.',
     previous_role_text:
-      'Before that I was a mobile developer at Spaxe (formerly SPACE), a house-renting platform built around budget and location search, with a 3D view of listings before you rent or buy.',
+      'I’m leading the build of Uncollos, an interior design company’s furniture customization platform. Before that I built mobile at Spaxe (formerly SPACE), a house-renting platform with budget and location search and a 3D view of listings. I also build my own products for the Nigerian market, including Kosher Spa and Vulttra.',
     now_text:
-      'Building Vulttra, and generally leaning into AI-assisted product workflows — it shows up across Vulttra, Kosher Spa, and the AI interview tool Bogey.',
+      'Making AI part of how products get designed and shipped, from Vulttra’s content studio to the AI interview tool Bogey, while moving my backends to Python.',
     email: 'dwaynekasperlamar@gmail.com',
     github_url: 'https://github.com/DwaynekasperLamar',
     twitter_url: 'https://twitter.com/Dwaynekasper_',

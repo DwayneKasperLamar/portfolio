@@ -5,6 +5,7 @@ const TRACKED_ENV_VARS = [
   'SUPABASE_SERVICE_ROLE_KEY',
   'ADMIN_PASSWORD',
   'ADMIN_SESSION_SECRET',
+  'GITHUB_TOKEN', // optional: raises the GitHub widget's rate limit
 ] as const;
 
 export default function AdminEnvPage() {

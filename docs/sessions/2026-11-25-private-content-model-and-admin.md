@@ -4,8 +4,7 @@
 
 ## What we set out to do
 Bring live content onto the site (it showed "Content isn't set up yet") and grow it into a documentary and biography: pages,
-carousels, links, journals, playlists, books, politics, life's works, with a large private part. Study Vulttra, Kosher Spa,
-FreszBasket and Amadi-PA first, especially their skills and `AGENTS.md`.
+carousels, links, journals, playlists, books, politics, life's works, with a large private part. Study Dwayne's other projects first, especially their skills and `AGENTS.md`.
 
 ## What we built
 - `supabase/002_content_model.sql`: `visibility` on everything; new tables `pages`, `timeline_events`, `journal_entries`, `collections`, `collection_items`; row rules so the anon key sees only public rows.

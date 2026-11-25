@@ -2,12 +2,35 @@ import ThemeToggleButton from '@/components/ThemeToggleButton';
 import TechIconRailLazy from '@/components/TechIconRailLazy';
 import ProjectBullet from '@/components/ProjectBullet';
 import Link from 'next/link';
-import { getProfile, getProjects, getPublicNav, getTechItems } from '@/lib/content';
+import WorkingOn from '@/components/WorkingOn';
+import WhatIDo from '@/components/WhatIDo';
+import GitHubWidget from '@/components/widgets/GitHubWidget';
+import ReadingWidget from '@/components/widgets/ReadingWidget';
+import JournalWidget from '@/components/widgets/JournalWidget';
+import {
+  getLatestPublicJournalEntry,
+  getProfile,
+  getProjects,
+  getPublicNav,
+  getReadingNow,
+  getTechItems,
+  getWorkingOn,
+  getWhatIDo,
+} from '@/lib/content';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [profile, projects, techItems, nav] = await Promise.all([getProfile(), getProjects(), getTechItems(), getPublicNav()]);
+  const [profile, projects, techItems, nav, workingOn, reading, latestEntry, whatIDo] = await Promise.all([
+    getProfile(),
+    getProjects(),
+    getTechItems(),
+    getPublicNav(),
+    getWorkingOn(),
+    getReadingNow(),
+    getLatestPublicJournalEntry(),
+    getWhatIDo(),
+  ]);
 
   if (!profile) {
     return (
@@ -46,6 +69,8 @@ export default async function Home() {
           </nav>
         )}
 
+        <WorkingOn items={workingOn} />
+
         <section className="mb-6">
           <p>{profile.current_role_text}</p>
         </section>
@@ -53,6 +78,8 @@ export default async function Home() {
         <section className="mb-6">
           <p>{profile.previous_role_text}</p>
         </section>
+
+        <WhatIDo items={whatIDo} />
 
         <hr className="border-line my-10" />
 
@@ -89,6 +116,15 @@ export default async function Home() {
         <section className="mb-6">
           <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-4">Now</h2>
           <p>{profile.now_text}</p>
+        </section>
+
+        <section className="mb-6">
+          <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-4">Activity</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <GitHubWidget profileUrl={profile.github_url} />
+            <ReadingWidget items={reading} />
+            <JournalWidget entry={latestEntry} />
+          </div>
         </section>
 
         <hr className="border-line my-10" />
