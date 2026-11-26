@@ -1,7 +1,15 @@
-const EmailButton = ({ email, subject, children = 'Email me' }: { email: string; subject?: string; children?: React.ReactNode }) => (
-  <a
-    href={`mailto:${email}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`}
-    className="inline-flex items-center justify-center rounded-full border border-primary px-5 py-2 text-sm font-semibold text-primary hover:bg-surface-alt transition-colors">
+const EmailButton = ({
+  email,
+  subject,
+  className = '',
+  children = 'Email me',
+}: {
+  email: string;
+  subject?: string;
+  className?: string;
+  children?: React.ReactNode;
+}) => (
+  <a href={`mailto:${email}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`} className={`btn btn-fill ${className}`}>
     {children}
   </a>
 );

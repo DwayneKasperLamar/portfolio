@@ -15,7 +15,7 @@ import {
   LISTS,
 } from '@/lib/content';
 
-const sectionHeading = 'font-mono text-xs uppercase tracking-wider text-muted mb-4';
+const sectionHeading = 'label mb-4';
 
 // Everything marked "private", in one place. Only the owner can open this.
 export default async function PrivateHome() {
@@ -54,7 +54,7 @@ export default async function PrivateHome() {
       subtitle="Only you can see this. Public things live on the public site."
       hideNav
       backLabel="← Site">
-      <p className="mb-8 font-mono text-xs">
+      <p className="mb-8 font-sans text-xs">
         <Link href="/admin/journal" className="text-muted hover:text-primary">
           Edit in admin →
         </Link>

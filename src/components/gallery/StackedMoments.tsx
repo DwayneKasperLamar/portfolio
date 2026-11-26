@@ -52,7 +52,7 @@ const StackedMoments = ({ moments, onOpen }: { moments: Moment[]; onOpen: (index
             className="relative block w-full h-full overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl origin-top text-left">
             <Frame moment={m} bare />
             <span className="absolute inset-x-0 bottom-0 block px-5 pt-14 pb-5 pr-10 bg-gradient-to-t from-veil to-transparent text-on-veil">
-              <span className="block font-mono text-xs opacity-85">
+              <span className="block font-sans text-xs opacity-85">
                 {m.label} &middot; {i + 1} of {moments.length}
               </span>
               <span className="block text-lg font-semibold leading-snug">{m.title}</span>

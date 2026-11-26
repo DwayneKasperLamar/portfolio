@@ -31,7 +31,7 @@ export default async function CvPage() {
     <PageShell title={profile.name} subtitle={`${profile.role_title} · ${profile.location}`} hideNav>
       <div className="text-[0.92rem] print:text-[10pt] print:leading-snug">
         <p className="mb-1">{d.bio}</p>
-        <p className="font-mono text-xs text-muted mb-4 break-words">{reach.filter(Boolean).join(' · ')}</p>
+        <p className="font-sans text-xs text-muted mb-4 break-words">{reach.filter(Boolean).join(' · ')}</p>
         <p className="mb-8 print:hidden">
           <PrintButton />
         </p>
@@ -42,7 +42,7 @@ export default async function CvPage() {
               <li key={e.id} className="break-inside-avoid">
                 <p>
                   <b>{e.subtitle}</b> &middot; {e.title}
-                  {e.status && <span className="font-mono text-xs text-muted"> &middot; {e.status}</span>}
+                  {e.status && <span className="font-sans text-xs text-muted"> &middot; {e.status}</span>}
                 </p>
                 <p className="text-secondary">{e.notes}</p>
               </li>

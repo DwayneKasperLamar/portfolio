@@ -22,7 +22,7 @@ export default async function JournalEntryPage({ params }: { params: { slug: str
       backHref="/journal"
       backLabel="← Journal">
       <BodyText text={entry.body} />
-      {entry.tags.length > 0 && <p className="font-mono text-xs text-muted mt-8">{entry.tags.map((t) => `#${t}`).join('  ')}</p>}
+      {entry.tags.length > 0 && <p className="font-sans text-xs text-muted mt-8">{entry.tags.map((t) => `#${t}`).join('  ')}</p>}
     </PageShell>
   );
 }

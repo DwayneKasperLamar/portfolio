@@ -5,7 +5,7 @@ const JournalList = ({ entries, basePath = '/journal', showVisibility }: { entri
   <ul className="space-y-4">
     {entries.map((e) => (
       <li key={e.slug}>
-        <p className="font-mono text-xs text-muted">
+        <p className="font-sans text-xs text-muted">
           {e.entry_date}
           {e.mood && ` · ${e.mood}`}
           {showVisibility && ` · ${e.visibility}`}

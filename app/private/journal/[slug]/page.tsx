@@ -15,7 +15,7 @@ export default async function PrivateJournalEntry({ params }: { params: { slug: 
       backHref="/private"
       backLabel="← Private">
       <BodyText text={entry.body} />
-      {entry.tags.length > 0 && <p className="font-mono text-xs text-muted mt-8">{entry.tags.map((t) => `#${t}`).join('  ')}</p>}
+      {entry.tags.length > 0 && <p className="font-sans text-xs text-muted mt-8">{entry.tags.map((t) => `#${t}`).join('  ')}</p>}
     </PageShell>
   );
 }

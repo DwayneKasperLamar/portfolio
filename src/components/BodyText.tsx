@@ -15,7 +15,7 @@ const BodyText = ({ text, className = '' }: { text: string; className?: string }
       {paragraphs.map((p, i) => {
         if (p.startsWith('## ')) {
           return (
-            <h2 key={i} className="font-mono text-xs uppercase tracking-wider text-muted pt-3">
+            <h2 key={i} className="label pt-3">
               {p.slice(3)}
             </h2>
           );
@@ -31,7 +31,7 @@ const BodyText = ({ text, className = '' }: { text: string; className?: string }
                       &darr;
                     </span>
                   )}
-                  <span className="border border-line bg-surface rounded-md px-3 py-1.5 font-mono text-xs text-primary">{step}</span>
+                  <span className="border border-line bg-surface rounded-md px-3 py-1.5 font-sans text-xs text-primary">{step}</span>
                 </li>
               ))}
             </ol>

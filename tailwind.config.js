@@ -4,6 +4,10 @@ module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx}', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-body)', 'system-ui', 'sans-serif'],
+        head: ['var(--font-head)', 'Georgia', 'serif'],
+      },
       colors: {
         black: {
           DEFAULT: '#000',
@@ -24,6 +28,7 @@ module.exports = {
         // These flip value when the `.dark` class is toggled by next-themes, so
         // `bg-base`/`bg-surface`/`text-primary`/etc. work the same in light and dark.
         base: 'var(--bg-base)',
+        inverse: 'var(--bg-base)', // text on a filled button ("text-base" would mean a font size)
         surface: 'var(--bg-surface)',
         'surface-alt': 'var(--bg-surface-alt)',
         line: 'var(--border-subtle)',
@@ -36,6 +41,8 @@ module.exports = {
         blueprint: 'var(--blueprint)',
         'blueprint-ink': 'var(--blueprint-ink)',
         badge: 'var(--badge)',
+        'inverse-muted': 'var(--text-inverse-muted)',
+        'line-inverse': 'var(--line-inverse)',
         veil: 'var(--veil)',
         'on-veil': 'var(--on-veil)',
       },

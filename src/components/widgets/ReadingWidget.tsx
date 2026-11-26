@@ -16,7 +16,7 @@ const ReadingWidget = ({ items }: { items: CollectionItem[] }) => {
             )}
             <p className="text-sm">
               <span className="text-primary">{b.title}</span>
-              {b.subtitle && <span className="block font-mono text-xs text-muted">{b.subtitle}</span>}
+              {b.subtitle && <span className="block font-sans text-xs text-muted">{b.subtitle}</span>}
             </p>
           </li>
         ))}

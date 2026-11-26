@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- photos are uploaded or linked in the admin */
 import Link from 'next/link';
-import { Briefcase, Cake, Calendar, Link2, MapPin } from 'lucide-react';
 import type { Profile } from '@/lib/content';
 import { DEFAULT_AVATAR, headerDetails } from '@/lib/profile-header';
 import { safeUrl } from '@/lib/safe-url';
@@ -53,97 +52,76 @@ interface MobileHeaderProps {
   owner: boolean; // logged in: "Edit profile" replaces "Email me"
 }
 
-// The profile header shown on phones only. Wider screens keep the simple text header.
+// The profile header shown on phones only. Wider screens keep the text header.
 const MobileHeader = ({ profile, counts, owner }: MobileHeaderProps) => {
   const d = headerDetails(profile);
   const avatar = safeUrl(d.avatar) ?? DEFAULT_AVATAR;
   const cover = safeUrl(d.cover);
-  const github = safeUrl(profile.github_url);
-  const action = 'flex items-center justify-center rounded-full border border-line py-2.5 text-sm font-semibold text-primary';
 
-  const meta = [
-    { icon: Briefcase, text: d.company },
-    { icon: MapPin, text: profile.location },
-    { icon: Calendar, text: d.joined },
-    { icon: Cake, text: d.born && `Born ${d.born}` },
-  ].filter((m) => m.text);
-
-  const stats = [
-    [counts.roles, counts.roles === 1 ? 'current role' : 'current roles'],
-    [counts.caseStudies, counts.caseStudies === 1 ? 'case study' : 'case studies'],
-  ].filter(([n]) => Number(n) > 0);
+  // Two even columns of short facts.
+  const facts = [
+    d.company,
+    profile.location,
+    d.joined,
+    counts.roles > 0 && `${counts.roles} current ${counts.roles === 1 ? 'role' : 'roles'}`,
+    counts.caseStudies > 0 && `${counts.caseStudies} case ${counts.caseStudies === 1 ? 'study' : 'studies'}`,
+    d.born && `Born ${d.born}`,
+  ].filter((f): f is string => Boolean(f));
 
   return (
-    <header className="md:hidden -mx-6 mb-8">
-      <div className="relative h-[150px] bg-blueprint overflow-hidden">
-        {cover ? <img src={cover} alt="" className="w-full h-full object-cover" /> : <Blueprint />}
+    <header className="pb-6 md:hidden">
+      <div className="relative h-32 overflow-hidden bg-blueprint">
+        {cover ? <img src={cover} alt="" className="h-full w-full object-cover" /> : <Blueprint />}
         <CoverButtons title={profile.name} />
       </div>
 
-      <div className="px-4">
-        <div className="relative -mt-[46px] w-[92px] h-[92px] rounded-full border-4 border-base bg-surface overflow-hidden">
-          <img
-            src={avatar}
-            alt={profile.name}
-            // the starter photo is a tall portrait: keep the face in the circle
-            className={`w-full h-full object-cover ${avatar === DEFAULT_AVATAR ? 'object-[50%_70%] scale-[1.35] origin-[43%_55%]' : ''}`}
-          />
+      <div className="grid gap-3.5 px-5">
+        <div>
+          <div className="relative -mt-11 h-[88px] w-[88px] overflow-hidden rounded-full border-4 border-base bg-surface">
+            <img
+              src={avatar}
+              alt={profile.name}
+              // the starter photo is a tall portrait: keep the face in the circle
+              className={`h-full w-full object-cover ${avatar === DEFAULT_AVATAR ? 'object-[50%_70%] scale-[1.35] origin-[43%_55%]' : ''}`}
+            />
+          </div>
+          <h1 className="mt-3 flex flex-wrap items-center gap-2 text-[27px] font-semibold leading-tight text-primary">
+            {profile.name}
+            {d.verified && <CheckBadge />}
+          </h1>
+          {d.handle && <p className="text-sm text-muted">{d.handle}</p>}
         </div>
 
-        <h1 className="flex flex-wrap items-center gap-2 mt-2 text-2xl font-bold text-primary leading-tight">
-          {profile.name}
-          {d.verified && <CheckBadge />}
-        </h1>
-        {d.handle && <p className="font-mono text-sm text-muted">{d.handle}</p>}
-        {d.bio && <p className="mt-2.5 text-[0.95rem]">{d.bio}</p>}
+        {d.bio && <p className="font-head text-[19px] font-medium leading-[1.4] text-primary [text-wrap:pretty]">{d.bio}</p>}
 
         {profile.now_text && (
-          <p className="flex items-center gap-2 mt-2.5 font-mono text-xs text-primary">
-            <span className="status-dot" />
-            {profile.now_text}
-          </p>
+          <div>
+            <span className="pill">
+              <span className="status-dot" />
+              {profile.now_text}
+            </span>
+          </div>
         )}
 
-        <ul className="flex flex-wrap gap-x-4 gap-y-1.5 mt-2.5 font-mono text-xs text-muted">
-          {meta.map(({ icon: Icon, text }) => (
-            <li key={text} className="flex items-center gap-1.5">
-              <Icon size={14} aria-hidden />
-              {text}
-            </li>
+        <ul className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[13px] leading-snug text-muted">
+          {facts.map((f) => (
+            <li key={f}>{f}</li>
           ))}
-          {github && (
-            <li className="flex items-center gap-1.5 min-w-0">
-              <Link2 size={14} aria-hidden />
-              <a href={github} target="_blank" rel="noreferrer" className="truncate hover:text-primary">
-                {github.replace(/^https?:\/\/(www\.)?/, '')}
-              </a>
-            </li>
-          )}
         </ul>
 
-        {stats.length > 0 && (
-          <p className="flex flex-wrap gap-x-4 gap-y-1 mt-2.5 text-sm text-muted">
-            {stats.map(([n, label]) => (
-              <span key={label}>
-                <b className="text-primary">{n}</b> {label}
-              </span>
-            ))}
-          </p>
-        )}
-
-        <div className="grid grid-cols-2 gap-2.5 mt-3.5">
-          <Link href="/cv" className={action}>
-            View CV
-          </Link>
+        <div className="grid grid-cols-2 gap-2.5">
           {owner ? (
-            <Link href="/admin/profile" className={action}>
+            <Link href="/admin/profile" className="btn btn-fill">
               Edit profile
             </Link>
           ) : (
-            <a href={`mailto:${profile.email}`} className={action}>
+            <a href={`mailto:${profile.email}`} className="btn btn-fill">
               Email me
             </a>
           )}
+          <Link href="/cv" className="btn">
+            View CV
+          </Link>
         </div>
       </div>
     </header>

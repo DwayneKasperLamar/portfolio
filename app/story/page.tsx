@@ -19,7 +19,7 @@ export default async function StoryPage() {
         <>
           <Experience kind="story" moments={fromTimeline(events)} />
           <details className="mt-10 max-w-[592px]">
-            <summary className="cursor-pointer font-mono text-xs text-muted hover:text-primary mb-6">Read it as a list</summary>
+            <summary className="cursor-pointer font-sans text-xs text-muted hover:text-primary mb-6">Read it as a list</summary>
             <TimelineList events={events} />
           </details>
         </>

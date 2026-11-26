@@ -266,15 +266,17 @@ export async function getPublicList(slug: string): Promise<CollectionItem[]> {
 export interface NavLink {
   href: string;
   label: string;
+  short?: string; // for the narrow phone tabs
 }
 
 /** The short menu: work first, the person second. */
 export async function getPublicNav(): Promise<NavLink[]> {
   const caseStudies = await getPublicList(LISTS.caseStudies);
   return [
-    ...(caseStudies.length > 0 ? [{ href: '/work', label: 'Case studies' }] : []),
+    { href: '/#experience', label: 'Work' },
+    ...(caseStudies.length > 0 ? [{ href: '/work', label: 'Case studies', short: 'Cases' }] : []),
     { href: '/cv', label: 'CV' },
-    { href: '/about', label: 'About me' },
+    { href: '/about', label: 'About me', short: 'About' },
     { href: '/#contact', label: 'Contact' },
   ];
 }

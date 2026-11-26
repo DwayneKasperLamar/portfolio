@@ -37,7 +37,7 @@ const Frame = ({ moment, playing, bare }: FrameProps) => {
       <span className="flex flex-col items-center justify-center gap-2 w-full h-full p-4 text-center bg-surface-alt overflow-hidden">
         {!bare && (
           <>
-            <span className="font-mono text-xs text-muted">{moment.label}</span>
+            <span className="font-sans text-xs text-muted">{moment.label}</span>
             <span className="text-primary leading-snug">{moment.title}</span>
           </>
         )}
@@ -48,7 +48,7 @@ const Frame = ({ moment, playing, bare }: FrameProps) => {
   return (
     <span className="relative block w-full h-full">
       {picture}
-      {isVideo && <span className="absolute right-2 top-2 font-mono text-[0.65rem] bg-veil text-on-veil rounded-full px-2 py-0.5 pointer-events-none">&#9654; video</span>}
+      {isVideo && <span className="absolute right-2 top-2 font-sans text-[0.65rem] bg-veil text-on-veil rounded-full px-2 py-0.5 pointer-events-none">&#9654; video</span>}
     </span>
   );
 };

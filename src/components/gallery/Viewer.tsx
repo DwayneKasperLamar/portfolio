@@ -11,7 +11,7 @@ interface ViewerProps {
   onChange: (index: number | null) => void;
 }
 
-const button = 'font-mono text-xs border border-on-veil rounded-md px-4 py-2 text-on-veil';
+const button = 'font-sans text-xs border border-on-veil rounded-md px-4 py-2 text-on-veil';
 
 // Full-screen view of one moment. Escape closes, arrow keys move.
 const Viewer = ({ moments, index, onChange }: ViewerProps) => {
@@ -81,7 +81,7 @@ const Viewer = ({ moments, index, onChange }: ViewerProps) => {
       ) : null}
 
       <div className="text-center max-w-[560px]">
-        <p className="font-mono text-xs opacity-80">
+        <p className="font-sans text-xs opacity-80">
           {index + 1} of {moments.length}
           {m.label && ` · ${m.label}`}
         </p>

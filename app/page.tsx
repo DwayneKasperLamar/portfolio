@@ -1,20 +1,21 @@
 import Link from 'next/link';
 import { cookies } from 'next/headers';
-import ThemeToggleButton from '@/components/ThemeToggleButton';
-import TechIconRailLazy from '@/components/TechIconRailLazy';
 import MobileHeader from '@/components/MobileHeader';
+import PhoneTabs from '@/components/PhoneTabs';
+import SiteHeader from '@/components/SiteHeader';
+import Hero from '@/components/Hero';
+import Block from '@/components/Block';
 import Experience from '@/components/Experience';
-import Section from '@/components/Section';
 import TitledList from '@/components/TitledList';
+import Offers from '@/components/Offers';
 import CaseStudyList from '@/components/CaseStudyList';
 import Quotes from '@/components/Quotes';
-import Tools from '@/components/Tools';
+import ToolTiles from '@/components/ToolTiles';
 import Contact from '@/components/Contact';
 import EmailButton from '@/components/EmailButton';
 import BodyText from '@/components/BodyText';
 import { ADMIN_SESSION_COOKIE, isValidSession } from '@/lib/auth';
 import { getProfile, getProjects, getPublicList, getPublicNav, getTechItems, LISTS } from '@/lib/content';
-import { headerDetails } from '@/lib/profile-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,86 +47,131 @@ export default async function Home() {
 
   // Only changes a button label; no private content is loaded on this page.
   const owner = await isValidSession(cookies().get(ADMIN_SESSION_COOKIE)?.value);
-  const { bio } = headerDetails(profile);
-  const about = [profile.current_role_text, profile.previous_role_text].filter(Boolean).join('\n\n');
 
+  // The web menu jumps to sections of this page; each appears only if the section exists.
+  const webLinks = [
+    experience.length > 0 && { href: '/#experience', label: 'Work' },
+    caseStudies.length > 0 && { href: '/#case-studies', label: 'Case studies' },
+    ai.length > 0 && { href: '/#ai', label: 'How I work' },
+    offers.length > 0 && { href: '/#services', label: 'Services' },
+    { href: '/#about', label: 'About' },
+    { href: '/#contact', label: 'Contact' },
+  ].filter((l): l is { href: string; label: string } => Boolean(l));
+
+  // One page, two arrangements. The source order is the phone order; on the web the opening
+  // comes first and the tool logos move up under it (md:order-*).
   return (
     <>
-      <TechIconRailLazy items={techItems} projects={projects} />
-      <main className="max-w-[640px] mx-auto px-6 pt-0 md:pt-24 pb-8">
-        <MobileHeader
-          profile={profile}
-          counts={{
-            roles: experience.filter((e) => e.status?.toLowerCase() === 'current').length,
-            caseStudies: caseStudies.length,
-          }}
-          owner={owner}
-        />
+      <SiteHeader name={profile.name} email={profile.email} links={webLinks} />
+      <main className="flex flex-col text-[15px]">
+        <div className="md:hidden">
+          <MobileHeader
+            profile={profile}
+            counts={{
+              roles: experience.filter((e) => e.status?.toLowerCase() === 'current').length,
+              caseStudies: caseStudies.length,
+            }}
+            owner={owner}
+          />
+        </div>
+        <PhoneTabs links={nav} />
+        <Hero profile={profile} className="md:order-1" />
 
-        {/* Web header */}
-        <div className="hidden md:block mb-6">
-          <div className="flex justify-between items-start gap-4">
-            <div>
-              <h1 className="text-xl font-semibold text-primary mb-1">{profile.name}</h1>
-              <p className="font-mono text-xs text-muted">
-                {profile.location} &middot; {profile.role_title}
-              </p>
-            </div>
-            <ThemeToggleButton />
-          </div>
-          {bio && <p className="mt-6 text-xl leading-snug text-primary">{bio}</p>}
-          <div className="mt-4 flex flex-wrap items-center gap-4">
-            <EmailButton email={profile.email} />
-            <Link href="/cv" className="inline-flex items-center justify-center rounded-full border border-line px-5 py-2 text-sm font-semibold text-primary hover:border-muted transition-colors">
-              View CV
-            </Link>
-            {profile.now_text && (
-              <span className="flex items-center gap-2 font-mono text-xs text-muted">
-                <span className="status-dot" />
-                {profile.now_text}
-              </span>
-            )}
-          </div>
+        {experience.length > 0 && (
+          <Block id="experience" label="Work experience" title="Where I have worked" className="md:order-3">
+            <Experience items={experience} />
+          </Block>
+        )}
+        {caseStudies.length > 0 && (
+          <Block id="case-studies" label="Case studies" title="Problems and decisions" className="md:order-3">
+            <CaseStudyList items={caseStudies} cards />
+          </Block>
+        )}
+        {ai.length > 0 && (
+          <Block id="ai" label="How I work with AI" title="AI does much of the typing. I make the decisions." className="md:order-3">
+            <TitledList items={ai} layout="points" />
+          </Block>
+        )}
+
+        {/* Phone: "What I do" then "Work with me". Web: the offers first, areas of work under them. */}
+        <div id="services" className="flex flex-col md:order-3 md:scroll-mt-[68px]">
+          {whatIDo.length > 0 && (
+            <Block label="What I do" className="md:order-2 md:!pt-8 md:[&_h2]:hidden">
+              <TitledList items={whatIDo} layout="areas" />
+            </Block>
+          )}
+          {offers.length > 0 && (
+            <Block label="Work with me" webLabel="Services" title="Work with me" className="md:order-1">
+              <Offers items={offers} />
+              <EmailButton email={profile.email} subject="Working together" className="mt-4 w-full md:hidden">
+                Email me about it
+              </EmailButton>
+            </Block>
+          )}
         </div>
 
-        {nav.length > 0 && (
-          <nav className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-muted mb-10">
-            {nav.map((l) => (
-              <Link key={l.href} href={l.href} className="hover:text-primary">
-                {l.label}
+        {quotes.length > 0 && (
+          <Block label="What people say" title="What people say" className="md:order-3 md:[&_.label]:hidden">
+            <Quotes items={quotes} />
+          </Block>
+        )}
+
+        <section id="about" className="px-5 pb-2 pt-8 scroll-mt-14 md:order-3 md:px-10 md:pb-24 md:pt-20 md:scroll-mt-[68px]">
+          <div className="md:mx-auto md:grid md:max-w-[1080px] md:grid-cols-[260px_minmax(0,1fr)] md:gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-20">
+            <h2 className="mb-[18px] md:mb-0">
+              <span className="label block">About</span>
+              <span className="mt-1.5 hidden font-head text-[34px] font-semibold leading-tight text-primary md:block">About me</span>
+            </h2>
+            <div>
+              <BodyText text={profile.current_role_text} className="text-secondary md:text-lg" />
+              <Link href="/about" className="mt-4 hidden text-sm font-medium text-primary underline decoration-line hover:decoration-primary md:inline-block">
+                Story, books and projects &rarr;
               </Link>
-            ))}
-          </nav>
+            </div>
+          </div>
+        </section>
+
+        {techItems.length > 0 && (
+          <section aria-label="Tools" className="px-5 pb-2 pt-8 md:order-2 md:border-y md:border-line md:bg-surface md:px-10 md:py-7">
+            <div className="md:mx-auto md:max-w-[1080px]">
+              <h2 className="label mb-[18px] md:sr-only">Tools</h2>
+              <ToolTiles items={techItems} projects={projects} className="grid-cols-5 lg:grid-cols-10" />
+            </div>
+          </section>
         )}
 
-        <Experience items={experience} />
+        {/* Web: a contrasting band that invites contact. */}
+        <section id="contact" className="px-5 pb-2 pt-8 scroll-mt-14 md:order-4 md:bg-primary md:px-10 md:py-[72px] md:scroll-mt-[68px]">
+          <div className="md:mx-auto md:grid md:max-w-[1080px] md:grid-cols-[minmax(0,1fr)_minmax(0,440px)] md:items-center md:gap-10 lg:gap-20">
+            <div>
+              <h2 className="mb-[18px] md:mb-0">
+                <span className="label block md:hidden">Contact</span>
+                <span className="hidden text-balance font-head text-[40px] font-semibold leading-tight text-inverse md:block">
+                  Tell me what you are building.
+                </span>
+              </h2>
+              <p className="mt-3 hidden text-base text-inverse-muted md:block">Open to remote software architect roles and project work.</p>
+            </div>
+            <Contact profile={profile} extra={contact} />
+          </div>
+        </section>
 
-        {caseStudies.length > 0 && (
-          <Section title="Case studies" id="case-studies">
-            <CaseStudyList items={caseStudies} />
-          </Section>
-        )}
-
-        <TitledList title="How I work with AI" items={ai} />
-        <TitledList title="What I do" items={whatIDo} />
-        <TitledList title="Work with me" items={offers}>
-          <p className="mt-5">
-            <EmailButton email={profile.email} subject="Working together">
-              Email me about it
-            </EmailButton>
-          </p>
-        </TitledList>
-        <Quotes items={quotes} />
-
-        {about && (
-          <Section title="About">
-            <BodyText text={about} />
-          </Section>
-        )}
-        <Tools items={techItems} projects={projects} />
-
-        <hr className="border-line my-10" />
-        <Contact profile={profile} extra={contact} />
+        {/* Web footer (phones use the site-wide one). */}
+        <footer className="hidden px-10 md:order-5 md:block">
+          <div className="mx-auto flex max-w-[1080px] justify-between gap-4 py-6 text-[13px] text-muted">
+            <span>
+              {profile.name} &middot; {profile.role_title} &middot; {profile.location}
+            </span>
+            <span className="flex gap-4">
+              <Link href="/cv" className="hover:text-primary">
+                CV
+              </Link>
+              <Link href="/about" className="hover:text-primary">
+                About me
+              </Link>
+            </span>
+          </div>
+        </footer>
       </main>
     </>
   );

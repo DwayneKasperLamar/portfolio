@@ -18,6 +18,9 @@
   --blueprint: #101a2b;
   --blueprint-ink: #7fa7d9;
   --badge: #1d8fe8;
+  /* On the reversed (contrasting) contact band. */
+  --text-inverse-muted: #bdbdb8;
+  --line-inverse: rgba(255, 255, 255, 0.2);
   /* Dark overlay and its text, the same in both themes (used over photos and video). */
   --veil: rgba(10, 10, 12, 0.93);
   --on-veil: #f1f1ee;
@@ -33,6 +36,8 @@
   --text-muted: #8f8f97;
   --text-faint: #6b6b73;
   --bg-stage: #151518;
+  --text-inverse-muted: #55555c;
+  --line-inverse: rgba(0, 0, 0, 0.18);
 }
 
 * {
@@ -42,7 +47,8 @@
 body {
   background: var(--bg-base);
   color: var(--text-primary);
-  font-family: ui-serif, Georgia, 'Times New Roman', serif;
+  font-family: var(--font-body), system-ui, sans-serif;
+  line-height: 1.65;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
@@ -55,6 +61,29 @@ body {
     --text-primary: #000000;
     --text-secondary: #111111;
     --text-muted: #444444;
+  }
+}
+
+@layer base {
+  h1 {
+    font-family: var(--font-head), Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer components {
+  /* Small section label, used everywhere a block needs a name. */
+  .label {
+    @apply text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted;
+  }
+  .pill {
+    @apply inline-flex items-center gap-[7px] rounded-full border border-line px-[11px] py-1.5 text-[12.5px] leading-none text-primary;
+  }
+  .btn {
+    @apply inline-flex h-11 items-center justify-center rounded-[10px] border border-primary px-[22px] text-sm font-semibold text-primary transition-colors hover:bg-surface-alt;
+  }
+  .btn-fill {
+    @apply bg-primary text-inverse hover:bg-secondary;
   }
 }
 

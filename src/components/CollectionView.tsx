@@ -6,7 +6,7 @@ import BodyText from '@/components/BodyText';
 const linkClass = 'underline decoration-line hover:decoration-primary';
 
 const Stars = ({ rating }: { rating: number }) => (
-  <span className="font-mono text-xs text-muted" aria-label={`${rating} out of 5`}>
+  <span className="font-sans text-xs text-muted" aria-label={`${rating} out of 5`}>
     {'★'.repeat(rating)}
     {'☆'.repeat(5 - rating)}
   </span>
@@ -25,7 +25,7 @@ const Carousel = ({ items }: { items: CollectionItem[] }) => (
           </div>
           <figcaption className="mt-2 text-sm">
             <span className="text-primary">{item.title}</span>
-            {item.subtitle && <span className="block font-mono text-xs text-muted">{item.subtitle}</span>}
+            {item.subtitle && <span className="block font-sans text-xs text-muted">{item.subtitle}</span>}
           </figcaption>
         </figure>
       );
@@ -61,7 +61,7 @@ const Item = ({ item, kind }: { item: CollectionItem; kind: Collection['kind'] }
           {item.subtitle && <span className="text-muted"> &mdash; {item.subtitle}</span>}
         </p>
         <p className="flex gap-3 items-center mt-0.5">
-          {item.status && <span className="font-mono text-xs text-muted">{item.status}</span>}
+          {item.status && <span className="font-sans text-xs text-muted">{item.status}</span>}
           {item.rating ? <Stars rating={item.rating} /> : null}
         </p>
         {item.notes && <BodyText text={item.notes} className="mt-2 text-sm text-secondary" />}

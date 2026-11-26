@@ -7,7 +7,7 @@ const JournalWidget = ({ entry }: { entry: JournalEntry | null }) => {
   if (!entry) return null;
   return (
     <WidgetCard label="Latest from the journal">
-      <p className="font-mono text-xs text-muted mb-1">{entry.entry_date}</p>
+      <p className="font-sans text-xs text-muted mb-1">{entry.entry_date}</p>
       <Link href={`/journal/${entry.slug}`} className="text-[0.95rem] underline decoration-line hover:decoration-primary">
         {entry.title}
       </Link>

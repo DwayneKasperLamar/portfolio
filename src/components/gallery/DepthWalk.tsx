@@ -115,7 +115,7 @@ const DepthWalk = ({ moments, onOpen }: { moments: Moment[]; onOpen: (index: num
             <Frame moment={m} playing={i === at} />
           </div>
         ))}
-        <p className="absolute left-4 bottom-3 max-w-[calc(100%-2rem)] z-[2000] bg-base border border-line rounded-md px-3 py-1.5 font-mono text-xs">
+        <p className="absolute left-4 bottom-3 max-w-[calc(100%-2rem)] z-[2000] bg-base border border-line rounded-md px-3 py-1.5 font-sans text-xs">
           {front.label} &middot; {front.title}
         </p>
       </div>
@@ -130,7 +130,7 @@ const DepthWalk = ({ moments, onOpen }: { moments: Moment[]; onOpen: (index: num
           aria-label="Position in the story"
           className="flex-1 min-w-[160px] accent-current"
         />
-        <button type="button" onClick={() => onOpen(at)} className="font-mono text-xs border border-line rounded-md px-4 py-2 text-muted hover:text-primary">
+        <button type="button" onClick={() => onOpen(at)} className="font-sans text-xs border border-line rounded-md px-4 py-2 text-muted hover:text-primary">
           Open this one
         </button>
       </div>

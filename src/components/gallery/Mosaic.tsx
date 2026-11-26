@@ -55,7 +55,7 @@ const Mosaic = ({ moments, phone, onOpen }: { moments: Moment[]; phone: boolean;
                 className={`relative min-w-0 overflow-hidden rounded-lg bg-surface transition-all duration-500 motion-reduce:transition-none ${size}`}>
                 <Frame moment={m} playing={isGrown} bare={isGrown} />
                 {isGrown && (
-                  <span className="absolute inset-x-0 bottom-0 block px-3 pt-8 pb-2 bg-gradient-to-t from-veil to-transparent text-on-veil font-mono text-xs text-left truncate">
+                  <span className="absolute inset-x-0 bottom-0 block px-3 pt-8 pb-2 bg-gradient-to-t from-veil to-transparent text-on-veil font-sans text-xs text-left truncate">
                     {m.title}
                     {m.label && ` · ${m.label}`}
                   </span>

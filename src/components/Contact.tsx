@@ -1,47 +1,47 @@
 import type { CollectionItem, Profile } from '@/lib/content';
 import { safeUrl } from '@/lib/safe-url';
-import Section from '@/components/Section';
 
-const link = 'underline decoration-line hover:decoration-primary break-all';
+// "dwayne@x.com", "github.com/name" -> what to show for a profile link.
+const handleOf = (url: string) => url.replace(/\/+$/, '').split('/').pop() ?? url;
 
+// Contact rows: what it is on the left, the address in the middle, an arrow on the right.
+// On the web they sit inside the contrasting contact band, so the colours are reversed there.
 // Main email from the profile; extra addresses or links from the public `contact` list.
 const Contact = ({ profile, extra }: { profile: Profile; extra: CollectionItem[] }) => {
-  const links = [
-    { label: 'GitHub', url: safeUrl(profile.github_url) },
-    { label: 'X', url: safeUrl(profile.twitter_url) },
+  const github = safeUrl(profile.github_url);
+  const x = safeUrl(profile.twitter_url);
+  const rows = [
+    { key: 'email', label: 'Email', text: profile.email, url: safeUrl(`mailto:${profile.email}`) },
+    ...extra.map((item) => ({
+      key: item.id,
+      label: item.url?.startsWith('mailto:') ? 'Email' : 'Link',
+      text: item.title,
+      url: safeUrl(item.url),
+    })),
+    { key: 'github', label: 'GitHub', text: github ? handleOf(github) : '', url: github },
+    { key: 'x', label: 'X', text: x ? `@${handleOf(x)}` : '', url: x },
   ];
+
   return (
-    <Section title="Contact" id="contact">
-      <p>
-        Email{' '}
-        <a href={`mailto:${profile.email}`} className={link}>
-          {profile.email}
-        </a>
-        {extra.map((item) => {
-          const url = safeUrl(item.url);
-          return url ? (
-            <span key={item.id}>
-              {' '}
-              or{' '}
-              <a href={url} className={link}>
-                {item.title}
+    <ul>
+      {rows.map(
+        (row) =>
+          row.url && (
+            <li key={row.key} className="border-t border-line first:border-t-0 md:border-line-inverse md:first:border-t">
+              <a
+                href={row.url}
+                {...(row.url.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer' })}
+                className="grid grid-cols-[64px_minmax(0,1fr)_16px] items-center gap-3 py-3 text-sm hover:underline md:py-3.5">
+                <span className="text-[12.5px] font-medium text-muted md:text-inverse-muted">{row.label}</span>
+                <span className="text-primary [overflow-wrap:anywhere] md:text-inverse">{row.text}</span>
+                <span aria-hidden className="text-muted md:text-inverse-muted">
+                  &#8599;
+                </span>
               </a>
-            </span>
-          ) : null;
-        })}
-        .
-      </p>
-      <p className="mt-2 flex flex-wrap gap-x-4 font-mono text-xs">
-        {links.map(
-          (l) =>
-            l.url && (
-              <a key={l.label} href={l.url} target="_blank" rel="noreferrer" className="text-muted hover:text-primary">
-                {l.label} &#8599;
-              </a>
-            ),
-        )}
-      </p>
-    </Section>
+            </li>
+          ),
+      )}
+    </ul>
   );
 };
 

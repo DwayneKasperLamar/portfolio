@@ -14,8 +14,8 @@ const TimelineList = ({ events, showVisibility }: { events: TimelineEvent[]; sho
         lastYear = year;
         return (
           <li key={e.id}>
-            {heading && <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-3 pt-2 border-t border-line">{year}</h2>}
-            <p className="font-mono text-xs text-muted mb-1">
+            {heading && <h2 className="label mb-3 pt-2 border-t border-line">{year}</h2>}
+            <p className="font-sans text-xs text-muted mb-1">
               {e.event_date} &middot; {e.category}
               {showVisibility && ` · ${e.visibility}`}
             </p>

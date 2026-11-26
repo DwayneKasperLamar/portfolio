@@ -1,14 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 const Footer = () => {
   const [time, setTime] = useState('');
+  const home = usePathname() === '/';
 
   useEffect(() => {
     const format = () =>
       new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'Africa/Lagos',
+        timeZone: 'Africa/Lagos', // Nigeria's time zone
         hour: '2-digit',
         minute: '2-digit',
       }).format(new Date());
@@ -18,8 +20,11 @@ const Footer = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // The web home page has its own footer, so this one shows there on phones only.
+  const frame = home ? 'px-5 md:hidden' : 'max-w-[640px] px-6';
+
   return (
-    <footer className="print:hidden max-w-[640px] mx-auto px-6 pb-16 pt-12 font-mono text-xs text-muted">
+    <footer className={`print:hidden mx-auto pb-16 pt-12 text-xs text-muted ${frame}`}>
       {time && (
         <p className="flex items-center gap-2">
           <span className="status-dot" />

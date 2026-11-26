@@ -37,7 +37,7 @@ export default async function AdminProfilePage() {
             <textarea name="current_role_text" defaultValue={profile.current_role_text} rows={3} className={fieldClass} />
           </label>
           <label>
-            <span className={labelClass}>About, second paragraph (optional)</span>
+            <span className={labelClass}>Web: the line under the headline (empty = the standard line)</span>
             <textarea name="previous_role_text" defaultValue={profile.previous_role_text} rows={3} className={fieldClass} />
           </label>
           <label>
