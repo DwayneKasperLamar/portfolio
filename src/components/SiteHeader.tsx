@@ -2,7 +2,7 @@ import Link from 'next/link';
 import ThemeIconButton from '@/components/ThemeIconButton';
 import type { NavLink } from '@/lib/content';
 
-// The web menu bar. It stays at the top while scrolling. Phones use PhoneTabs instead.
+// The web menu bar. It stays at the top while scrolling. Phones use PhoneDock instead.
 const SiteHeader = ({ name, email, links }: { name: string; email: string; links: NavLink[] }) => (
   <div className="sticky top-0 z-30 hidden border-b border-line bg-base md:block print:hidden">
     <div className="mx-auto flex h-[68px] max-w-[1160px] items-center gap-6 px-10">

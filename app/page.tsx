@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 import MobileHeader from '@/components/MobileHeader';
-import PhoneTabs from '@/components/PhoneTabs';
+import PhoneDock from '@/components/PhoneDock';
+import { headerDetails } from '@/lib/profile-header';
 import SiteHeader from '@/components/SiteHeader';
 import Hero from '@/components/Hero';
 import Block from '@/components/Block';
@@ -15,16 +16,15 @@ import Contact from '@/components/Contact';
 import EmailButton from '@/components/EmailButton';
 import BodyText from '@/components/BodyText';
 import { ADMIN_SESSION_COOKIE, isValidSession } from '@/lib/auth';
-import { getProfile, getProjects, getPublicList, getPublicNav, getTechItems, LISTS } from '@/lib/content';
+import { getProfile, getProjects, getPublicList, getTechItems, LISTS } from '@/lib/content';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [profile, projects, techItems, nav, experience, caseStudies, ai, whatIDo, offers, quotes, contact] = await Promise.all([
+  const [profile, projects, techItems, experience, caseStudies, ai, whatIDo, offers, quotes, contact] = await Promise.all([
     getProfile(),
     getProjects(),
     getTechItems(),
-    getPublicNav(),
     getPublicList(LISTS.experience),
     getPublicList(LISTS.caseStudies),
     getPublicList(LISTS.aiWorkflow),
@@ -74,7 +74,6 @@ export default async function Home() {
             owner={owner}
           />
         </div>
-        <PhoneTabs links={nav} />
         <Hero profile={profile} className="md:order-1" />
 
         {experience.length > 0 && (
@@ -116,7 +115,7 @@ export default async function Home() {
           </Block>
         )}
 
-        <section id="about" className="px-5 pb-2 pt-8 scroll-mt-14 md:order-3 md:px-10 md:pb-24 md:pt-20 md:scroll-mt-[68px]">
+        <section id="about" className="px-5 pb-2 pt-8 scroll-mt-4 md:order-3 md:px-10 md:pb-24 md:pt-20 md:scroll-mt-[68px]">
           <div className="md:mx-auto md:grid md:max-w-[1080px] md:grid-cols-[260px_minmax(0,1fr)] md:gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-20">
             <h2 className="mb-[18px] md:mb-0">
               <span className="label block">About</span>
@@ -141,7 +140,7 @@ export default async function Home() {
         )}
 
         {/* Web: a contrasting band that invites contact. */}
-        <section id="contact" className="px-5 pb-2 pt-8 scroll-mt-14 md:order-4 md:bg-primary md:px-10 md:py-[72px] md:scroll-mt-[68px]">
+        <section id="contact" className="px-5 pb-2 pt-8 scroll-mt-4 md:order-4 md:bg-primary md:px-10 md:py-[72px] md:scroll-mt-[68px]">
           <div className="md:mx-auto md:grid md:max-w-[1080px] md:grid-cols-[minmax(0,1fr)_minmax(0,440px)] md:items-center md:gap-10 lg:gap-20">
             <div>
               <h2 className="mb-[18px] md:mb-0">
@@ -173,6 +172,7 @@ export default async function Home() {
           </div>
         </footer>
       </main>
+      <PhoneDock photo={headerDetails(profile).avatar} name={profile.name} />
     </>
   );
 }

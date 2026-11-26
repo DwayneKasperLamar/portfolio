@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import ThemeToggleButton from '@/components/ThemeToggleButton';
-import { getPublicNav } from '@/lib/content';
+import PhoneDock from '@/components/PhoneDock';
+import { getProfile, getPublicNav } from '@/lib/content';
+import { headerDetails } from '@/lib/profile-header';
 
 interface PageShellProps {
   title: string;
@@ -16,7 +18,7 @@ interface PageShellProps {
 
 // Shared frame for every inner page: back link, title, navigation, theme toggle.
 const PageShell = async ({ title, subtitle, children, hideNav, backHref = '/', backLabel = '← Home', wide }: PageShellProps) => {
-  const nav = hideNav ? [] : await getPublicNav();
+  const [nav, profile] = await Promise.all([hideNav ? Promise.resolve([]) : getPublicNav(), getProfile()]);
 
   return (
     <main className={`${wide ? 'max-w-[980px]' : 'max-w-[640px]'} mx-auto px-6 pt-16 print:pt-0 print:max-w-none print:px-0 print:pb-0 pb-8`}>
@@ -31,7 +33,7 @@ const PageShell = async ({ title, subtitle, children, hideNav, backHref = '/', b
       {subtitle && <p className="font-sans text-xs text-muted mb-6">{subtitle}</p>}
 
       {nav.length > 0 && (
-        <nav className="flex flex-wrap gap-x-4 gap-y-1 font-sans text-xs text-muted mb-8 mt-4">
+        <nav className="hidden md:flex flex-wrap gap-x-4 gap-y-1 font-sans text-xs text-muted mb-8 mt-4">
           {nav.map((l) => (
             <Link key={l.href} href={l.href} className="hover:text-primary">
               {l.label}
@@ -41,6 +43,7 @@ const PageShell = async ({ title, subtitle, children, hideNav, backHref = '/', b
       )}
 
       <div className="mt-6">{children}</div>
+      {profile && <PhoneDock photo={headerDetails(profile).avatar} name={profile.name} />}
     </main>
   );
 };

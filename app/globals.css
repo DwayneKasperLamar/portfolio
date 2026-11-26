@@ -14,13 +14,17 @@
   --bg-stage: #ecebe6;
   /* Light tile behind logos in both themes, so dark logos stay readable. */
   --chip: #ffffff;
-  /* Phone profile header: drawn background and check badge. */
-  --blueprint: #101a2b;
-  --blueprint-ink: #7fa7d9;
+  /* Check badge beside the name on phones. */
   --badge: #1d8fe8;
   /* On the reversed (contrasting) contact band. */
   --text-inverse-muted: #bdbdb8;
   --line-inverse: rgba(255, 255, 255, 0.2);
+  /* See-through phone menu. */
+  --glass: rgba(255, 255, 255, 0.58);
+  --glass-ring: rgba(0, 0, 0, 0.08);
+  --glass-edge: rgba(255, 255, 255, 0.85);
+  --glass-pick: rgba(20, 20, 20, 0.1);
+  --glass-shadow: rgba(0, 0, 0, 0.18);
   /* Dark overlay and its text, the same in both themes (used over photos and video). */
   --veil: rgba(10, 10, 12, 0.93);
   --on-veil: #f1f1ee;
@@ -38,6 +42,11 @@
   --bg-stage: #151518;
   --text-inverse-muted: #55555c;
   --line-inverse: rgba(0, 0, 0, 0.18);
+  --glass: rgba(42, 42, 48, 0.55);
+  --glass-ring: rgba(0, 0, 0, 0.45);
+  --glass-edge: rgba(255, 255, 255, 0.18);
+  --glass-pick: rgba(255, 255, 255, 0.14);
+  --glass-shadow: rgba(0, 0, 0, 0.55);
 }
 
 * {
@@ -75,6 +84,14 @@ body {
   /* Small section label, used everywhere a block needs a name. */
   .label {
     @apply text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted;
+  }
+  /* Frosted, see-through surface with a bright rim. */
+  .glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-ring);
+    box-shadow: 0 10px 30px var(--glass-shadow), inset 0 1px 0 var(--glass-edge), inset 0 -1px 1px var(--glass-edge);
   }
   .pill {
     @apply inline-flex items-center gap-[7px] rounded-full border border-line px-[11px] py-1.5 text-[12.5px] leading-none text-primary;

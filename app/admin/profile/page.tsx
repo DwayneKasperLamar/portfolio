@@ -63,7 +63,6 @@ export default async function AdminProfilePage() {
                 Header details. The headline shows on phone and web; photos and the rest on phones. Everything here is public. Leave &ldquo;Born&rdquo; empty to keep your birthday off the site.
               </p>
               <MediaField name="avatar_url" label="Profile photo" defaultValue={headerDetails(profile).avatar} imagesOnly />
-              <MediaField name="cover_url" label="Background photo" defaultValue={profile.cover_url} imagesOnly />
               {(
                 [
                   ['handle', 'handle', 'Handle (for example @yourname)'],

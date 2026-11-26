@@ -24,7 +24,7 @@ const Footer = () => {
   const frame = home ? 'px-5 md:hidden' : 'max-w-[640px] px-6';
 
   return (
-    <footer className={`print:hidden mx-auto pb-16 pt-12 text-xs text-muted ${frame}`}>
+    <footer className={`print:hidden mx-auto pb-28 pt-12 md:pb-16 text-xs text-muted ${frame}`}>
       {time && (
         <p className="flex items-center gap-2">
           <span className="status-dot" />

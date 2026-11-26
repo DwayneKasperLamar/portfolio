@@ -16,7 +16,7 @@ const Block = ({
   className?: string;
   children: React.ReactNode;
 }) => (
-  <section id={id} className={`px-5 pb-2 pt-8 scroll-mt-14 md:px-10 md:pb-0 md:pt-20 md:scroll-mt-[68px] ${className}`}>
+  <section id={id} className={`px-5 pb-2 pt-8 scroll-mt-4 md:px-10 md:pb-0 md:pt-20 md:scroll-mt-[68px] ${className}`}>
     <div className="md:mx-auto md:max-w-[1080px]">
       <h2 className="mb-[18px] md:mb-8">
         <span className={`label block ${webLabel ? 'md:hidden' : ''}`}>{label}</span>

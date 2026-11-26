@@ -19,7 +19,9 @@ Last updated: 2026-11-26
 - Repository is public: no private project names, drafts or private writing in committed files.
 
 ## Next session starts with
-1. NOT yet committed: fonts (Newsreader + Inter) and the approved conventional WEB layout (menu bar, hero with photo, logo band, cards in threes, contact band, footer); the phone design from the first mockup is unchanged. Screenshots checked at 500, 768, 1366 wide, both themes. Waiting for "push".
+1. Live and checked: pushed `5a6fcbf` (new fonts, conventional web layout, tidier phone design). Offered next: the same web menu bar on CV, About, Story and Gallery.
+1b. NOT yet committed: phone header without the background banner (photo kept) and a floating see-through bottom bar (`src/components/PhoneDock.tsx`) copied from Dwayne's iOS screenshot; replaces the tabs. 11 browser interaction checks pass at phone size; not tried on a real iPhone. Waiting for "push".
+1c. Message box + WhatsApp: chosen and mocked up (https://claude.ai/artifact/7aSn749Q4SC9PjKSrNvY7Y), waiting for approval, a WhatsApp number and the alert email. Needs a database script, a Resend account for the alert address, and spam limits.
 2. Dwayne reads the three drafts at `/private`; confirm visits show in Vercel Analytics; collect real numbers and quotes.
 3. Tidy-up, if wanted: the old 3D files and packages are now unused.
 

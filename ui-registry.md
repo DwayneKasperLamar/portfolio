@@ -19,7 +19,10 @@ Fonts load in `app/layout.tsx` (`--font-head` Newsreader, `--font-body` Inter).
 - **Web (768px up):** `SiteHeader` sticky bar (68px) · `Hero` (text + photo) · tool logo band (`bg-surface`) ·
   `Block` sections in a centred 1080px column (`px-10`, `pt-20`, label + 34px heading) · grids of three ·
   reversed contact band (`bg-primary`, `text-inverse`, `border-line-inverse`) · own footer.
-- **Phone:** `MobileHeader`, sticky `PhoneTabs`, the same blocks stacked with `px-5 pt-8` and thin dividers.
+- **Phone:** `MobileHeader` (photo, theme button, name and details; no background banner), the same blocks stacked
+  with `px-5 pt-8` and thin dividers, and `PhoneDock` floating at the bottom on every public page.
+- **Phone dock:** `.glass` surface, full width, `rounded-full`, icons only (52px targets), current item on
+  `bg-glass-pick`, photo for About. Shrinks to the current icon on scroll down; opens on scroll up or tap.
 - Source order is the phone order; the web moves blocks with `md:order-*`.
 
 ## Pieces

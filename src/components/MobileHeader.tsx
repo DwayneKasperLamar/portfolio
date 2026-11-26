@@ -3,35 +3,7 @@ import Link from 'next/link';
 import type { Profile } from '@/lib/content';
 import { DEFAULT_AVATAR, headerDetails } from '@/lib/profile-header';
 import { safeUrl } from '@/lib/safe-url';
-import { CoverButtons } from '@/components/HeaderButtons';
-
-// Drawn background used until a background photo is uploaded: a small system diagram.
-const Blueprint = () => (
-  <svg viewBox="0 0 600 150" preserveAspectRatio="xMaxYMid slice" className="w-full h-full text-blueprint-ink" aria-hidden>
-    <defs>
-      <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-        <path d="M20 0H0V20" fill="none" stroke="currentColor" strokeOpacity="0.15" />
-      </pattern>
-    </defs>
-    <rect width="600" height="150" fill="url(#grid)" />
-    {(
-      [
-        [250, 30, 'app'],
-        [340, 80, 'server'],
-        [405, 28, 'payments'],
-        [480, 100, 'data'],
-      ] as const
-    ).map(([x, y, name]) => (
-      <g key={name}>
-        <rect x={x} y={y} width="78" height="30" rx="5" fill="none" stroke="currentColor" />
-        <text x={x + 39} y={y + 19} textAnchor="middle" fontSize="11" fontFamily="monospace" fill="currentColor">
-          {name}
-        </text>
-      </g>
-    ))}
-    <path d="M328 45h51v35M418 95h62M398 80l40-22" fill="none" stroke="currentColor" strokeDasharray="4 4" />
-  </svg>
-);
+import ThemeIconButton from '@/components/ThemeIconButton';
 
 const CheckBadge = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5 shrink-0 text-badge" role="img" aria-label="check badge">
@@ -56,7 +28,6 @@ interface MobileHeaderProps {
 const MobileHeader = ({ profile, counts, owner }: MobileHeaderProps) => {
   const d = headerDetails(profile);
   const avatar = safeUrl(d.avatar) ?? DEFAULT_AVATAR;
-  const cover = safeUrl(d.cover);
 
   // Two even columns of short facts.
   const facts = [
@@ -70,20 +41,18 @@ const MobileHeader = ({ profile, counts, owner }: MobileHeaderProps) => {
 
   return (
     <header className="pb-6 md:hidden">
-      <div className="relative h-32 overflow-hidden bg-blueprint">
-        {cover ? <img src={cover} alt="" className="h-full w-full object-cover" /> : <Blueprint />}
-        <CoverButtons title={profile.name} />
-      </div>
-
-      <div className="grid gap-3.5 px-5">
+      <div className="grid gap-3.5 px-5 pt-6">
         <div>
-          <div className="relative -mt-11 h-[88px] w-[88px] overflow-hidden rounded-full border-4 border-base bg-surface">
-            <img
-              src={avatar}
-              alt={profile.name}
-              // the starter photo is a tall portrait: keep the face in the circle
-              className={`h-full w-full object-cover ${avatar === DEFAULT_AVATAR ? 'object-[50%_70%] scale-[1.35] origin-[43%_55%]' : ''}`}
-            />
+          <div className="flex items-start justify-between gap-4">
+            <div className="h-[88px] w-[88px] overflow-hidden rounded-full border border-line bg-surface">
+              <img
+                src={avatar}
+                alt={profile.name}
+                // the starter photo is a tall portrait: keep the face in the circle
+                className={`h-full w-full object-cover ${avatar === DEFAULT_AVATAR ? 'object-[50%_70%] scale-[1.35] origin-[43%_55%]' : ''}`}
+              />
+            </div>
+            <ThemeIconButton />
           </div>
           <h1 className="mt-3 flex flex-wrap items-center gap-2 text-[27px] font-semibold leading-tight text-primary">
             {profile.name}
