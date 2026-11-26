@@ -19,7 +19,7 @@ Last updated: 2026-11-26
 - Repository is public: no private project names, drafts or private writing in committed files.
 
 ## Next session starts with
-1. NOT yet committed: location is "Nigeria" (database already updated; preview image and description remade), "View CV" replaces "Share profile" and is on the web header too, store badges (Google Play link; "iOS planned" with no link, there is no App Store listing).
+1. Live and checked: pushed `118ed62` ("Nigeria", "View CV", Google Play and "iOS planned" badges).
 2. Waiting for approval: layout and font mockup https://claude.ai/artifact/FsPtfdCer3eXeGAkbyQzSZ (A Newsreader + Inter recommended, B Geist, C IBM Plex). It also replaces the floating side logos with a still two-column grid, which fixes their overlap. Build it, then ask to push.
 3. Dwayne reads the three drafts at `/private`; confirm visits show in Vercel Analytics; collect real numbers and quotes.
 
