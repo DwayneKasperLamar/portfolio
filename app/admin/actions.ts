@@ -55,11 +55,21 @@ function refresh(...paths: string[]) {
 
 export async function updateProfile(formData: FormData) {
   await requireOwner();
+  const extra: Record<string, unknown> = {};
+  // Header fields are only sent once the form offers them (after 003_profile_and_media.sql).
+  if (formData.has('handle')) {
+    // An emptied box is saved as empty text (= hide it), which is different from never set.
+    for (const key of ['handle', 'company', 'joined_text', 'born_text'] as const) extra[key] = str(formData, key, MAX.short);
+    extra.bio = str(formData, 'bio', MAX.medium);
+    for (const key of ['avatar_url', 'cover_url'] as const) extra[key] = str(formData, key, MAX.url) || null;
+    extra.verified = formData.get('verified') === 'on';
+  }
   check(
     (
       await getSupabase()
         .from('profile')
         .update({
+          ...extra,
           name: str(formData, 'name', MAX.short),
           location: str(formData, 'location', MAX.short),
           role_title: str(formData, 'role_title', MAX.short),
@@ -240,6 +250,7 @@ export async function upsertCollectionItem(formData: FormData) {
   const rating = int(formData, 'rating', 0);
   if (rating < 0 || rating > 5) throw new Error('Rating must be 0 to 5.');
   const row = {
+    ...(formData.has('play_url') ? { play_url: str(formData, 'play_url', MAX.url) || null } : {}),
     collection_slug: str(formData, 'collection_slug', MAX.short),
     title: str(formData, 'title', MAX.short),
     subtitle: str(formData, 'subtitle', MAX.short) || null,

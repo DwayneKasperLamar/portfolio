@@ -3,6 +3,7 @@ import PageShell from '@/components/PageShell';
 import TimelineList from '@/components/TimelineList';
 import JournalList from '@/components/JournalList';
 import CollectionView from '@/components/CollectionView';
+import CaseStudyList from '@/components/CaseStudyList';
 import {
   COLLECTION_KIND_LABELS,
   getOwnerCollections,
@@ -11,6 +12,7 @@ import {
   getOwnerPages,
   getOwnerProjects,
   getOwnerTimeline,
+  LISTS,
 } from '@/lib/content';
 
 const sectionHeading = 'font-mono text-xs uppercase tracking-wider text-muted mb-4';
@@ -31,8 +33,11 @@ export default async function PrivateHome() {
   const privateJournal = journal.filter((e) => e.visibility === 'private');
   const privateProjects = projects.filter((p) => p.visibility === 'private');
 
+  const drafts = items.filter((i) => i.collection_slug === LISTS.caseStudies && i.visibility === 'private');
+
   // A collection shows here if it is private, or if it is public but holds private items.
   const blocks = collections
+    .filter((c) => c.slug !== LISTS.caseStudies)
     .map((collection) => {
       const own = items.filter((i) => i.collection_slug === collection.slug);
       const shown = collection.visibility === 'private' ? own : own.filter((i) => i.visibility === 'private');
@@ -41,7 +46,7 @@ export default async function PrivateHome() {
     .filter((b) => b.collection.visibility === 'private' || b.shown.length > 0);
 
   const empty =
-    privatePages.length + privateTimeline.length + privateJournal.length + privateProjects.length + blocks.length === 0;
+    privatePages.length + privateTimeline.length + privateJournal.length + privateProjects.length + blocks.length + drafts.length === 0;
 
   return (
     <PageShell
@@ -56,6 +61,16 @@ export default async function PrivateHome() {
       </p>
 
       {empty && <p className="text-muted">Nothing private yet. Mark something &ldquo;private&rdquo; in the admin and it appears here.</p>}
+
+      {drafts.length > 0 && (
+        <section className="mb-10">
+          <h2 className={sectionHeading}>Case study drafts</h2>
+          <p className="text-sm text-muted mb-3">
+            Read each one. To publish: Admin &rarr; Collections &rarr; Case studies &rarr; the item &rarr; Public.
+          </p>
+          <CaseStudyList items={drafts} basePath="/private/work" />
+        </section>
+      )}
 
       {privatePages.length > 0 && (
         <section className="mb-10">

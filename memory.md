@@ -1,27 +1,30 @@
-# Memory — Portfolio: positioning live, gallery built
+# Memory — Portfolio: work-first home page built, not yet pushed
 
-Last updated: 2026-11-25 (late)
+Last updated: 2026-11-26
 
 ## What was built
-- Live (pushed `aa43080`, checked): software architect intro, "What I do", "Working on now", books (Meditations; Crime and Punishment), widgets with a GitHub "Latest pushes" feed, bigger side icons, the stale-data cache fix.
-- NOT yet committed: `/story` depth walk (web) and stacked moments (phone), new `/gallery` living mosaic (web) and folding mosaic (phone), full-screen viewer (photo, .mp4/.webm, YouTube). Files in `src/components/gallery/`. New colour tokens `stage`, `veil`, `on-veil`. Side icons now hide below 900px.
-- Mockups: https://claude.ai/artifact/B3sGQY2Fz9FHvpXBJr92SJ
-- Checks: build and lint pass. Both layouts screenshotted with sample data in headless Edge (before the final depth-walk spacing tweak). Touch, drag, wheel, hover and the viewer have NOT been tried by hand.
+- Live code: up to `3ea6edc`. The database content changes below already show on the live site.
+- NOT yet committed:
+  - Uploads (private bucket, `/media/[name]`), phone-only profile header.
+  - Home page order: headline + Email, work experience, case studies, how I work with AI, what I do, work with me, about, tools, contact. New `/work`, `/cv` (prints on one page), `/about`; draft preview at `/private/work/[slug]`.
+  - Link preview image, Vercel Analytics on public pages only. GitHub widget and "Working on now" removed.
+- Database (applied): new headline/about/availability text; lists `experience`, `ai-workflow`, `work-with-me`, `contact`, empty `quotes`; three PRIVATE case study drafts; tools updated; two dead project links removed; one product description corrected.
+- Checks: types, lint, build; strangers cannot open drafts or private pages; no dead links; screenshots of web, phone, CV, preview image.
 
 ## Decisions made
-- Repository stays public for now (Dwayne: push even while public). So no private project names or private writing in committed files.
-- Gallery = public items of collections with type "Gallery" (stored kind `carousel`, so no database change). Media are pasted links, no upload.
-- Story = timeline events; moments without media show as written cards.
-
-## Current state
-- No public timeline events or gallery items yet, so "Story" and "Gallery" are hidden from the menu.
+- Roles: Software Architect at Kosher Spa; co-founder and Software Architect at Uncollos; previously mobile developer at Spaxe. Open to remote roles.
+- Say plainly that AI writes much of the code and Dwayne decides and checks.
+- Uncollos logo is correct as it is. Both email addresses are shown.
+- Web header stays simple text; the photo header is phone-only.
+- Repository is public: no private project names, drafts or private writing in committed files.
 
 ## Next session starts with
-1. Ask whether to push the gallery, then check it live.
-2. Get real videos and photos (with caption and year) from Dwayne and add them.
-3. GitHub widget look: waiting for Dwayne's screenshot.
+1. Ask whether to push. After deploy: set the Kosher Spa project logo to `/assets/logos/kosher-spa.png` (not before, the file is not live yet), check the preview card, turn on Analytics in Vercel.
+2. Dwayne reads the three drafts at `/private` and publishes the ones that are ready.
+3. Collect real numbers and quotes.
 
 ## Open questions
-- Add `GITHUB_TOKEN` in Vercel (avoids GitHub's request limit)?
-- Make the repository private later?
+- Case study drafts need a read-through and sign-off before publishing.
+- Handle on the phone header comes from the X link; is that the right account?
+- Real results to add to the case studies (users, bookings).
 - Delete the unused 3D models and textures in `public/`?

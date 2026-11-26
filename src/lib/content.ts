@@ -23,6 +23,15 @@ export interface Profile {
   email: string;
   github_url: string;
   twitter_url: string;
+  // The rest appear after supabase/003_profile_and_media.sql has been run.
+  avatar_url?: string | null;
+  cover_url?: string | null;
+  handle?: string | null;
+  bio?: string | null;
+  company?: string | null;
+  joined_text?: string | null;
+  born_text?: string | null;
+  verified?: boolean;
 }
 
 export interface Project {
@@ -108,6 +117,7 @@ export interface CollectionItem {
   notes: string;
   status: string | null;
   rating: number | null;
+  play_url?: string | null; // Play Store listing (after 003)
   sort_order: number;
   visibility: Visibility;
 }
@@ -229,15 +239,48 @@ export async function getOwnerItems(collectionSlug?: string): Promise<Collection
   return rows<CollectionItem>(query);
 }
 
-// ---- Public navigation --------------------------------------------------------
+// ---- Special lists on the home page ------------------------------------------------
+
+// Ordinary collections (edited in Admin > Collections) that the site places itself.
+export const LISTS = {
+  experience: 'experience',
+  caseStudies: 'case-studies',
+  aiWorkflow: 'ai-workflow',
+  whatIDo: 'what-i-do',
+  offers: 'work-with-me',
+  quotes: 'quotes',
+  contact: 'contact',
+} as const;
+
+// Never offered as their own reading page on "About me".
+const SYSTEM_LISTS: string[] = [...Object.values(LISTS), 'working-on'];
+
+/** Public items of one public list, in order. Missing or private list = nothing. */
+export async function getPublicList(slug: string): Promise<CollectionItem[]> {
+  const data = await getPublicCollection(slug);
+  return data ? data.items : [];
+}
+
+// ---- Public navigation --------------------------------------------------------------
 
 export interface NavLink {
   href: string;
   label: string;
 }
 
-/** The links shown under the header. Only things that exist AND are public appear. */
+/** The short menu: work first, the person second. */
 export async function getPublicNav(): Promise<NavLink[]> {
+  const caseStudies = await getPublicList(LISTS.caseStudies);
+  return [
+    ...(caseStudies.length > 0 ? [{ href: '/work', label: 'Case studies' }] : []),
+    { href: '/cv', label: 'CV' },
+    { href: '/about', label: 'About me' },
+    { href: '/#contact', label: 'Contact' },
+  ];
+}
+
+/** Everything personal, listed on "About me". Only things that exist AND are public. */
+export async function getPersonalLinks(): Promise<NavLink[]> {
   const [pages, timeline, journal, collections, gallery] = await Promise.all([
     getPublicPages(),
     getPublicTimeline(),
@@ -248,10 +291,14 @@ export async function getPublicNav(): Promise<NavLink[]> {
 
   const links: NavLink[] = [];
   if (timeline.length > 0) links.push({ href: '/story', label: 'Story' });
-  if (journal.length > 0) links.push({ href: '/journal', label: 'Journal' });
   if (gallery.length > 0) links.push({ href: '/gallery', label: 'Gallery' });
-  // Gallery collections are all shown together on /gallery, so they get no menu link of their own.
-  for (const c of collections) if (c.show_in_nav && c.kind !== 'carousel') links.push({ href: `/c/${c.slug}`, label: c.title });
+  if (journal.length > 0) links.push({ href: '/journal', label: 'Journal' });
+  // Gallery collections are shown together on /gallery, so they get no link of their own.
+  for (const col of collections) {
+    if (col.show_in_nav && col.kind !== 'carousel' && !SYSTEM_LISTS.includes(col.slug)) {
+      links.push({ href: `/c/${col.slug}`, label: col.title });
+    }
+  }
   for (const p of pages) if (p.show_in_nav) links.push({ href: `/p/${p.slug}`, label: p.title });
   return links;
 }
@@ -266,17 +313,6 @@ export async function getOwnerJournalEntry(slug: string): Promise<JournalEntry |
 export async function getOwnerPage(slug: string): Promise<SitePage | null> {
   const { data, error } = await getSupabase().from('pages').select('*').eq('slug', slug).maybeSingle();
   return error ? null : data;
-}
-
-// ---- Home page: "Working on" and data-driven widgets ------------------------------
-
-// "Working on" is an ordinary collection with the slug `working-on`, so it is edited in
-// Admin > Collections and every item has its own public/private switch.
-export const WORKING_ON_SLUG = 'working-on';
-
-export async function getWorkingOn(): Promise<CollectionItem[]> {
-  const data = await getPublicCollection(WORKING_ON_SLUG);
-  return data ? data.items : [];
 }
 
 /** Public book items whose status contains "reading" (e.g. "reading now"). */
@@ -302,12 +338,6 @@ export async function getLatestPublicJournalEntry(): Promise<JournalEntry | null
   return (await getPublicJournal())[0] ?? null;
 }
 
-/** Items of the public `what-i-do` collection, shown under the home page introduction. */
-export async function getWhatIDo(): Promise<CollectionItem[]> {
-  const data = await getPublicCollection('what-i-do');
-  return data ? data.items : [];
-}
-
 /** Everything public in collections of type "Gallery" (stored as kind `carousel`). */
 export async function getPublicGalleryItems(): Promise<CollectionItem[]> {
   const collections = (await getPublicCollections()).filter((c) => c.kind === 'carousel');
@@ -323,4 +353,28 @@ export async function getPublicGalleryItems(): Promise<CollectionItem[]> {
       .eq('visibility', 'public')
       .order('sort_order', { ascending: true }),
   );
+}
+
+// ---- Uploaded files -----------------------------------------------------------
+
+/** True if something public is using this uploaded file right now. Anything unclear = false. */
+export async function isPublicMedia(ref: string): Promise<boolean> {
+  const db = getSupabase();
+  const [avatar, cover, project, event, publicCollections] = await Promise.all([
+    rows(db.from('profile').select('id').eq('avatar_url', ref).limit(1)),
+    rows(db.from('profile').select('id').eq('cover_url', ref).limit(1)),
+    rows<Project>(db.from('projects').select('*').eq('logo_url', ref)),
+    rows(db.from('timeline_events').select('id').eq('image_url', ref).eq('visibility', 'public').limit(1)),
+    getPublicCollections(),
+  ]);
+  if (avatar.length || cover.length || event.length || project.some((p) => p.visibility !== 'private')) return true;
+  if (publicCollections.length === 0) return false;
+
+  const slugs = publicCollections.map((c) => c.slug);
+  const uses = await Promise.all(
+    ['image_url', 'url'].map((column) =>
+      rows(db.from('collection_items').select('id').eq(column, ref).eq('visibility', 'public').in('collection_slug', slugs).limit(1)),
+    ),
+  );
+  return uses.some((found) => found.length > 0);
 }

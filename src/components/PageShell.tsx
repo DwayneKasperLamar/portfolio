@@ -19,8 +19,8 @@ const PageShell = async ({ title, subtitle, children, hideNav, backHref = '/', b
   const nav = hideNav ? [] : await getPublicNav();
 
   return (
-    <main className={`${wide ? 'max-w-[980px]' : 'max-w-[640px]'} mx-auto px-6 pt-16 pb-8`}>
-      <div className="flex justify-between items-start gap-4 mb-8">
+    <main className={`${wide ? 'max-w-[980px]' : 'max-w-[640px]'} mx-auto px-6 pt-16 print:pt-0 print:max-w-none print:px-0 print:pb-0 pb-8`}>
+      <div className="print:hidden flex justify-between items-start gap-4 mb-8">
         <Link href={backHref} className="font-mono text-xs text-muted hover:text-primary">
           {backLabel}
         </Link>

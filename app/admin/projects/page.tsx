@@ -1,6 +1,7 @@
 import { getOwnerProjects } from '@/lib/content';
 import { VisibilitySelect, VisibilityBadge } from '../_ui';
 import { upsertProject, deleteProject } from '../actions';
+import MediaField from '../_MediaField';
 import type { Project } from '@/lib/content';
 
 export const dynamic = 'force-dynamic';
@@ -24,13 +25,10 @@ function ProjectForm({ project, withVisibility }: { project?: Project; withVisib
         <textarea name="description" defaultValue={project?.description} rows={2} required className={fieldClass} />
       </label>
       <label>
-        <span className={labelClass}>Link (href)</span>
-        <input name="href" defaultValue={project?.href} required className={fieldClass} />
+        <span className={labelClass}>Link (leave empty if the site is down)</span>
+        <input name="href" defaultValue={project?.href} className={fieldClass} />
       </label>
-      <label>
-        <span className={labelClass}>Logo URL</span>
-        <input name="logo_url" defaultValue={project?.logo_url ?? ''} className={fieldClass} />
-      </label>
+      <MediaField name="logo_url" label="Logo" defaultValue={project?.logo_url} imagesOnly />
       <label>
         <span className={labelClass}>Sort order</span>
         <input name="sort_order" type="number" defaultValue={project?.sort_order ?? 0} className={fieldClass} />

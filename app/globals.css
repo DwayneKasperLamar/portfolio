@@ -12,6 +12,12 @@
   --text-muted: #888888;
   --text-faint: #a3a3a3;
   --bg-stage: #ecebe6;
+  /* Light tile behind logos in both themes, so dark logos stay readable. */
+  --chip: #ffffff;
+  /* Phone profile header: drawn background and check badge. */
+  --blueprint: #101a2b;
+  --blueprint-ink: #7fa7d9;
+  --badge: #1d8fe8;
   /* Dark overlay and its text, the same in both themes (used over photos and video). */
   --veil: rgba(10, 10, 12, 0.93);
   --on-veil: #f1f1ee;
@@ -38,6 +44,18 @@ body {
   color: var(--text-primary);
   font-family: ui-serif, Georgia, 'Times New Roman', serif;
   transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+@media print {
+  :root,
+  .dark {
+    --bg-base: #ffffff;
+    --bg-surface: #ffffff;
+    --border-subtle: #cccccc;
+    --text-primary: #000000;
+    --text-secondary: #111111;
+    --text-muted: #444444;
+  }
 }
 
 @layer utilities {

@@ -6,17 +6,29 @@ Next.js 14 (App Router) + Tailwind + Supabase. Public site on top, a private are
 
 | Where | What | Who sees it |
 |---|---|---|
-| `/` | Intro, projects, stack, now, contact, menu | everyone |
+| `/` | Headline, work experience, case studies, how I work with AI, services, about, tools, contact | everyone |
+| `/work`, `/work/<title>` | Case studies | public ones only |
+| `/cv` | One printable page built from the same content | everyone |
+| `/about` | Links to story, gallery, journal, books; reading now; projects | public things only |
 | `/story` | Biography as a depth walk (web) or stacked moments (phone), plus a plain list | public moments only |
 | `/gallery` | Videos and photos: living mosaic (web) or folding mosaic (phone) | public items in public "Gallery" collections |
-| `/journal`, `/journal/<slug>` | Journal | public entries only |
-| `/c/<slug>` | A collection: books, playlists, links, politics, life's works, image carousel | public collections and public items |
-| `/p/<slug>` | A free-form page | public pages only |
-| `/private/*` | Everything marked private, in one place | owner only (login) |
-| `/admin/*` | Editors for all of the above | owner only (login) |
+| `/journal`, `/c/<slug>`, `/p/<slug>` | Journal, collections, free-form pages | public only |
+| `/private/*` | Everything marked private, including case study drafts | owner only (login) |
+| `/admin/*` | Editors and uploads | owner only (login) |
+
+## Home page lists
+
+Edit these in Admin > Collections. The slug decides where a list appears:
+`experience` (title = company, author = role, status = current/previous), `case-studies` (author = where and role,
+status = one-line summary, notes = the study; its web address comes from the title, so renaming breaks shared links),
+`ai-workflow`, `what-i-do`, `work-with-me`, `quotes` (real ones only), `contact` (extra addresses).
+In long text, `## Heading` makes a heading and `Flow: step | step` draws the steps.
+
+- **Link preview:** `app/opengraph-image.png`. It is a fixed picture: remake it if the headline or photo changes.
+- **Visit counting:** Vercel Web Analytics, public pages only. Turn it on in Vercel > project > Analytics.
 
 Every piece of content has a **visibility**: `public` or `private`. New things default to **private**.
-The menu on the public site only lists things that exist and are public.
+The menu lists only what exists and is public.
 
 ## Adding to the Story and Gallery
 
@@ -24,13 +36,16 @@ The menu on the public site only lists things that exist and are public.
 - **Gallery:** Admin > Collections > new collection, type "Gallery (photos and videos)", visibility public, then add items.
   "Image URL" is the photo or the still; "Link" is the video (YouTube, `.mp4`, `.webm`). Nothing is uploaded: paste links.
 - The menu shows "Story" and "Gallery" only once something public exists.
+- **Uploads:** the admin has upload buttons (photos, MP4, WebM, MOV; 50 MB per file). Files go to a private storage
+  bucket and are served by `/media/<name>`, which lets a visitor see a file only while something public uses it.
 
 ## Set up (once)
 
-1. Supabase > SQL editor: run `supabase/schema.sql`, then `supabase/002_content_model.sql` (safe to run twice).
+1. Supabase > SQL editor: run `supabase/schema.sql`, then `supabase/002_content_model.sql`, then
+   `supabase/003_profile_and_media.sql` (the numbered ones are safe to run twice).
 2. Copy `.env.local.example` to `.env.local` and fill the four values. Add the same four in Vercel and redeploy.
 3. `npm install`, then `npm run seed` once (starter profile and projects).
-4. `npm run dev`, open `/admin/login`.
+4. `npm run seed:content` once for the home page lists, then `npm run dev` and open `/admin/login`.
 
 If the live site says "Content isn't set up yet", step 1, 2 or 3 is missing.
 
@@ -48,5 +63,5 @@ If the live site says "Content isn't set up yet", step 1, 2 or 3 is missing.
 ## Known limits
 
 - One shared password, no login rate limit yet. Use a long password.
-- No image upload: images are URLs (paste a link).
+- Deleting an entry does not delete its uploaded file from storage. A link already handed out stays valid for up to an hour.
 - Not yet built: search, RSS, drafts/scheduling, sharing a private page with a chosen person by link.

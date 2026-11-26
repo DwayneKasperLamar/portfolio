@@ -1,6 +1,7 @@
 import { getOwnerTimeline } from '@/lib/content';
 import type { TimelineEvent } from '@/lib/content';
 import { upsertTimelineEvent, deleteTimelineEvent } from '../actions';
+import MediaField from '../_MediaField';
 import { ExplainNote, VisibilitySelect, VisibilityBadge, fieldClass, labelClass, cardClass, saveClass } from '../_ui';
 
 export const dynamic = 'force-dynamic';
@@ -27,10 +28,7 @@ function EventForm({ event }: { event?: TimelineEvent }) {
         <span className={labelClass}>What happened (blank line = new paragraph)</span>
         <textarea name="body" defaultValue={event?.body} rows={5} className={fieldClass} />
       </label>
-      <label>
-        <span className={labelClass}>Photo or video link (optional)</span>
-        <input name="image_url" defaultValue={event?.image_url ?? ''} className={fieldClass} />
-      </label>
+      <MediaField name="image_url" label="Photo or video (optional)" defaultValue={event?.image_url} />
       <VisibilitySelect value={event?.visibility} />
       <button type="submit" className={saveClass}>
         {event ? 'Save' : 'Add to timeline'}

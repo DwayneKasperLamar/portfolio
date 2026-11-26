@@ -1,6 +1,7 @@
 import { COLLECTION_KINDS, COLLECTION_KIND_LABELS, getOwnerCollections, getOwnerItems } from '@/lib/content';
 import type { Collection, CollectionItem } from '@/lib/content';
 import { upsertCollection, deleteCollection, upsertCollectionItem, deleteCollectionItem } from '../actions';
+import MediaField from '../_MediaField';
 import { ExplainNote, VisibilitySelect, VisibilityBadge, fieldClass, labelClass, cardClass, saveClass } from '../_ui';
 
 export const dynamic = 'force-dynamic';
@@ -48,7 +49,7 @@ function CollectionForm({ collection }: { collection?: Collection }) {
   );
 }
 
-function ItemForm({ collectionSlug, item }: { collectionSlug: string; item?: CollectionItem }) {
+function ItemForm({ collectionSlug, item, withPlay }: { collectionSlug: string; item?: CollectionItem; withPlay: boolean }) {
   return (
     <form action={upsertCollectionItem} className="flex flex-col gap-3 border border-line rounded-lg p-3 bg-surface">
       <input type="hidden" name="id" value={item?.id ?? ''} />
@@ -63,19 +64,20 @@ function ItemForm({ collectionSlug, item }: { collectionSlug: string; item?: Col
           <input name="subtitle" defaultValue={item?.subtitle ?? ''} className={fieldClass} />
         </label>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <label>
-          <span className={labelClass}>Link (web page, Spotify, or a video: YouTube / .mp4)</span>
-          <input name="url" defaultValue={item?.url ?? ''} className={fieldClass} />
-        </label>
-        <label>
-          <span className={labelClass}>Image URL (cover, photo, or video still)</span>
-          <input name="image_url" defaultValue={item?.image_url ?? ''} className={fieldClass} />
-        </label>
-      </div>
+      <MediaField name="image_url" label="Photo, video, cover or logo" defaultValue={item?.image_url} />
       <label>
-        <span className={labelClass}>Notes (blank line = new paragraph)</span>
-        <textarea name="notes" defaultValue={item?.notes} rows={3} className={fieldClass} />
+        <span className={labelClass}>Link (web page, Spotify, or a YouTube video)</span>
+        <input name="url" defaultValue={item?.url ?? ''} className={fieldClass} />
+      </label>
+      {withPlay && (
+        <label>
+          <span className={labelClass}>Play Store link (shows the Play icon)</span>
+          <input name="play_url" defaultValue={item?.play_url ?? ''} className={fieldClass} />
+        </label>
+      )}
+      <label>
+        <span className={labelClass}>Notes (blank line = new paragraph; &quot;## Heading&quot;; &quot;Flow: step | step&quot;)</span>
+        <textarea name="notes" defaultValue={item?.notes} rows={collectionSlug === 'case-studies' ? 18 : 3} className={fieldClass} />
       </label>
       <div className="grid grid-cols-3 gap-3">
         <label>
@@ -101,13 +103,15 @@ function ItemForm({ collectionSlug, item }: { collectionSlug: string; item?: Col
 
 export default async function AdminCollectionsPage() {
   const [collections, items] = await Promise.all([getOwnerCollections(), getOwnerItems()]);
+  // The Play Store column only exists after supabase/003_profile_and_media.sql has been run.
+  const withPlay = items.some((i) => i.play_url !== undefined);
 
   return (
     <div>
       <h1 className="text-lg font-semibold text-primary mb-2">Collections</h1>
       <ExplainNote>
-        Lists of things: books, playlists, links, politics notes, life&rsquo;s works, or an image carousel. Make a collection, then add
-        items. An item is visible to the public only if both it and its collection are public.
+        Lists of things. An item is public only if both it and its collection are public. Some lists place themselves on the site:
+        experience, case-studies (status = one-line summary), ai-workflow, what-i-do, work-with-me, quotes (real ones only) and contact.
       </ExplainNote>
 
       <h2 className="text-sm font-semibold text-primary mb-3">New collection</h2>
@@ -143,7 +147,7 @@ export default async function AdminCollectionsPage() {
                       {item.title}
                       <VisibilityBadge value={item.visibility} />
                     </summary>
-                    <ItemForm collectionSlug={collection.slug} item={item} />
+                    <ItemForm collectionSlug={collection.slug} item={item} withPlay={withPlay} />
                     <form action={deleteCollectionItem} className="mt-2">
                       <input type="hidden" name="id" value={item.id} />
                       <button type="submit" className="text-xs text-red-500 hover:underline">
@@ -154,7 +158,7 @@ export default async function AdminCollectionsPage() {
                 ))}
                 <details>
                   <summary className="cursor-pointer text-sm text-muted mb-2">+ Add an item</summary>
-                  <ItemForm collectionSlug={collection.slug} />
+                  <ItemForm collectionSlug={collection.slug} withPlay={withPlay} />
                 </details>
               </div>
             </details>

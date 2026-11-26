@@ -35,10 +35,10 @@ const TechIcon = ({ item, project }: { item: TechItem; project?: Project }) => {
       className="pointer-events-auto flex items-center gap-2 whitespace-nowrap cursor-pointer transition-transform duration-200"
       style={{ transform: hovered ? 'scale(1.12)' : 'scale(1)' }}>
       {/* Light chip behind every logo: dark logos (Next.js, Expo) vanish on the dark theme without it. */}
-      <span className="flex items-center justify-center w-14 h-14 rounded-2xl bg-white border border-line shadow-md">
+      <span className="flex items-center justify-center w-14 h-14 rounded-2xl bg-chip border border-line shadow-md">
         <SafeImage src={`https://cdn.simpleicons.org/${item.icon_key}`} alt={item.label} width={36} height={36} />
       </span>
-      {project?.logo_url && <SafeImage src={project.logo_url} alt={project.title} width={28} height={28} className="rounded-full border border-line bg-white" />}
+      {project?.logo_url && <SafeImage src={project.logo_url} alt={project.title} width={28} height={28} className="rounded-full border border-line bg-chip" />}
       {hovered && (
         <span className="font-mono text-sm bg-surface border border-line rounded px-2.5 py-1.5 text-primary shadow-md">
           {project ? `${item.label} — ${project.title}` : item.label}
@@ -47,7 +47,7 @@ const TechIcon = ({ item, project }: { item: TechItem; project?: Project }) => {
     </div>
   );
 
-  return project ? (
+  return project?.href ? (
     <a href={project.href} target="_blank" rel="noreferrer">
       {content}
     </a>

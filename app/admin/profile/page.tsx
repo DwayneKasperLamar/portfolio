@@ -1,5 +1,7 @@
 import { getProfile } from '@/lib/content';
 import { updateProfile } from '../actions';
+import MediaField from '../_MediaField';
+import { headerDetails } from '@/lib/profile-header';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,15 +33,15 @@ export default async function AdminProfilePage() {
             <input name="role_title" defaultValue={profile.role_title} className={fieldClass} />
           </label>
           <label>
-            <span className={labelClass}>Current role paragraph</span>
+            <span className={labelClass}>About (shown near the bottom of the home page)</span>
             <textarea name="current_role_text" defaultValue={profile.current_role_text} rows={3} className={fieldClass} />
           </label>
           <label>
-            <span className={labelClass}>Previous role paragraph</span>
+            <span className={labelClass}>About, second paragraph (optional)</span>
             <textarea name="previous_role_text" defaultValue={profile.previous_role_text} rows={3} className={fieldClass} />
           </label>
           <label>
-            <span className={labelClass}>&ldquo;Now&rdquo; paragraph</span>
+            <span className={labelClass}>Availability line (for example Open to remote roles)</span>
             <textarea name="now_text" defaultValue={profile.now_text} rows={3} className={fieldClass} />
           </label>
           <label>
@@ -54,6 +56,34 @@ export default async function AdminProfilePage() {
             <span className={labelClass}>Twitter URL</span>
             <input name="twitter_url" defaultValue={profile.twitter_url} className={fieldClass} />
           </label>
+          {/* These columns exist after supabase/003_profile_and_media.sql has been run. */}
+          {profile.avatar_url !== undefined && (
+            <>
+              <p className="text-sm text-muted border border-dashed border-line rounded px-3 py-2">
+                Header details. The headline shows on phone and web; photos and the rest on phones. Everything here is public. Leave &ldquo;Born&rdquo; empty to keep your birthday off the site.
+              </p>
+              <MediaField name="avatar_url" label="Profile photo" defaultValue={headerDetails(profile).avatar} imagesOnly />
+              <MediaField name="cover_url" label="Background photo" defaultValue={profile.cover_url} imagesOnly />
+              {(
+                [
+                  ['handle', 'handle', 'Handle (for example @yourname)'],
+                  ['bio', 'bio', 'Headline: your one-line promise (phone and web)'],
+                  ['company', 'company', 'Work line (for example Software architect)'],
+                  ['joined_text', 'joined', 'Joined line (for example Building since 2021)'],
+                  ['born_text', 'born', 'Born (optional, public)'],
+                ] as const
+              ).map(([key, shown, label]) => (
+                <label key={key}>
+                  <span className={labelClass}>{label}</span>
+                  <input name={key} defaultValue={headerDetails(profile)[shown]} className={fieldClass} />
+                </label>
+              ))}
+              <label className="flex items-center gap-2 text-sm text-primary">
+                <input type="checkbox" name="verified" defaultChecked={headerDetails(profile).verified} />
+                Show the check badge beside my name (decoration, not an official verification)
+              </label>
+            </>
+          )}
           <button type="submit" className="self-start bg-surface-alt border border-line rounded px-4 py-2 text-primary hover:border-muted transition-colors">
             Save
           </button>

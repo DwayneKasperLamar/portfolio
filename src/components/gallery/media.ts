@@ -9,7 +9,7 @@ export interface Moment {
   label: string; // date, place or author
   body: string;
   image: string | null; // photo, or the still shown for a video
-  videoFile: string | null; // direct .mp4 / .webm link
+  videoFile: string | null; // uploaded or linked .mp4 / .webm / .mov
   youtubeId: string | null;
   link: string | null; // any other web page
 }
@@ -27,7 +27,7 @@ export function youtubeId(url: string): string | null {
   }
 }
 
-const isVideoFile = (url: string) => /\.(mp4|webm)$/i.test(url.split(/[?#]/)[0]);
+const isVideoFile = (url: string) => /\.(mp4|webm|mov)$/i.test(url.split(/[?#]/)[0]);
 
 // `first` and `second` can each be a photo, a video or a web page; sort out which is which.
 function sortLinks(first: string | null, second: string | null) {

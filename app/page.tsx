@@ -1,35 +1,36 @@
+import Link from 'next/link';
+import { cookies } from 'next/headers';
 import ThemeToggleButton from '@/components/ThemeToggleButton';
 import TechIconRailLazy from '@/components/TechIconRailLazy';
-import ProjectBullet from '@/components/ProjectBullet';
-import Link from 'next/link';
-import WorkingOn from '@/components/WorkingOn';
-import WhatIDo from '@/components/WhatIDo';
-import GitHubWidget from '@/components/widgets/GitHubWidget';
-import ReadingWidget from '@/components/widgets/ReadingWidget';
-import JournalWidget from '@/components/widgets/JournalWidget';
-import {
-  getLatestPublicJournalEntry,
-  getProfile,
-  getProjects,
-  getPublicNav,
-  getReadingNow,
-  getTechItems,
-  getWorkingOn,
-  getWhatIDo,
-} from '@/lib/content';
+import MobileHeader from '@/components/MobileHeader';
+import Experience from '@/components/Experience';
+import Section from '@/components/Section';
+import TitledList from '@/components/TitledList';
+import CaseStudyList from '@/components/CaseStudyList';
+import Quotes from '@/components/Quotes';
+import Tools from '@/components/Tools';
+import Contact from '@/components/Contact';
+import EmailButton from '@/components/EmailButton';
+import BodyText from '@/components/BodyText';
+import { ADMIN_SESSION_COOKIE, isValidSession } from '@/lib/auth';
+import { getProfile, getProjects, getPublicList, getPublicNav, getTechItems, LISTS } from '@/lib/content';
+import { headerDetails } from '@/lib/profile-header';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [profile, projects, techItems, nav, workingOn, reading, latestEntry, whatIDo] = await Promise.all([
+  const [profile, projects, techItems, nav, experience, caseStudies, ai, whatIDo, offers, quotes, contact] = await Promise.all([
     getProfile(),
     getProjects(),
     getTechItems(),
     getPublicNav(),
-    getWorkingOn(),
-    getReadingNow(),
-    getLatestPublicJournalEntry(),
-    getWhatIDo(),
+    getPublicList(LISTS.experience),
+    getPublicList(LISTS.caseStudies),
+    getPublicList(LISTS.aiWorkflow),
+    getPublicList(LISTS.whatIDo),
+    getPublicList(LISTS.offers),
+    getPublicList(LISTS.quotes),
+    getPublicList(LISTS.contact),
   ]);
 
   if (!profile) {
@@ -43,24 +44,49 @@ export default async function Home() {
     );
   }
 
-  const stackItems = techItems.filter((t) => t.category === 'stack');
+  // Only changes a button label; no private content is loaded on this page.
+  const owner = await isValidSession(cookies().get(ADMIN_SESSION_COOKIE)?.value);
+  const { bio } = headerDetails(profile);
+  const about = [profile.current_role_text, profile.previous_role_text].filter(Boolean).join('\n\n');
 
   return (
     <>
       <TechIconRailLazy items={techItems} projects={projects} />
-      <main className="max-w-[640px] mx-auto px-6 pt-24 pb-8">
-        <div className="flex justify-between items-start gap-4 mb-10">
-          <div>
-            <h1 className="text-xl font-semibold text-primary mb-1">{profile.name}</h1>
-            <p className="font-mono text-xs text-muted">
-              {profile.location} &middot; {profile.role_title}
-            </p>
+      <main className="max-w-[640px] mx-auto px-6 pt-0 md:pt-24 pb-8">
+        <MobileHeader
+          profile={profile}
+          counts={{
+            roles: experience.filter((e) => e.status?.toLowerCase() === 'current').length,
+            caseStudies: caseStudies.length,
+          }}
+          owner={owner}
+        />
+
+        {/* Web header */}
+        <div className="hidden md:block mb-6">
+          <div className="flex justify-between items-start gap-4">
+            <div>
+              <h1 className="text-xl font-semibold text-primary mb-1">{profile.name}</h1>
+              <p className="font-mono text-xs text-muted">
+                {profile.location} &middot; {profile.role_title}
+              </p>
+            </div>
+            <ThemeToggleButton />
           </div>
-          <ThemeToggleButton />
+          {bio && <p className="mt-6 text-xl leading-snug text-primary">{bio}</p>}
+          <div className="mt-4 flex flex-wrap items-center gap-4">
+            <EmailButton email={profile.email} />
+            {profile.now_text && (
+              <span className="flex items-center gap-2 font-mono text-xs text-muted">
+                <span className="status-dot" />
+                {profile.now_text}
+              </span>
+            )}
+          </div>
         </div>
 
         {nav.length > 0 && (
-          <nav className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-muted mb-8">
+          <nav className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-muted mb-10">
             {nav.map((l) => (
               <Link key={l.href} href={l.href} className="hover:text-primary">
                 {l.label}
@@ -69,83 +95,34 @@ export default async function Home() {
           </nav>
         )}
 
-        <WorkingOn items={workingOn} />
+        <Experience items={experience} />
 
-        <section className="mb-6">
-          <p>{profile.current_role_text}</p>
-        </section>
+        {caseStudies.length > 0 && (
+          <Section title="Case studies" id="case-studies">
+            <CaseStudyList items={caseStudies} />
+          </Section>
+        )}
 
-        <section className="mb-6">
-          <p>{profile.previous_role_text}</p>
-        </section>
+        <TitledList title="How I work with AI" items={ai} />
+        <TitledList title="What I do" items={whatIDo} />
+        <TitledList title="Work with me" items={offers}>
+          <p className="mt-5">
+            <EmailButton email={profile.email} subject="Working together">
+              Email me about it
+            </EmailButton>
+          </p>
+        </TitledList>
+        <Quotes items={quotes} />
 
-        <WhatIDo items={whatIDo} />
+        {about && (
+          <Section title="About">
+            <BodyText text={about} />
+          </Section>
+        )}
+        <Tools items={techItems} projects={projects} />
 
         <hr className="border-line my-10" />
-
-        <section className="mb-6">
-          <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-4">Projects</h2>
-          <ul className="space-y-2.5">
-            {projects.map((project) => (
-              <li key={project.slug} className="flex items-center gap-3 text-[0.95rem]">
-                <ProjectBullet logoUrl={project.logo_url} title={project.title} />
-                <span>
-                  <a
-                    href={project.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline decoration-line hover:decoration-primary">
-                    {project.title}
-                  </a>{' '}
-                  &mdash; {project.description}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-4">Stack</h2>
-          <p className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            {stackItems.map((item) => (
-              <span key={item.id}>{item.label}</span>
-            ))}
-          </p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-4">Now</h2>
-          <p>{profile.now_text}</p>
-        </section>
-
-        <section className="mb-6">
-          <h2 className="font-mono text-xs uppercase tracking-wider text-muted mb-4">Activity</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <GitHubWidget profileUrl={profile.github_url} />
-            <ReadingWidget items={reading} />
-            <JournalWidget entry={latestEntry} />
-          </div>
-        </section>
-
-        <hr className="border-line my-10" />
-
-        <section>
-          <p>
-            Reach me at{' '}
-            <a href={`mailto:${profile.email}`} className="underline decoration-line hover:decoration-primary">
-              {profile.email}
-            </a>
-            , or find me on{' '}
-            <a href={profile.github_url} target="_blank" rel="noreferrer" className="underline decoration-line hover:decoration-primary">
-              GitHub
-            </a>{' '}
-            and{' '}
-            <a href={profile.twitter_url} target="_blank" rel="noreferrer" className="underline decoration-line hover:decoration-primary">
-              Twitter
-            </a>
-            .
-          </p>
-        </section>
+        <Contact profile={profile} extra={contact} />
       </main>
     </>
   );

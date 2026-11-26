@@ -19,11 +19,11 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer className="max-w-[640px] mx-auto px-6 pb-16 pt-12 font-mono text-xs text-muted">
+    <footer className="print:hidden max-w-[640px] mx-auto px-6 pb-16 pt-12 font-mono text-xs text-muted">
       {time && (
         <p className="flex items-center gap-2">
           <span className="status-dot" />
-          Open to remote work &mdash; {time} WAT
+          Open to remote roles &mdash; {time} WAT
         </p>
       )}
     </footer>
