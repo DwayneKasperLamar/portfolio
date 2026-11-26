@@ -4,7 +4,7 @@ import { Briefcase, Cake, Calendar, Link2, MapPin } from 'lucide-react';
 import type { Profile } from '@/lib/content';
 import { DEFAULT_AVATAR, headerDetails } from '@/lib/profile-header';
 import { safeUrl } from '@/lib/safe-url';
-import { CoverButtons, ShareButton } from '@/components/HeaderButtons';
+import { CoverButtons } from '@/components/HeaderButtons';
 
 // Drawn background used until a background photo is uploaded: a small system diagram.
 const Blueprint = () => (
@@ -132,9 +132,9 @@ const MobileHeader = ({ profile, counts, owner }: MobileHeaderProps) => {
         )}
 
         <div className="grid grid-cols-2 gap-2.5 mt-3.5">
-          <ShareButton title={profile.name} className={action}>
-            Share profile
-          </ShareButton>
+          <Link href="/cv" className={action}>
+            View CV
+          </Link>
           {owner ? (
             <Link href="/admin/profile" className={action}>
               Edit profile

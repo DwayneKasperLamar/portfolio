@@ -1,10 +1,10 @@
-# Memory — Portfolio: work-first home page built, not yet pushed
+# Memory — Portfolio: work-first home page is live
 
 Last updated: 2026-11-26
 
 ## What was built
-- Live code: up to `3ea6edc`. The database content changes below already show on the live site.
-- NOT yet committed:
+- Live: pushed `963edee`, deployed and checked (routes, drafts hidden, no dead links, preview image, Kosher Spa logo fixed).
+- In that push:
   - Uploads (private bucket, `/media/[name]`), phone-only profile header.
   - Home page order: headline + Email, work experience, case studies, how I work with AI, what I do, work with me, about, tools, contact. New `/work`, `/cv` (prints on one page), `/about`; draft preview at `/private/work/[slug]`.
   - Link preview image, Vercel Analytics on public pages only. GitHub widget and "Working on now" removed.
@@ -19,9 +19,9 @@ Last updated: 2026-11-26
 - Repository is public: no private project names, drafts or private writing in committed files.
 
 ## Next session starts with
-1. Ask whether to push. After deploy: set the Kosher Spa project logo to `/assets/logos/kosher-spa.png` (not before, the file is not live yet), check the preview card, turn on Analytics in Vercel.
-2. Dwayne reads the three drafts at `/private` and publishes the ones that are ready.
-3. Collect real numbers and quotes.
+1. NOT yet committed: location is "Nigeria" (database already updated; preview image and description remade), "View CV" replaces "Share profile" and is on the web header too, store badges (Google Play link; "iOS planned" with no link, there is no App Store listing).
+2. Waiting for approval: layout and font mockup https://claude.ai/artifact/FsPtfdCer3eXeGAkbyQzSZ (A Newsreader + Inter recommended, B Geist, C IBM Plex). It also replaces the floating side logos with a still two-column grid, which fixes their overlap. Build it, then ask to push.
+3. Dwayne reads the three drafts at `/private`; confirm visits show in Vercel Analytics; collect real numbers and quotes.
 
 ## Open questions
 - Case study drafts need a read-through and sign-off before publishing.

@@ -76,6 +76,9 @@ export default async function Home() {
           {bio && <p className="mt-6 text-xl leading-snug text-primary">{bio}</p>}
           <div className="mt-4 flex flex-wrap items-center gap-4">
             <EmailButton email={profile.email} />
+            <Link href="/cv" className="inline-flex items-center justify-center rounded-full border border-line px-5 py-2 text-sm font-semibold text-primary hover:border-muted transition-colors">
+              View CV
+            </Link>
             {profile.now_text && (
               <span className="flex items-center gap-2 font-mono text-xs text-muted">
                 <span className="status-dot" />
