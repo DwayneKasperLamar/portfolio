@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import ConfirmButton from '../_ConfirmButton';
-import { blockDay, saveHours, savePrice, setBookingStatus, unblockDay } from './actions';
+import { blockDay, cancelSession, saveHours, savePrice, unblockDay } from './actions';
 import { ExplainNote, PageHead, btnClass, btnFillClass, cardClass, deleteClass, fieldClass, labelClass, smallClass } from '../_ui';
 import { ownerClock } from '../_format';
-import { MAX_NOTICE_HOURS, WEEKDAYS, addDays, partsIn, usd } from '@/lib/booking';
+import { WEEKDAYS, addDays, partsIn, usd } from '@/lib/booking';
 import { enquiriesReady, getBlockedDays, getBookingSettings, getOwnerBookings, getOwnerEnquiries } from '@/lib/enquiries';
 import { requireOwner } from '@/lib/owner';
 
@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 const PROBLEMS: Record<string, string> = {
   days: 'Choose at least one open day.',
   hours: 'Closing time must be after opening time.',
-  range: `Notice must be 0 to ${MAX_NOTICE_HOURS} hours (14 days), and booking ahead 1 to 90 days.`,
+  range: 'Booking ahead must be 1 to 90 days.',
   zone: 'That time zone is not recognised. Use a form like Africa/Lagos or Europe/London.',
   rate: 'The rate must be above 0 and at most 10,000 dollars. Leave it empty to close booking.',
   length: 'The longest session must be 1 to 8 hours.',
@@ -48,13 +48,6 @@ export default async function AdminBookingsPage({ searchParams }: { searchParams
   const problem = searchParams.problem ? PROBLEMS[searchParams.problem] : null;
   const saved = searchParams.saved ? SAVED[searchParams.saved] : null;
 
-  const statusForm = (id: string, status: 'paid' | 'unpaid', label: string) => (
-    <form action={setBookingStatus}>
-      <input type="hidden" name="id" value={id} />
-      <input type="hidden" name="status" value={status} />
-      <button type="submit" className={smallClass}>{label}</button>
-    </form>
-  );
   const numberField = (name: string, label: string, value: number | string, extra: React.InputHTMLAttributes<HTMLInputElement>) => (
     <label>
       <span className={labelClass}>{label}</span>
@@ -69,7 +62,7 @@ export default async function AdminBookingsPage({ searchParams }: { searchParams
         <a href="#hours" className={btnFillClass}>Opening hours</a>
       </PageHead>
       <ExplainNote>
-        Paid sessions with clients you accepted. A session is unpaid until you mark it paid, after you see the money. Times are in{' '}
+        Paid sessions and free job-offer calls. Clients and recruiters can only pick a time from the next day on. Times are in{' '}
         {settings.timezone}.
       </ExplainNote>
 
@@ -103,22 +96,30 @@ export default async function AdminBookingsPage({ searchParams }: { searchParams
             )}
             {d.sessions.map((b) => {
               const client = who.get(b.enquiry_id)?.name ?? 'Client';
+              const call = b.kind === 'call';
+              const sure = b.status === 'paid' || b.status === 'confirmed';
+              const state = call
+                ? `Free call · ${sure ? 'Confirmed' : 'To confirm'}`
+                : `${usd(b.total_usd)} · ${sure ? 'Paid' : 'Not paid'}`;
               return (
-                <div key={b.id} className={`grid gap-1 rounded-[9px] border bg-surface-alt p-2 text-xs ${b.status === 'paid' ? 'border-line' : 'border-dashed border-muted'}`}>
+                <div key={b.id} className={`grid gap-1 rounded-[9px] border bg-surface-alt p-2 text-xs ${sure ? 'border-line' : 'border-dashed border-muted'}`}>
                   <b className="text-primary">
                     {ownerClock(b.starts_at, settings.timezone)}–{ownerClock(b.ends_at, settings.timezone)}
                   </b>
                   <Link href={`/admin/enquiries?id=${b.enquiry_id}`} className="truncate underline decoration-line">{client}</Link>
                   <span className="flex items-center gap-1.5 text-muted">
-                    {b.status === 'paid' && <span className="status-dot" />}
-                    {usd(Number(b.total_usd))} · {b.status === 'paid' ? 'Paid' : 'Waiting for payment'}
+                    {sure && <span className="status-dot" />}
+                    {state}
                   </span>
                   <span className="mt-1 flex flex-wrap items-center gap-2">
-                    {b.status === 'paid' ? statusForm(b.id, 'unpaid', 'Not paid') : statusForm(b.id, 'paid', 'Mark paid')}
-                    <form action={setBookingStatus}>
+                    {call && !sure && <Link href={`/admin/enquiries?id=${b.enquiry_id}`} className={smallClass}>Answer</Link>}
+                    <form action={cancelSession}>
                       <input type="hidden" name="id" value={b.id} />
-                      <input type="hidden" name="status" value="cancelled" />
-                      <ConfirmButton question={`Cancel the session with ${client}? Tell them yourself, and refund them if they paid.`} className={deleteClass}>
+                      <ConfirmButton
+                        question={call
+                          ? `Cancel the call with ${client}? Tell them yourself.`
+                          : `Cancel the session with ${client}? Their paid hours go back to them to pick another time. Tell them yourself.`}
+                        className={deleteClass}>
                         Cancel
                       </ConfirmButton>
                     </form>
@@ -134,6 +135,7 @@ export default async function AdminBookingsPage({ searchParams }: { searchParams
       <div className="mt-5 grid items-start gap-4 lg:grid-cols-2 xl:grid-cols-3">
         <form id="hours" action={saveHours} className={`${cardClass} scroll-mt-20`}>
           <h2 className="font-semibold text-primary">When people can book</h2>
+          <p className="text-[13px] text-muted">The earliest time anyone can pick is the next day.</p>
           <fieldset>
             <legend className={labelClass}>Open days</legend>
             <div className="flex flex-wrap gap-1.5">
@@ -161,7 +163,6 @@ export default async function AdminBookingsPage({ searchParams }: { searchParams
                 </select>
               </label>
             ))}
-            {numberField('notice_hours', 'Notice needed (hours)', settings.notice_hours, { min: 0, max: MAX_NOTICE_HOURS, required: true })}
             {numberField('horizon_days', 'Book ahead (days)', settings.horizon_days, { min: 1, max: 90, required: true })}
           </div>
           <label>
@@ -177,7 +178,7 @@ export default async function AdminBookingsPage({ searchParams }: { searchParams
           {numberField('max_hours', 'Longest session (hours)', settings.max_hours, { min: 1, max: 8, required: true })}
           <p className="text-[13px] text-muted">
             {settings.rate_usd ? `Clients see ${usd(settings.rate_usd)} per hour.` : 'Booking is closed until you set a rate.'} A new rate does not change
-            sessions already booked. How they pay is set in <Link href="/admin/settings" className="underline">Settings</Link>.
+            sessions already paid for. How they pay is set in <Link href="/admin/settings" className="underline">Settings</Link>.
           </p>
           <button type="submit" disabled={!ready} className={`${btnFillClass} self-start`}>Save price</button>
         </form>

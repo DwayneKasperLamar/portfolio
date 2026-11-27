@@ -1,104 +1,36 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useFormState, useFormStatus } from 'react-dom';
-import { createBooking, type BookingState } from '../../app/actions/booking';
-import { usd, type Slot } from '@/lib/booking';
+import SlotPicker from './SlotPicker';
+import { alertBox, formCard } from './form-styles';
+import { bookSession, type BookingState } from '../../app/actions/booking';
+import type { Slot } from '@/lib/booking';
 
-const chip = 'rounded-[10px] border px-3 py-2.5 text-center text-[13px]';
-const on = 'border-primary bg-primary text-inverse';
-const off = 'border-line text-primary hover:border-muted';
-
-function Confirm({ disabled }: { disabled: boolean }) {
+function Confirm({ disabled, hours }: { disabled: boolean; hours: number }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={disabled || pending} className="btn btn-fill disabled:opacity-50">
-      {pending ? 'Booking…' : 'Confirm booking'}
+    <button type="submit" disabled={disabled || pending} className="btn btn-fill w-full disabled:opacity-50">
+      {pending ? 'Booking…' : `Book my ${hours} ${hours === 1 ? 'hour' : 'hours'}`}
     </button>
   );
 }
 
-// Pick a day, a time and a length. Days and times are shown in the visitor's own time zone.
-export default function BookingPicker({ token, slots, rate }: { token: string; slots: Slot[]; rate: number }) {
-  const [state, action] = useFormState<BookingState, FormData>(createBooking, { status: 'idle' });
-  const [mounted, setMounted] = useState(false);
-  const [day, setDay] = useState('');
+// For a confirmed payment: pick when it happens. The length is what was paid for.
+export default function BookingPicker({ token, paymentId, hours, slots }: { token: string; paymentId: string; hours: number; slots: Slot[] }) {
+  const [state, action] = useFormState<BookingState, FormData>(bookSession, { status: 'idle' });
   const [start, setStart] = useState('');
-  const [hours, setHours] = useState(1);
-  useEffect(() => setMounted(true), []);
-
-  const days = useMemo(() => {
-    const grouped = new Map<string, Slot[]>();
-    for (const s of slots) {
-      const key = new Date(s.start).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-      grouped.set(key, [...(grouped.get(key) ?? []), s]);
-    }
-    return grouped;
-  }, [slots]);
-
-  if (!mounted) return <div className="h-64 rounded-2xl border border-line" aria-hidden />;
-  if (slots.length === 0) return <p>No free times in the coming weeks. I will email you some.</p>;
-
-  const activeDay = days.has(day) ? day : [...days.keys()][0];
-  const chosen = slots.find((s) => s.start === start);
-  const length = chosen ? Math.min(hours, chosen.maxHours) : 1;
-  const zone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const chosen = slots.some((s) => s.start === start) ? start : '';
 
   return (
-    <form action={action} className="grid gap-5 rounded-2xl border border-line p-[18px] md:p-6">
+    <form action={action} className={formCard}>
       <input type="hidden" name="token" value={token} />
-      <input type="hidden" name="start" value={chosen?.start ?? ''} />
-      <input type="hidden" name="hours" value={length} />
-
-      <div>
-        <h2 className="mb-2.5 font-head text-xl font-semibold text-primary">1 · Pick a day</h2>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-          {[...days.keys()].map((d) => (
-            <button key={d} type="button" aria-pressed={d === activeDay} onClick={() => { setDay(d); setStart(''); }} className={`${chip} whitespace-nowrap !px-1.5 ${d === activeDay ? on : off}`}>
-              {d}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div>
-        <h2 className="mb-1 font-head text-xl font-semibold text-primary">2 · Pick a time</h2>
-        <p className="mb-2.5 text-xs text-muted">Your time zone: {zone}</p>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-          {days.get(activeDay)!.map((s) => (
-            <button key={s.start} type="button" aria-pressed={s.start === start} onClick={() => setStart(s.start)} className={`${chip} ${s.start === start ? on : off}`}>
-              {new Date(s.start).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div>
-        <h2 className="mb-2.5 font-head text-xl font-semibold text-primary">3 · How long?</h2>
-        <div className="flex flex-wrap gap-2">
-          {Array.from({ length: chosen?.maxHours ?? 1 }, (_, i) => i + 1).map((n) => (
-            <button key={n} type="button" aria-pressed={n === length} onClick={() => setHours(n)} className={`${chip} ${n === length ? on : off}`}>
-              {n} {n === 1 ? 'hour' : 'hours'}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {state.status === 'error' && (
-        <p role="alert" className="rounded-[10px] border border-line bg-surface-alt px-3 py-2 text-[13px] font-medium text-primary">{state.message}</p>
-      )}
-      {state.status === 'booked' && (
-        <p role="status" className="rounded-[10px] border border-line bg-surface-alt px-3 py-2 text-[13px] font-medium text-primary">
-          Booked. Your session and how to pay are listed above.
-        </p>
-      )}
-
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
-        <p>
-          <span className="label block">Total</span>
-          <b className="text-lg text-primary">{usd(rate * length)}</b>{' '}
-          <span className="text-sm text-muted">({length} × {usd(rate)})</span>
-        </p>
-        <Confirm disabled={!chosen} />
-      </div>
+      <input type="hidden" name="payment" value={paymentId} />
+      <input type="hidden" name="start" value={chosen} />
+      <h2 className="font-head text-xl font-semibold text-primary">When suits you?</h2>
+      <SlotPicker slots={slots} value={chosen} onPick={setStart} />
+      {state.status === 'error' && <p role="alert" className={alertBox}>{state.message}</p>}
+      <Confirm disabled={!chosen} hours={hours} />
     </form>
   );
 }

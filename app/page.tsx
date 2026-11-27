@@ -143,7 +143,7 @@ export default async function Home() {
         {(gallery.length > 0 || owner) && (
           <Block id="gallery" label="Gallery" title="Moments" className="md:order-3">
             {gallery.length > 0 ? (
-              <GalleryExperience kind="gallery" moments={fromGalleryItems(gallery)} />
+              <GalleryExperience kind="gallery" moments={fromGalleryItems(gallery)} phoneLimit={8} />
             ) : (
               <p className="rounded-xl border border-dashed border-line p-4 text-sm text-muted">
                 Only you can see this. Nothing in your gallery is public yet:{' '}

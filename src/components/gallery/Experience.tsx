@@ -4,12 +4,13 @@ import { useState } from 'react';
 import DepthWalk from './DepthWalk';
 import StackedMoments from './StackedMoments';
 import Mosaic from './Mosaic';
+import Waterfall from './Waterfall';
 import Viewer from './Viewer';
 import { useMedia } from './useMedia';
 import type { Moment } from './media';
 
 // Picks the web or phone layout and holds the full-screen viewer.
-const Experience = ({ moments, kind }: { moments: Moment[]; kind: 'story' | 'gallery' }) => {
+const Experience = ({ moments, kind, phoneLimit }: { moments: Moment[]; kind: 'story' | 'gallery'; phoneLimit?: number }) => {
   const phone = useMedia('(max-width: 767px)');
   const [open, setOpen] = useState<number | null>(null);
 
@@ -18,7 +19,11 @@ const Experience = ({ moments, kind }: { moments: Moment[]; kind: 'story' | 'gal
   return (
     <>
       {kind === 'gallery' ? (
-        <Mosaic key={String(phone)} moments={moments} phone={phone} onOpen={setOpen} />
+        phone ? (
+          <Waterfall moments={moments} limit={phoneLimit} onOpen={setOpen} />
+        ) : (
+          <Mosaic moments={moments} onOpen={setOpen} />
+        )
       ) : phone ? (
         <StackedMoments moments={moments} onOpen={setOpen} />
       ) : (

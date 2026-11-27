@@ -37,3 +37,6 @@ next-env.d.ts
 *.sln
 *.sw?
 .vercel
+
+# The personal to-do list (read by a desktop app): the repository is public, so it stays local.
+TODO.md

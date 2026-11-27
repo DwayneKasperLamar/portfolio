@@ -37,11 +37,15 @@ first time they appear. Teach in the reply; keep the *changes* narrow.
    - `/admin` and `/private` are checked twice: `middleware.ts` and `requireOwner()` inside the page or action. Keep both.
    - Private responses are `no-store` and `noindex`. Never add analytics, logging or third-party embeds to private pages.
    - Text from the admin is rendered as plain text, never HTML. Links go through `safeUrl()`.
-   - Only three files let someone without the login write to the database: `app/actions/enquiry.ts` and
-     `app/actions/contact.ts` (any visitor; contact only until the enquiry form is set up), and
-     `app/actions/booking.ts` (a client holding a booking link). Keep their guards (trap field, length caps, limits,
-     fail closed; for bookings: check the link every time, price and times decided by the server), never add an echo
-     of stored data, and never give `messages`, `enquiries`, `bookings` or the booking tables an anon policy.
+   - Only three files let someone without the login write to the database: `app/actions/enquiry.ts` (any visitor:
+     consultation enquiries, and job-offer call requests that hold a calendar time), `app/actions/contact.ts` (any
+     visitor, only until the enquiry form is set up), and `app/actions/booking.ts` (a client holding a booking link).
+     Keep their guards (trap field, length caps, limits, fail closed; for bookings: check the link every time, price
+     and times decided by the server, a payment confirmed by the owner before a time can be picked), never add an
+     echo of stored data, and never give `messages`, `enquiries`, `bookings`, `payments` or the booking tables an
+     anon policy.
+   - Pictures are public the moment they are marked public: screenshots of work screens can show keys, links and
+     other people's code. Say so if you notice any.
    - A booking link `/book/<token>` is a secret that stands in for a login: no analytics, no referrer, not indexed.
      A client may only ever see and change their own sessions.
    - Uploads live in a PRIVATE bucket and are only served by `/media/<name>` (`isPublicMedia`). A new place that

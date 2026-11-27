@@ -1,8 +1,8 @@
-import { savePayment } from './actions';
+import { saveCallLink, savePayment } from './actions';
 import { saveWhatsApp } from '../messages/actions';
 import { ExplainNote, PageHead, btnFillClass, cardClass, fieldClass, labelClass } from '../_ui';
 import { getOwnerItems, LISTS } from '@/lib/content';
-import { enquiriesReady, getBookingSettings } from '@/lib/enquiries';
+import { enquiriesReady, getBookingSettings, paymentsReady } from '@/lib/enquiries';
 import { alertsConfigured } from '@/lib/messages';
 import { requireOwner } from '@/lib/owner';
 
@@ -19,31 +19,32 @@ const TRACKED_ENV_VARS = [
 
 const PROBLEMS: Record<string, string> = {
   link: 'The payment link must start with https:// and have no spaces.',
+  call: 'The meeting link must start with https:// and have no spaces.',
   note: 'Keep the payment note under 500 characters.',
   number: 'Use the full number with the country code, for example +234 followed by the number without its first 0.',
 };
 
+const SAVED: Record<string, string> = { payment: 'Payment details saved.', whatsapp: 'WhatsApp number saved.', call: 'Meeting link saved.' };
+
 export default async function AdminSettingsPage({ searchParams }: { searchParams: { problem?: string; saved?: string } }) {
   await requireOwner('/admin/settings');
-  const [ready, settings, contact] = await Promise.all([enquiriesReady(), getBookingSettings(), getOwnerItems(LISTS.contact)]);
+  const [ready, twoPaths, settings, contact] = await Promise.all([enquiriesReady(), paymentsReady(), getBookingSettings(), getOwnerItems(LISTS.contact)]);
   const whatsapp = contact.find((c) => c.url?.startsWith('https://wa.me/'))?.url?.replace('https://wa.me/', '+') ?? '';
   const problem = searchParams.problem ? PROBLEMS[searchParams.problem] : null;
 
   return (
     <div>
       <PageHead title="Settings" />
-      <ExplainNote>How you get notified, how clients pay you, and your WhatsApp button.</ExplainNote>
+      <ExplainNote>How you get notified, how clients pay you, your meeting link and your WhatsApp button.</ExplainNote>
       {problem && <p role="alert" className="mb-4 rounded-xl border border-primary bg-surface-alt p-3 font-medium">{problem}</p>}
-      {(searchParams.saved === 'payment' || searchParams.saved === 'whatsapp') && (
-        <p role="status" className="mb-4 rounded-xl border border-line bg-surface-alt p-3">
-          {searchParams.saved === 'payment' ? 'Payment details saved.' : 'WhatsApp number saved.'}
-        </p>
+      {searchParams.saved && SAVED[searchParams.saved] && (
+        <p role="status" className="mb-4 rounded-xl border border-line bg-surface-alt p-3">{SAVED[searchParams.saved]}</p>
       )}
 
       <div className="grid items-start gap-4 lg:grid-cols-2">
         <section className={cardClass}>
           <h2 className="font-semibold text-primary">Email alerts</h2>
-          <p>{alertsConfigured() ? 'On: you get an email for each new enquiry and booking.' : 'Off. Everything is still saved here.'}</p>
+          <p>{alertsConfigured() ? 'On: you get an email for each new enquiry, job offer, payment and booking.' : 'Off. Everything is still saved here.'}</p>
           {!alertsConfigured() && (
             <p className="text-[13px] text-muted">
               To switch on: create a Resend account with the email that should get alerts, then add <code>RESEND_API_KEY</code> and{' '}
@@ -64,10 +65,20 @@ export default async function AdminSettingsPage({ searchParams }: { searchParams
               placeholder="For example: put your name in the payment reference." className={fieldClass} />
           </label>
           <p className="text-[13px] text-muted">
-            Only accepted clients see these, on their booking page. Use a link that takes US dollars. The site cannot see payments: you mark
-            sessions paid under Bookings.
+            Only accepted clients see these, on their booking page. Use a link that takes US dollars. The site cannot see payments: you press
+            &ldquo;Payment received&rdquo; under Enquiries.
           </p>
           <button type="submit" disabled={!ready} className={`${btnFillClass} self-start`}>Save payment details</button>
+        </form>
+
+        <form action={saveCallLink} className={cardClass}>
+          <h2 className="font-semibold text-primary">Your meeting link</h2>
+          <label>
+            <span className={labelClass}>Link for calls</span>
+            <input name="call_link" type="url" maxLength={500} defaultValue={settings.call_link ?? ''} placeholder="https://" className={fieldClass} />
+          </label>
+          <p className="text-[13px] text-muted">For example your Google Meet or Zoom room. It goes into the email you send when you confirm a call. It is never shown on the site.</p>
+          <button type="submit" disabled={!twoPaths} className={`${btnFillClass} self-start`}>Save meeting link</button>
         </form>
 
         <form action={saveWhatsApp} className={cardClass}>

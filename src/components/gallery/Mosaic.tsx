@@ -7,39 +7,29 @@ import type { Moment } from './media';
 function chunk<T>(list: T[], size: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
-  // On the web, never leave one frame alone: it would stretch across the whole row.
-  if (size > 2 && out.length > 1 && out[out.length - 1].length === 1) out[out.length - 1].unshift(out[out.length - 2].pop() as T);
+  // Never leave one frame alone: it would stretch across the whole row.
+  if (out.length > 1 && out[out.length - 1].length === 1) out[out.length - 1].unshift(out[out.length - 2].pop() as T);
   return out;
 }
 
-// Gallery page. Web: the frame you point at swells and its neighbours make room.
-// Phone: two to a row; tap one to open it wide while its partner folds to a strip.
-// In both, a second click or tap opens it full screen.
-const Mosaic = ({ moments, phone, onOpen }: { moments: Moment[]; phone: boolean; onOpen: (index: number) => void }) => {
+// The web gallery: the frame you point at swells and its neighbours make room; a second click
+// opens it full screen. Phones use Waterfall instead.
+const Mosaic = ({ moments, onOpen }: { moments: Moment[]; onOpen: (index: number) => void }) => {
   const [grown, setGrown] = useState(0);
   const wasGrown = useRef(false);
-  const perRow = phone ? 2 : 4;
-  const rows = chunk(moments, perRow);
+  const rows = chunk(moments, 4);
   const grownRow = Math.max(0, rows.findIndex((row) => row.includes(moments[grown])));
 
   return (
-    <div className="flex flex-col gap-1.5" style={phone ? undefined : { height: Math.max(420, rows.length * 170) }}>
+    <div className="flex flex-col gap-1.5" style={{ height: Math.max(420, rows.length * 170) }}>
       {rows.map((row, r) => (
         <div
           key={row[0].id}
-          className={`flex gap-1.5 min-h-0 transition-all duration-500 motion-reduce:transition-none ${
-            phone ? (r === grownRow ? 'h-[300px]' : 'h-32') : r === grownRow ? 'flex-[2.6_1_0%]' : 'flex-[1_1_0%]'
-          }`}>
+          className={`flex gap-1.5 min-h-0 transition-all duration-500 motion-reduce:transition-none ${r === grownRow ? 'flex-[2.6_1_0%]' : 'flex-[1_1_0%]'}`}>
           {row.map((m, c) => {
             const i = rows.slice(0, r).reduce((total, previous) => total + previous.length, 0) + c;
             const isGrown = i === grown;
-            const size = isGrown
-              ? phone
-                ? 'flex-[1_1_0%]'
-                : 'flex-[3.8_1_0%]'
-              : phone && r === grownRow
-                ? 'flex-[0_0_46px]'
-                : 'flex-[1_1_0%]';
+            const size = isGrown ? 'flex-[3.8_1_0%]' : 'flex-[1_1_0%]';
             return (
               <button
                 key={m.id}

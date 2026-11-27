@@ -47,7 +47,7 @@ export default function AdminShell({ name, photo, newEnquiries, children }: Prop
         {l.href === '/admin/enquiries' && newEnquiries > 0 && (
           <span className="absolute right-2 top-1 rounded-full bg-primary px-[7px] text-[11px] font-semibold text-inverse md:static md:ml-auto">
             {newEnquiries}
-            <span className="sr-only"> new</span>
+            <span className="sr-only"> waiting</span>
           </span>
         )}
       </Link>

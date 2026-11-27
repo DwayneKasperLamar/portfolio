@@ -39,8 +39,16 @@ Fonts load in `app/layout.tsx` (`--font-head` Newsreader, `--font-body` Inter).
 - Anything that deletes uses `ConfirmButton`.
 
 ## Visitor forms
-- Enquiry and booking: one column up to 640px, card `rounded-2xl border border-line p-[18px] md:p-6`, fields
-  `rounded-[10px] border-line bg-surface`, 12.5px muted labels. Choice chips fill with `bg-primary` when picked.
+- One column up to 640px. Shared classes in `src/components/form-styles.ts`: `formCard`, `field`, `label`, `chip`
+  with `chipOn` / `chipOff` (picked chips fill with `bg-primary`), `alertBox`.
+- Choosing a day and time: `SlotPicker` (days in a 3- or 5-column grid, then start times).
+- A choice between paths is a card per path (`rounded-2xl border bg-surface p-5`), the recommended one with
+  `border-primary`.
+- Waiting for the owner: dashed `border-muted` box.
+
+## Gallery
+- Web: `Mosaic` (rows of four that swell). Phone: `Waterfall`, two columns, 8px gaps, `rounded-2xl`, each picture at
+  its own height; thin grid rows put the next one in the shorter column. Home shows 8 and "See all".
 
 ## Pieces
 | Piece | Classes / component |

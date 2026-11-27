@@ -2,7 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { MAX_NOTICE_HOURS, validTimeZone } from '@/lib/booking';
+import { validTimeZone } from '@/lib/booking';
+import { paymentsReady } from '@/lib/enquiries';
 import { requireOwner } from '@/lib/owner';
 import { getSupabase } from '@/lib/supabase';
 
@@ -23,12 +24,17 @@ function done(saved: string): never {
 const settingsRow = async (fields: Record<string, unknown>) =>
   check((await getSupabase().from('booking_settings').upsert({ id: 1, ...fields })).error);
 
-export async function setBookingStatus(formData: FormData) {
+/** Cancels a session or call. Hours the client paid for go back to them, to pick another time. */
+export async function cancelSession(formData: FormData) {
   await requireOwner();
-  const status = text(formData, 'status');
-  if (status !== 'paid' && status !== 'unpaid' && status !== 'cancelled') return;
+  const db = getSupabase();
+  const gone = await db.from('bookings').update({ status: 'cancelled' }).eq('id', text(formData, 'id')).neq('status', 'cancelled').select('id');
+  check(gone.error);
   // A cancelled session stays cancelled: its time may already belong to someone else.
-  check((await getSupabase().from('bookings').update({ status }).eq('id', text(formData, 'id')).neq('status', 'cancelled')).error);
+  // (Before script 006 there are no payments to give back.)
+  if (gone.data?.length && (await paymentsReady())) {
+    check((await db.from('payments').update({ status: 'confirmed', booking_id: null }).eq('booking_id', gone.data[0].id)).error);
+  }
   revalidatePath('/admin', 'layout');
 }
 
@@ -37,14 +43,13 @@ export async function saveHours(formData: FormData) {
   const open_days = [...new Set(formData.getAll('open_days').map((d) => whole(d, 0, 6)))].filter((d): d is number => d !== null).sort();
   const open_from = whole(formData.get('open_from'), 0, 23);
   const open_to = whole(formData.get('open_to'), 1, 24);
-  const notice_hours = whole(formData.get('notice_hours'), 0, MAX_NOTICE_HOURS);
   const horizon_days = whole(formData.get('horizon_days'), 1, 90);
   const timezone = text(formData, 'timezone', 60);
   if (open_days.length === 0) refuse('days');
   if (open_from === null || open_to === null || open_to <= open_from) refuse('hours');
-  if (notice_hours === null || horizon_days === null) refuse('range');
+  if (horizon_days === null) refuse('range');
   if (!validTimeZone(timezone)) refuse('zone');
-  await settingsRow({ open_days, open_from, open_to, notice_hours, horizon_days, timezone });
+  await settingsRow({ open_days, open_from, open_to, horizon_days, timezone });
   done('hours');
 }
 

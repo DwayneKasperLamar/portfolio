@@ -20,3 +20,14 @@ export async function savePayment(formData: FormData) {
   revalidatePath('/admin', 'layout');
   redirect('/admin/settings?saved=payment');
 }
+
+/** The meeting link put into the email that confirms a job-offer call. */
+export async function saveCallLink(formData: FormData) {
+  await requireOwner();
+  const link = text(formData, 'call_link');
+  if (link && (link.length > 500 || !/^https:\/\/[^\s]+$/.test(link))) redirect('/admin/settings?problem=call');
+  const { error } = await getSupabase().from('booking_settings').upsert({ id: 1, call_link: link || null });
+  if (error) throw new Error(error.message);
+  revalidatePath('/admin', 'layout');
+  redirect('/admin/settings?saved=call');
+}
