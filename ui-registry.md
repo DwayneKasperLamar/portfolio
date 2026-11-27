@@ -25,6 +25,11 @@ Fonts load in `app/layout.tsx` (`--font-head` Newsreader, `--font-body` Inter).
   `bg-glass-pick`, photo for About. Shrinks to the current icon on scroll down; opens on scroll up or tap.
 - Source order is the phone order; the web moves blocks with `md:order-*`.
 
+## Admin
+- `AdminShell`: 232px side menu (`bg-surface`), grouped; a scrolling row on phones. Content up to 1180px.
+- Screen: `PageHead`, dashed `ExplainNote`, then a grid (`gridClass`, or 2/3/4-column tiles). Cards `rounded-xl border border-line bg-surface`.
+- Anything that deletes uses `ConfirmButton`.
+
 ## Pieces
 | Piece | Classes / component |
 |---|---|

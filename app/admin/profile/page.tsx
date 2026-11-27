@@ -19,7 +19,7 @@ export default async function AdminProfilePage() {
           No profile row yet &mdash; run the seed script (<code>npm run seed</code>) after Supabase credentials are set.
         </p>
       ) : (
-        <form action={updateProfile} className="flex flex-col gap-4">
+        <form action={updateProfile} className="flex max-w-2xl flex-col gap-4">
           <label>
             <span className={labelClass}>Name</span>
             <input name="name" defaultValue={profile.name} className={fieldClass} />

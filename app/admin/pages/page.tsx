@@ -49,11 +49,11 @@ export default async function AdminPagesPage() {
       </ExplainNote>
 
       <h2 className="text-sm font-semibold text-primary mb-3">New page</h2>
-      <div className="mb-10">
+      <div className="mb-10 max-w-2xl">
         <PageForm />
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="grid items-start gap-4 xl:grid-cols-2 [&>details]:rounded-xl [&>details]:border [&>details]:border-line [&>details]:p-3">
         {pages.map((page) => (
           <details key={page.slug}>
             <summary className="cursor-pointer text-sm text-primary mb-2 flex gap-3 items-baseline">

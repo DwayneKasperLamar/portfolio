@@ -54,7 +54,7 @@ export default async function AdminTechPage() {
   return (
     <div>
       <h1 className="text-lg font-semibold text-primary mb-6">Tech items</h1>
-      <div className="flex flex-col gap-6 mb-10">
+      <div className="grid items-start gap-5 mb-10 lg:grid-cols-2">
         {items.map((item) => (
           <div key={item.id} className="flex flex-col gap-2">
             <TechForm item={item} projects={projects} />

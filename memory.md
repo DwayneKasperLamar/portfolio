@@ -19,11 +19,10 @@ Last updated: 2026-11-26
 - Repository is public: no private project names, drafts or private writing in committed files.
 
 ## Next session starts with
-1. Live and checked: pushed `5a6fcbf` (new fonts, conventional web layout, tidier phone design). Offered next: the same web menu bar on CV, About, Story and Gallery.
-1b. NOT yet committed: phone header without the background banner (photo kept) and a floating see-through bottom bar (`src/components/PhoneDock.tsx`) copied from Dwayne's iOS screenshot; replaces the tabs. 11 browser interaction checks pass at phone size; not tried on a real iPhone. Waiting for "push".
-1c. Message box + WhatsApp: chosen and mocked up (https://claude.ai/artifact/7aSn749Q4SC9PjKSrNvY7Y), waiting for approval, a WhatsApp number and the alert email. Needs a database script, a Resend account for the alert address, and spam limits.
-2. Dwayne reads the three drafts at `/private`; confirm visits show in Vercel Analytics; collect real numbers and quotes.
-3. Tidy-up, if wanted: the old 3D files and packages are now unused.
+1. Live and checked: pushed `0f2f2ec` (floating phone menu, simpler phone header); 11 browser checks pass on the live site.
+2. NOT yet committed: admin redesign (side menu, dashboard, collection pages), Admin > Gallery with multi-upload, gallery section on the home page, approved message box + WhatsApp button + Admin > Messages. Sandbox tests of the message box pass (15); admin walk on the real database passes, test upload removed. Waiting for "push".
+3. Dwayne to do: run `supabase/004_messages.sql`; enter the WhatsApp number in Admin > Messages; Resend account + `RESEND_API_KEY`, `ALERT_EMAIL` in Vercel; upload gallery photos. Then send one real test message.
+4. Read the three case study drafts at `/private`; collect real numbers and quotes.
 
 ## Open questions
 - Case study drafts need a read-through and sign-off before publishing.

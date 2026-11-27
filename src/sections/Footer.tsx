@@ -5,7 +5,8 @@ import { usePathname } from 'next/navigation';
 
 const Footer = () => {
   const [time, setTime] = useState('');
-  const home = usePathname() === '/';
+  const path = usePathname();
+  const home = path === '/';
 
   useEffect(() => {
     const format = () =>
@@ -22,6 +23,8 @@ const Footer = () => {
 
   // The web home page has its own footer, so this one shows there on phones only.
   const frame = home ? 'px-5 md:hidden' : 'max-w-[640px] px-6';
+
+  if (path.startsWith('/admin')) return null; // the admin has its own frame
 
   return (
     <footer className={`print:hidden mx-auto pb-28 pt-12 md:pb-16 text-xs text-muted ${frame}`}>

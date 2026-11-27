@@ -14,8 +14,8 @@ const SiteHeader = ({ name, email, links }: { name: string; email: string; links
           <Link
             key={l.href}
             href={l.href}
-            // Tablets have less room: the extra link waits for a wider screen.
-            className={`hover:text-primary hover:underline ${l.label === 'Case studies' ? 'hidden lg:block' : ''}`}>
+            // Tablets have less room: the extra links wait for a wider screen.
+            className={`hover:text-primary hover:underline ${['Case studies', 'How I work'].includes(l.label) ? 'hidden lg:block' : ''}`}>
             {l.label}
           </Link>
         ))}

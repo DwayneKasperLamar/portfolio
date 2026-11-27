@@ -21,7 +21,7 @@ export default async function CvPage() {
   ]);
   if (!profile) notFound();
   const d = headerDetails(profile);
-  const reach = [profile.email, ...contact.map((c) => c.title), profile.github_url.replace(/^https?:\/\//, ''), profile.now_text];
+  const reach = [profile.email, ...contact.filter((c) => c.url?.startsWith('mailto:')).map((c) => c.title), profile.github_url.replace(/^https?:\/\//, ''), profile.now_text];
   const lists = [
     { title: 'How I work with AI', items: ai },
     { title: 'What I do', items: whatIDo },

@@ -7,6 +7,8 @@ import type { Moment } from './media';
 function chunk<T>(list: T[], size: number): T[][] {
   const out: T[][] = [];
   for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
+  // On the web, never leave one frame alone: it would stretch across the whole row.
+  if (size > 2 && out.length > 1 && out[out.length - 1].length === 1) out[out.length - 1].unshift(out[out.length - 2].pop() as T);
   return out;
 }
 
@@ -18,7 +20,7 @@ const Mosaic = ({ moments, phone, onOpen }: { moments: Moment[]; phone: boolean;
   const wasGrown = useRef(false);
   const perRow = phone ? 2 : 4;
   const rows = chunk(moments, perRow);
-  const grownRow = Math.floor(grown / perRow);
+  const grownRow = Math.max(0, rows.findIndex((row) => row.includes(moments[grown])));
 
   return (
     <div className="flex flex-col gap-1.5" style={phone ? undefined : { height: Math.max(420, rows.length * 170) }}>
@@ -29,7 +31,7 @@ const Mosaic = ({ moments, phone, onOpen }: { moments: Moment[]; phone: boolean;
             phone ? (r === grownRow ? 'h-[300px]' : 'h-32') : r === grownRow ? 'flex-[2.6_1_0%]' : 'flex-[1_1_0%]'
           }`}>
           {row.map((m, c) => {
-            const i = r * perRow + c;
+            const i = rows.slice(0, r).reduce((total, previous) => total + previous.length, 0) + c;
             const isGrown = i === grown;
             const size = isGrown
               ? phone

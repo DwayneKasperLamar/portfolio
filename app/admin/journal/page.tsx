@@ -54,11 +54,11 @@ export default async function AdminJournalPage() {
       </ExplainNote>
 
       <h2 className="text-sm font-semibold text-primary mb-3">New entry</h2>
-      <div className="mb-10">
+      <div className="mb-10 max-w-2xl">
         <JournalForm />
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="grid items-start gap-4 xl:grid-cols-2 [&>details]:rounded-xl [&>details]:border [&>details]:border-line [&>details]:p-3">
         {entries.map((entry) => (
           <details key={entry.slug} className="group">
             <summary className="cursor-pointer text-sm text-primary mb-2 flex gap-3 items-baseline">

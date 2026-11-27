@@ -3,6 +3,11 @@ import { cookies } from 'next/headers';
 import MobileHeader from '@/components/MobileHeader';
 import PhoneDock from '@/components/PhoneDock';
 import { headerDetails } from '@/lib/profile-header';
+import MessageForm from '@/components/MessageForm';
+import WhatsAppButton from '@/components/WhatsAppButton';
+import GalleryExperience from '@/components/gallery/Experience';
+import { fromGalleryItems } from '@/components/gallery/media';
+import { messagesReady } from '@/lib/messages';
 import SiteHeader from '@/components/SiteHeader';
 import Hero from '@/components/Hero';
 import Block from '@/components/Block';
@@ -16,12 +21,12 @@ import Contact from '@/components/Contact';
 import EmailButton from '@/components/EmailButton';
 import BodyText from '@/components/BodyText';
 import { ADMIN_SESSION_COOKIE, isValidSession } from '@/lib/auth';
-import { getProfile, getProjects, getPublicList, getTechItems, LISTS } from '@/lib/content';
+import { getProfile, getProjects, getPublicGalleryItems, getPublicList, getTechItems, LISTS } from '@/lib/content';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [profile, projects, techItems, experience, caseStudies, ai, whatIDo, offers, quotes, contact] = await Promise.all([
+  const [profile, projects, techItems, experience, caseStudies, ai, whatIDo, offers, quotes, contact, gallery, canMessage] = await Promise.all([
     getProfile(),
     getProjects(),
     getTechItems(),
@@ -32,6 +37,8 @@ export default async function Home() {
     getPublicList(LISTS.offers),
     getPublicList(LISTS.quotes),
     getPublicList(LISTS.contact),
+    getPublicGalleryItems(),
+    messagesReady(),
   ]);
 
   if (!profile) {
@@ -48,12 +55,19 @@ export default async function Home() {
   // Only changes a button label; no private content is loaded on this page.
   const owner = await isValidSession(cookies().get(ADMIN_SESSION_COOKIE)?.value);
 
+  // The WhatsApp link (set in Admin > Messages) gets a button; other contact links are rows.
+  const isWhatsApp = (url: string | null) => Boolean(url?.startsWith('https://wa.me/'));
+  const whatsapp = contact.find((c) => isWhatsApp(c.url))?.url;
+  const contactRows = contact.filter((c) => !isWhatsApp(c.url));
+  const showForm = canMessage || owner;
+
   // The web menu jumps to sections of this page; each appears only if the section exists.
   const webLinks = [
     experience.length > 0 && { href: '/#experience', label: 'Work' },
     caseStudies.length > 0 && { href: '/#case-studies', label: 'Case studies' },
     ai.length > 0 && { href: '/#ai', label: 'How I work' },
     offers.length > 0 && { href: '/#services', label: 'Services' },
+    gallery.length > 0 && { href: '/#gallery', label: 'Gallery' },
     { href: '/#about', label: 'About' },
     { href: '/#contact', label: 'Contact' },
   ].filter((l): l is { href: string; label: string } => Boolean(l));
@@ -115,6 +129,23 @@ export default async function Home() {
           </Block>
         )}
 
+        {/* Visitors see the gallery once something in it is public; you also see the reminder. */}
+        {(gallery.length > 0 || owner) && (
+          <Block id="gallery" label="Gallery" title="Moments" className="md:order-3">
+            {gallery.length > 0 ? (
+              <GalleryExperience kind="gallery" moments={fromGalleryItems(gallery)} />
+            ) : (
+              <p className="rounded-xl border border-dashed border-line p-4 text-sm text-muted">
+                Only you can see this. Nothing in your gallery is public yet:{' '}
+                <Link href="/admin/gallery" className="text-primary underline">
+                  add photos or switch them to public
+                </Link>
+                .
+              </p>
+            )}
+          </Block>
+        )}
+
         <section id="about" className="px-5 pb-2 pt-8 scroll-mt-4 md:order-3 md:px-10 md:pb-24 md:pt-20 md:scroll-mt-[68px]">
           <div className="md:mx-auto md:grid md:max-w-[1080px] md:grid-cols-[260px_minmax(0,1fr)] md:gap-10 lg:grid-cols-[340px_minmax(0,1fr)] lg:gap-20">
             <h2 className="mb-[18px] md:mb-0">
@@ -141,9 +172,9 @@ export default async function Home() {
 
         {/* Web: a contrasting band that invites contact. */}
         <section id="contact" className="px-5 pb-2 pt-8 scroll-mt-4 md:order-4 md:bg-primary md:px-10 md:py-[72px] md:scroll-mt-[68px]">
-          <div className="md:mx-auto md:grid md:max-w-[1080px] md:grid-cols-[minmax(0,1fr)_minmax(0,440px)] md:items-center md:gap-10 lg:gap-20">
-            <div>
-              <h2 className="mb-[18px] md:mb-0">
+          <div className="flex flex-col gap-4 md:mx-auto md:grid md:max-w-[1080px] md:grid-cols-[minmax(0,1fr)_minmax(0,440px)] md:grid-rows-[auto_1fr] md:items-start md:gap-x-10 md:gap-y-7 lg:gap-x-20">
+            <div className="md:col-start-1 md:row-start-1">
+              <h2>
                 <span className="label block md:hidden">Contact</span>
                 <span className="hidden text-balance font-head text-[40px] font-semibold leading-tight text-inverse md:block">
                   Tell me what you are building.
@@ -151,7 +182,23 @@ export default async function Home() {
               </h2>
               <p className="mt-3 hidden text-base text-inverse-muted md:block">Open to remote software architect roles and project work.</p>
             </div>
-            <Contact profile={profile} extra={contact} />
+
+            {showForm && (
+              <div className="md:col-start-2 md:row-span-2 md:row-start-1">
+                {canMessage ? (
+                  <MessageForm />
+                ) : (
+                  <p className="rounded-2xl border border-dashed border-line bg-base p-4 text-sm text-muted">
+                    Only you can see this. The message box appears for visitors once <code>supabase/004_messages.sql</code> has been run.
+                  </p>
+                )}
+              </div>
+            )}
+
+            <div className={`grid gap-4 md:row-start-2 ${showForm ? 'md:col-start-1' : 'md:col-start-2 md:row-start-1'}`}>
+              {whatsapp && <WhatsAppButton url={whatsapp} className="w-full text-primary md:w-auto md:justify-self-start md:text-inverse" />}
+              <Contact profile={profile} extra={contactRows} />
+            </div>
           </div>
         </section>
 

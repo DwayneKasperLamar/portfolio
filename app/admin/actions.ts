@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { getSupabase } from '@/lib/supabase';
 import { requireOwner } from '@/lib/owner';
 import { COLLECTION_KINDS, type CollectionKind, type Visibility } from '@/lib/content';
@@ -242,6 +243,7 @@ export async function deleteCollection(formData: FormData) {
   // Items are removed with it (foreign key "on delete cascade").
   check((await getSupabase().from('collections').delete().eq('slug', str(formData, 'slug', MAX.short))).error);
   refresh('/admin/collections', '/private');
+  redirect('/admin/collections');
 }
 
 export async function upsertCollectionItem(formData: FormData) {

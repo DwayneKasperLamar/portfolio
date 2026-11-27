@@ -5,6 +5,8 @@ const TRACKED_ENV_VARS = [
   'SUPABASE_SERVICE_ROLE_KEY',
   'ADMIN_PASSWORD',
   'ADMIN_SESSION_SECRET',
+  'RESEND_API_KEY', // optional: email alerts for new messages
+  'ALERT_EMAIL', // optional: where the alerts go
 ] as const;
 
 export default function AdminEnvPage() {

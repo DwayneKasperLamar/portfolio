@@ -271,10 +271,11 @@ export interface NavLink {
 
 /** The short menu: work first, the person second. */
 export async function getPublicNav(): Promise<NavLink[]> {
-  const caseStudies = await getPublicList(LISTS.caseStudies);
+  const [caseStudies, gallery] = await Promise.all([getPublicList(LISTS.caseStudies), getPublicGalleryItems()]);
   return [
     { href: '/#experience', label: 'Work' },
     ...(caseStudies.length > 0 ? [{ href: '/work', label: 'Case studies', short: 'Cases' }] : []),
+    ...(gallery.length > 0 ? [{ href: '/gallery', label: 'Gallery' }] : []),
     { href: '/cv', label: 'CV' },
     { href: '/about', label: 'About me', short: 'About' },
     { href: '/#contact', label: 'Contact' },

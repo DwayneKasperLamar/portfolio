@@ -16,6 +16,15 @@ Next.js 14 (App Router) + Tailwind + Supabase. Public site on top, a private are
 | `/private/*` | Everything marked private, including case study drafts | owner only (login) |
 | `/admin/*` | Editors and uploads | owner only (login) |
 
+## Admin, gallery and messages
+
+- `/admin` is a dashboard with a side menu.
+- **Gallery:** Admin > Gallery: upload several photos or videos at once, choose private or public, add YouTube links.
+  Public ones show on the home page and `/gallery`.
+- **Message box:** appears after `004_messages.sql` has run. Messages are read in Admin > Messages. The WhatsApp button
+  appears once a number is saved there. Email alerts need `RESEND_API_KEY` and `ALERT_EMAIL` (the Resend account's own
+  address, unless a domain is verified). A visitor can send 3 an hour; 50 a day in total.
+
 ## Home page lists
 
 Edit these in Admin > Collections. The slug decides where a list appears:
@@ -42,7 +51,7 @@ The menu lists only what exists and is public.
 ## Set up (once)
 
 1. Supabase > SQL editor: run `supabase/schema.sql`, then `supabase/002_content_model.sql`, then
-   `supabase/003_profile_and_media.sql` (the numbered ones are safe to run twice).
+   `supabase/003_profile_and_media.sql` and `supabase/004_messages.sql` (the numbered ones are safe to run twice).
 2. Copy `.env.local.example` to `.env.local` and fill the four values. Add the same four in Vercel and redeploy.
 3. `npm install`, then `npm run seed` once (starter profile and projects).
 4. `npm run seed:content` once for the home page lists, then `npm run dev` and open `/admin/login`.

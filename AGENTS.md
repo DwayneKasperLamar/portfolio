@@ -37,6 +37,9 @@ first time they appear. Teach in the reply; keep the *changes* narrow.
    - `/admin` and `/private` are checked twice: `middleware.ts` and `requireOwner()` inside the page or action. Keep both.
    - Private responses are `no-store` and `noindex`. Never add analytics, logging or third-party embeds to private pages.
    - Text from the admin is rendered as plain text, never HTML. Links go through `safeUrl()`.
+   - `app/actions/contact.ts` is the only action a stranger can use to write to the database. Keep its guards (trap
+     field, length caps, per-sender and daily limits, fail closed), never add a read or an echo to it, and never give
+     the `messages` table an anon policy.
    - Uploads live in a PRIVATE bucket and are only served by `/media/<name>` (`isPublicMedia`). A new place that
      stores a file link must be added to `isPublicMedia`, or visitors will not see it. Never make the bucket public.
 2. **Never print, read, commit or paste secrets.** `.env*` files stay git-ignored. Check that an env file exists with `ls`,

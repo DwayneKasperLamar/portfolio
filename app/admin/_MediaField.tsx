@@ -3,6 +3,7 @@
 /* eslint-disable @next/next/no-img-element -- admin preview of an arbitrary or private file */
 import { useState } from 'react';
 import { createUpload } from './media-actions';
+import { sendFile } from '@/lib/browser-upload';
 import { UPLOAD_TYPES, uploadProblem } from '@/lib/upload-rules';
 
 const fieldClass =
@@ -13,19 +14,6 @@ interface MediaFieldProps {
   label: string;
   defaultValue?: string | null;
   imagesOnly?: boolean;
-}
-
-// Send the file with a progress number (fetch cannot report upload progress).
-function send(url: string, file: File, onProgress: (percent: number) => void) {
-  return new Promise<void>((resolve, reject) => {
-    const request = new XMLHttpRequest();
-    request.open('PUT', url);
-    request.setRequestHeader('Content-Type', file.type);
-    request.upload.onprogress = (e) => e.lengthComputable && onProgress(Math.round((e.loaded / e.total) * 100));
-    request.onload = () => (request.status < 300 ? resolve() : reject(new Error(`Upload refused (${request.status}).`)));
-    request.onerror = () => reject(new Error('The connection dropped. Try again.'));
-    request.send(file);
-  });
 }
 
 // A link box with an upload button. Uploading fills the box; pressing Save keeps it.
@@ -47,7 +35,7 @@ export default function MediaField({ name, label, defaultValue, imagesOnly }: Me
     try {
       const ticket = await createUpload(file.type, file.size);
       if ('error' in ticket) return setStatus(ticket.error);
-      await send(ticket.uploadUrl, file, (percent) => setStatus(`Uploading ${percent}%`));
+      await sendFile(ticket.uploadUrl, file, (percent) => setStatus(`Uploading ${percent}%`));
       setValue(ticket.path);
       setStatus('Uploaded. Now press Save.');
     } catch (e) {
