@@ -1,23 +1,16 @@
 'use server';
 
-// The ONLY action a stranger can call that writes to the database. Keep every guard here.
-import { createHash } from 'node:crypto';
-import { headers } from 'next/headers';
+// Public write action: the short message box, used until the enquiry form is set up. Keep every guard here.
 import { MESSAGE_LIMITS as L, sendAlert } from '@/lib/messages';
 import { getSupabase } from '@/lib/supabase';
+import { senderHash } from '@/lib/sender';
+import { enquiriesReady } from '@/lib/enquiries';
 
 export type SendState = { status: 'idle' | 'sent' | 'error'; message?: string };
 
 const fail = (message: string): SendState => ({ status: 'error', message });
 const GENERIC = 'The message was not sent. Please try again, or email me directly.';
 const TOO_MANY = 'That is a lot of messages. Please email me directly instead.';
-
-// A scrambled network address: enough to count messages per visitor without storing the address.
-function senderHash(): string {
-  const h = headers();
-  const address = h.get('x-forwarded-for')?.split(',')[0].trim() || h.get('x-real-ip') || 'unknown';
-  return createHash('sha256').update(`${address}:${process.env.ADMIN_SESSION_SECRET ?? 'portfolio'}`).digest('hex');
-}
 
 export async function sendMessage(_previous: SendState, formData: FormData): Promise<SendState> {
   const text = (key: string) => String(formData.get(key) ?? '').trim();
@@ -32,6 +25,9 @@ export async function sendMessage(_previous: SendState, formData: FormData): Pro
   if (email.length > L.email || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email)) return fail('Please check your email address.');
   if (!body) return fail('Please write a short message.');
   if (body.length > L.body) return fail(`Please keep it under ${L.body} characters.`);
+
+  // Once the enquiry form is live, this shorter door is closed: every client must say who they are.
+  if (await enquiriesReady()) return fail('Please use the enquiry form.');
 
   const db = getSupabase();
   const sender = senderHash();

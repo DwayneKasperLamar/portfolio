@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { requireOwner } from '@/lib/owner';
 import { getSupabase } from '@/lib/supabase';
 import { LISTS } from '@/lib/content';
@@ -27,9 +28,7 @@ export async function saveWhatsApp(formData: FormData) {
   await requireOwner();
   const raw = String(formData.get('number') ?? '').trim();
   const digits = raw.replace(/[\s()+-]/g, '');
-  if (raw && !/^[1-9]\d{7,14}$/.test(digits)) {
-    throw new Error('Use the full number with the country code, for example +234 followed by the number without its first 0.');
-  }
+  if (raw && !/^[1-9]\d{7,14}$/.test(digits)) redirect('/admin/settings?problem=number');
 
   const db = getSupabase();
   check((await db.from('collection_items').delete().eq('collection_slug', LISTS.contact).like('url', 'https://wa.me/%')).error);
@@ -44,4 +43,5 @@ export async function saveWhatsApp(formData: FormData) {
     );
   }
   revalidatePath('/', 'layout');
+  redirect('/admin/settings?saved=whatsapp');
 }

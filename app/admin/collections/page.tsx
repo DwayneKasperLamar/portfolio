@@ -2,10 +2,12 @@ import Link from 'next/link';
 import { CollectionForm } from './_forms';
 import { ExplainNote, PageHead, VisibilityBadge } from '../_ui';
 import { COLLECTION_KIND_LABELS, getOwnerCollections, getOwnerItems } from '@/lib/content';
+import { requireOwner } from '@/lib/owner';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminCollectionsPage() {
+  await requireOwner();
   const [collections, items] = await Promise.all([getOwnerCollections(), getOwnerItems()]);
 
   return (

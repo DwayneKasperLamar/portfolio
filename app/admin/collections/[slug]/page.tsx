@@ -3,12 +3,14 @@ import { notFound } from 'next/navigation';
 import { CollectionForm, ItemForm } from '../_forms';
 import ConfirmButton from '../../_ConfirmButton';
 import { deleteCollection, deleteCollectionItem } from '../../actions';
-import { PageHead, VisibilityBadge, gridClass } from '../../_ui';
+import { ExplainNote, PageHead, VisibilityBadge, gridClass } from '../../_ui';
 import { COLLECTION_KIND_LABELS, getOwnerCollections, getOwnerItems } from '@/lib/content';
+import { requireOwner } from '@/lib/owner';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminCollectionPage({ params }: { params: { slug: string } }) {
+  await requireOwner();
   const slug = decodeURIComponent(params.slug);
   const [collections, items] = await Promise.all([getOwnerCollections(), getOwnerItems(slug)]);
   const collection = collections.find((c) => c.slug === slug);
@@ -18,12 +20,13 @@ export default async function AdminCollectionPage({ params }: { params: { slug: 
 
   return (
     <div>
-      <Link href="/admin/collections" className="text-sm text-muted hover:text-primary">&larr; Collections</Link>
       <PageHead title={collection.title}>
         <span className="flex items-center gap-3 text-sm text-muted">
           {COLLECTION_KIND_LABELS[collection.kind]} <VisibilityBadge value={collection.visibility} />
         </span>
       </PageHead>
+      <Link href="/admin/collections" className="mb-4 inline-block text-sm text-muted hover:text-primary">&larr; All collections</Link>
+      <ExplainNote>The items in this list. An item is public only if both it and this collection are public.</ExplainNote>
 
       <ul className={gridClass}>
         {items.map((item) => (

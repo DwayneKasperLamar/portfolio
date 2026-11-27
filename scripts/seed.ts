@@ -31,7 +31,7 @@ async function main() {
   await supabase.from('profile').upsert({
     id: 1,
     name: 'Dwayne Kasper',
-    location: 'Nigeria',
+    location: '', // not shown on the site
     role_title: 'Software Architect',
     current_role_text:
       'I work as a software architect at Kosher Spa, and at Uncollos, a startup I co-founded. I decide how a system fits together, design the data and the money flows, and direct AI coding agents to build it. I check what ships.',

@@ -3,9 +3,9 @@
 import { usePathname } from 'next/navigation';
 import { Analytics, type BeforeSendEvent } from '@vercel/analytics/react';
 
-// Counts visits to PUBLIC pages only. The private area, the admin and uploaded files are
-// never reported: the component is not even loaded there, and the filter drops any stray event.
-const HIDDEN = /^\/(admin|private|media)(\/|$)/;
+// Counts visits to PUBLIC pages only. The private area, the admin, booking links and uploaded
+// files are never reported: the component is not even loaded there, and the filter drops any stray event.
+const HIDDEN = /^\/(admin|private|media|book)(\/|$)/;
 
 function publicOnly(event: BeforeSendEvent) {
   return HIDDEN.test(new URL(event.url).pathname) ? null : event;

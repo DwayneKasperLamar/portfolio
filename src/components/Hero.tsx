@@ -12,7 +12,7 @@ const Hero = ({ profile, className = '' }: { profile: Profile; className?: strin
   // "About, second paragraph" in the admin; the standard line is used while it is empty.
   const lead =
     profile.previous_role_text ||
-    `${profile.role_title} in ${profile.location}. I decide how it all fits together, direct AI coding agents to build it, and check what ships.`;
+    `${profile.role_title}. I decide how it all fits together, direct AI coding agents to build it, and check what ships.`;
 
   return (
     <header className={`hidden px-10 md:block ${className}`}>

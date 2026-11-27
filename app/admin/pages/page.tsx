@@ -1,7 +1,9 @@
 import { getOwnerPages } from '@/lib/content';
 import type { SitePage } from '@/lib/content';
 import { upsertPage, deletePage } from '../actions';
-import { ExplainNote, VisibilitySelect, VisibilityBadge, fieldClass, labelClass, cardClass, saveClass } from '../_ui';
+import { ExplainNote, VisibilitySelect, VisibilityBadge, fieldClass, labelClass, cardClass, saveClass, PageHead, deleteClass } from '../_ui';
+import ConfirmButton from '../_ConfirmButton';
+import { requireOwner } from '@/lib/owner';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,11 +41,12 @@ function PageForm({ page }: { page?: SitePage }) {
 }
 
 export default async function AdminPagesPage() {
+  await requireOwner();
   const pages = await getOwnerPages();
 
   return (
     <div>
-      <h1 className="text-lg font-semibold text-primary mb-2">Pages</h1>
+      <PageHead title="Pages" />
       <ExplainNote>
         Free-form pages (About, Manifesto, Now, anything). A public page lives at /p/slug; a private one is only readable after login.
       </ExplainNote>
@@ -63,9 +66,9 @@ export default async function AdminPagesPage() {
             <PageForm page={page} />
             <form action={deletePage} className="mt-2">
               <input type="hidden" name="slug" value={page.slug} />
-              <button type="submit" className="text-xs text-red-500 hover:underline">
+              <ConfirmButton question={`Delete the page "${page.title}"? This cannot be undone.`} className={deleteClass}>
                 Delete &ldquo;{page.title}&rdquo;
-              </button>
+              </ConfirmButton>
             </form>
           </details>
         ))}

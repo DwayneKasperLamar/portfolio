@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { ADMIN_SESSION_COOKIE, computeSessionToken, safeEqual, safeNextPath } from '@/lib/auth';
@@ -24,10 +25,12 @@ export async function login(formData: FormData) {
     maxAge: 60 * 60 * 24 * 7,
   });
 
+  revalidatePath('/admin', 'layout'); // the menu is drawn again, now for the owner
   redirect(next);
 }
 
 export async function logout() {
   cookies().delete(ADMIN_SESSION_COOKIE);
+  revalidatePath('/admin', 'layout');
   redirect('/admin/login');
 }

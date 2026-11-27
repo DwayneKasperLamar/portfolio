@@ -19,7 +19,7 @@ const head = Newsreader({
 
 const title = 'Dwayne Kasper — Software Architect';
 const description =
-  'Software architect in Nigeria. I design mobile and web products that take payments, and build them with AI. Open to remote roles.';
+  'Software architect. I design mobile and web products that take payments, and build them with AI. Open to remote roles.';
 
 // The preview card shown when the link is pasted in a message or email. The picture is
 // app/opengraph-image.png. Set NEXT_PUBLIC_SITE_URL when the site gets its own domain.

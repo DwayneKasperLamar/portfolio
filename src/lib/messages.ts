@@ -29,9 +29,9 @@ export async function getOwnerMessages(): Promise<Message[]> {
 
 export const alertsConfigured = () => Boolean(process.env.RESEND_API_KEY && process.env.ALERT_EMAIL);
 
-// Email the owner about a new message. Best effort: the message is already saved, so a slow
-// or failing email service must never turn a sent message into an error.
-export async function sendAlert(message: { name: string; email: string; body: string }): Promise<void> {
+// Email the owner. Best effort: what happened is already saved, so a slow or failing email
+// service must never turn a successful action into an error.
+export async function sendOwnerAlert(subject: string, text: string, replyTo?: string): Promise<void> {
   if (!alertsConfigured()) return;
   try {
     const response = await fetch('https://api.resend.com/emails', {
@@ -40,15 +40,22 @@ export async function sendAlert(message: { name: string; email: string; body: st
       body: JSON.stringify({
         from: 'Portfolio <onboarding@resend.dev>', // only delivers to the Resend account's own address
         to: [process.env.ALERT_EMAIL],
-        reply_to: message.email,
-        subject: `New message from ${message.name.replace(/\s+/g, ' ')}`,
-        text: `${message.name} <${message.email}> wrote:\n\n${message.body}\n\nAll messages: /admin/messages`,
+        ...(replyTo ? { reply_to: replyTo } : {}),
+        subject: subject.replace(/\s+/g, ' ').slice(0, 200),
+        text,
       }),
       cache: 'no-store',
       signal: AbortSignal.timeout(5000),
     });
-    if (!response.ok) console.error(`Message alert not sent: email service answered ${response.status}`);
+    if (!response.ok) console.error(`Alert not sent: email service answered ${response.status}`);
   } catch {
-    console.error('Message alert not sent: email service unreachable');
+    console.error('Alert not sent: email service unreachable');
   }
 }
+
+export const sendAlert = (message: { name: string; email: string; body: string }) =>
+  sendOwnerAlert(
+    `New message from ${message.name}`,
+    `${message.name} <${message.email}> wrote:\n\n${message.body}\n\nAll messages: /admin/enquiries`,
+    message.email,
+  );

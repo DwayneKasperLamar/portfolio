@@ -13,6 +13,7 @@ const keyForPath = (path: string): Key => {
   if (path === '/') return 'home';
   if (path.startsWith('/work')) return 'work';
   if (path.startsWith('/cv')) return 'cv';
+  if (path.startsWith('/enquire')) return 'contact';
   return 'about';
 };
 
@@ -24,7 +25,7 @@ const HomeIcon = ({ filled }: { filled: boolean }) => (
 
 // The phone menu: a floating, see-through bar at the bottom, like the iPhone's.
 // It shows where you are. Scrolling down shrinks it to the current icon; scrolling up
-// or tapping it opens it again. Never shown in the admin or the private area.
+// or tapping it opens it again. Never shown in the admin, the private area or a booking page.
 const PhoneDock = ({ photo, name }: { photo: string; name: string }) => {
   const path = usePathname();
   const [section, setSection] = useState<Key>('home');
@@ -60,7 +61,7 @@ const PhoneDock = ({ photo, name }: { photo: string; name: string }) => {
     return () => window.removeEventListener('scroll', onScroll);
   }, [path]);
 
-  if (path.startsWith('/admin') || path.startsWith('/private')) return null;
+  if (/^\/(admin|private|book)(\/|$)/.test(path)) return null;
 
   const active = path === '/' ? section : keyForPath(path);
   const items: { key: Key; label: string; href: string; icon: (on: boolean) => React.ReactNode }[] = [

@@ -1,6 +1,9 @@
 import { getTechItems, getProjects } from '@/lib/content';
 import type { TechItem, Project } from '@/lib/content';
 import { upsertTechItem, deleteTechItem } from '../actions';
+import { ExplainNote, PageHead, deleteClass } from '../_ui';
+import ConfirmButton from '../_ConfirmButton';
+import { requireOwner } from '@/lib/owner';
 
 export const dynamic = 'force-dynamic';
 
@@ -49,20 +52,22 @@ function TechForm({ item, projects }: { item?: TechItem; projects: Project[] }) 
 }
 
 export default async function AdminTechPage() {
+  await requireOwner();
   const [items, projects] = await Promise.all([getTechItems(), getProjects()]);
 
   return (
     <div>
-      <h1 className="text-lg font-semibold text-primary mb-6">Tech items</h1>
+      <PageHead title="Tools" />
+      <ExplainNote>The tool logos on your site. Everything here is public.</ExplainNote>
       <div className="grid items-start gap-5 mb-10 lg:grid-cols-2">
         {items.map((item) => (
           <div key={item.id} className="flex flex-col gap-2">
             <TechForm item={item} projects={projects} />
             <form action={deleteTechItem}>
               <input type="hidden" name="id" value={item.id} />
-              <button type="submit" className="text-xs text-red-500 hover:underline">
+              <ConfirmButton question={`Delete ${item.label}?`} className={deleteClass}>
                 Delete {item.label}
-              </button>
+              </ConfirmButton>
             </form>
           </div>
         ))}

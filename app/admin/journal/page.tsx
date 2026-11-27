@@ -1,7 +1,9 @@
 import { getOwnerJournal } from '@/lib/content';
 import type { JournalEntry } from '@/lib/content';
 import { upsertJournalEntry, deleteJournalEntry } from '../actions';
-import { ExplainNote, VisibilitySelect, VisibilityBadge, fieldClass, labelClass, cardClass, saveClass } from '../_ui';
+import { ExplainNote, VisibilitySelect, VisibilityBadge, fieldClass, labelClass, cardClass, saveClass, PageHead, deleteClass } from '../_ui';
+import ConfirmButton from '../_ConfirmButton';
+import { requireOwner } from '@/lib/owner';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,11 +46,12 @@ function JournalForm({ entry }: { entry?: JournalEntry }) {
 }
 
 export default async function AdminJournalPage() {
+  await requireOwner();
   const entries = await getOwnerJournal();
 
   return (
     <div>
-      <h1 className="text-lg font-semibold text-primary mb-2">Journal</h1>
+      <PageHead title="Journal" />
       <ExplainNote>
         Your diary. Every entry is private until you switch it to public. Private entries are only readable at /private after you log in.
       </ExplainNote>
@@ -69,9 +72,9 @@ export default async function AdminJournalPage() {
             <JournalForm entry={entry} />
             <form action={deleteJournalEntry} className="mt-2">
               <input type="hidden" name="slug" value={entry.slug} />
-              <button type="submit" className="text-xs text-red-500 hover:underline">
+              <ConfirmButton question={`Delete "${entry.title}"? This cannot be undone.`} className={deleteClass}>
                 Delete &ldquo;{entry.title}&rdquo;
-              </button>
+              </ConfirmButton>
             </form>
           </details>
         ))}

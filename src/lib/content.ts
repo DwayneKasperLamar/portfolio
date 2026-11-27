@@ -32,6 +32,7 @@ export interface Profile {
   joined_text?: string | null;
   born_text?: string | null;
   verified?: boolean;
+  linkedin_url?: string | null; // after supabase/005_enquiries_bookings.sql
 }
 
 export interface Project {

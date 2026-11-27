@@ -1,8 +1,10 @@
 import { getOwnerProjects } from '@/lib/content';
-import { VisibilitySelect, VisibilityBadge } from '../_ui';
+import { VisibilitySelect, VisibilityBadge, PageHead, deleteClass, ExplainNote } from '../_ui';
+import ConfirmButton from '../_ConfirmButton';
 import { upsertProject, deleteProject } from '../actions';
 import MediaField from '../_MediaField';
 import type { Project } from '@/lib/content';
+import { requireOwner } from '@/lib/owner';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,13 +44,15 @@ function ProjectForm({ project, withVisibility }: { project?: Project; withVisib
 }
 
 export default async function AdminProjectsPage() {
+  await requireOwner();
   const projects = await getOwnerProjects();
   // The visibility column only exists after supabase/002_content_model.sql has been run.
   const withVisibility = projects.length === 0 || projects.some((p) => p.visibility !== undefined);
 
   return (
     <div>
-      <h1 className="text-lg font-semibold text-primary mb-6">Projects</h1>
+      <PageHead title="Projects" />
+      <ExplainNote>The projects listed on your About me page. Each one is private until you mark it public.</ExplainNote>
       <div className="grid items-start gap-5 mb-10 lg:grid-cols-2">
         {projects.map((project) => (
           <div key={project.slug} className="flex flex-col gap-2">
@@ -56,9 +60,9 @@ export default async function AdminProjectsPage() {
             <ProjectForm project={project} withVisibility={withVisibility} />
             <form action={deleteProject}>
               <input type="hidden" name="slug" value={project.slug} />
-              <button type="submit" className="text-xs text-red-500 hover:underline">
+              <ConfirmButton question={`Delete ${project.title}?`} className={deleteClass}>
                 Delete {project.title}
-              </button>
+              </ConfirmButton>
             </form>
           </div>
         ))}

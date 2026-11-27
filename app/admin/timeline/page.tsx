@@ -2,7 +2,9 @@ import { getOwnerTimeline } from '@/lib/content';
 import type { TimelineEvent } from '@/lib/content';
 import { upsertTimelineEvent, deleteTimelineEvent } from '../actions';
 import MediaField from '../_MediaField';
-import { ExplainNote, VisibilitySelect, VisibilityBadge, fieldClass, labelClass, cardClass, saveClass } from '../_ui';
+import { ExplainNote, VisibilitySelect, VisibilityBadge, fieldClass, labelClass, cardClass, saveClass, PageHead, deleteClass } from '../_ui';
+import ConfirmButton from '../_ConfirmButton';
+import { requireOwner } from '@/lib/owner';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,11 +40,12 @@ function EventForm({ event }: { event?: TimelineEvent }) {
 }
 
 export default async function AdminTimelinePage() {
+  await requireOwner();
   const events = await getOwnerTimeline();
 
   return (
     <div>
-      <h1 className="text-lg font-semibold text-primary mb-2">Timeline</h1>
+      <PageHead title="Timeline" />
       <ExplainNote>
         The biography, one moment at a time. The public Story page shows only the moments marked public, oldest first.
       </ExplainNote>
@@ -63,9 +66,9 @@ export default async function AdminTimelinePage() {
             <EventForm event={event} />
             <form action={deleteTimelineEvent} className="mt-2">
               <input type="hidden" name="id" value={event.id} />
-              <button type="submit" className="text-xs text-red-500 hover:underline">
+              <ConfirmButton question={`Delete "${event.title}"?`} className={deleteClass}>
                 Delete &ldquo;{event.title}&rdquo;
-              </button>
+              </ConfirmButton>
             </form>
           </details>
         ))}

@@ -10,6 +10,7 @@ const handleOf = (url: string) => url.replace(/\/+$/, '').split('/').pop() ?? ur
 const Contact = ({ profile, extra }: { profile: Profile; extra: CollectionItem[] }) => {
   const github = safeUrl(profile.github_url);
   const x = safeUrl(profile.twitter_url);
+  const linkedin = safeUrl(profile.linkedin_url);
   const rows = [
     { key: 'email', label: 'Email', text: profile.email, url: safeUrl(`mailto:${profile.email}`) },
     ...extra.map((item) => ({
@@ -18,6 +19,7 @@ const Contact = ({ profile, extra }: { profile: Profile; extra: CollectionItem[]
       text: item.title,
       url: safeUrl(item.url),
     })),
+    { key: 'linkedin', label: 'LinkedIn', text: linkedin ? handleOf(linkedin) : '', url: linkedin },
     { key: 'github', label: 'GitHub', text: github ? handleOf(github) : '', url: github },
     { key: 'x', label: 'X', text: x ? `@${handleOf(x)}` : '', url: x },
   ];

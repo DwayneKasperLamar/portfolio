@@ -32,7 +32,6 @@ const MobileHeader = ({ profile, counts, owner }: MobileHeaderProps) => {
   // Two even columns of short facts.
   const facts = [
     d.company,
-    profile.location,
     d.joined,
     counts.roles > 0 && `${counts.roles} current ${counts.roles === 1 ? 'role' : 'roles'}`,
     counts.caseStudies > 0 && `${counts.caseStudies} case ${counts.caseStudies === 1 ? 'study' : 'studies'}`,

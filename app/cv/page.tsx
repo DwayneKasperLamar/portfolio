@@ -28,7 +28,7 @@ export default async function CvPage() {
   ];
 
   return (
-    <PageShell title={profile.name} subtitle={`${profile.role_title} · ${profile.location}`} hideNav>
+    <PageShell title={profile.name} subtitle={profile.role_title} hideNav>
       <div className="text-[0.92rem] print:text-[10pt] print:leading-snug">
         <p className="mb-1">{d.bio}</p>
         <p className="font-sans text-xs text-muted mb-4 break-words">{reach.filter(Boolean).join(' · ')}</p>

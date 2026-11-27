@@ -25,10 +25,22 @@ Fonts load in `app/layout.tsx` (`--font-head` Newsreader, `--font-body` Inter).
   `bg-glass-pick`, photo for About. Shrinks to the current icon on scroll down; opens on scroll up or tap.
 - Source order is the phone order; the web moves blocks with `md:order-*`.
 
-## Admin
-- `AdminShell`: 232px side menu (`bg-surface`), grouped; a scrolling row on phones. Content up to 1180px.
-- Screen: `PageHead`, dashed `ExplainNote`, then a grid (`gridClass`, or 2/3/4-column tiles). Cards `rounded-xl border border-line bg-surface`.
+## Admin (approved mockup, 2026-11-27)
+- `AdminShell`: 216px side menu (`bg-surface`): photo, name, View site; Home, Enquiries (count badge), Bookings;
+  "Your site": Profile, Content, Gallery, Settings; Log out at the bottom. Active item `bg-base ring-1 ring-line`.
+  Phone: the same seven in a 4-column block, icon over label. Content uses the full width (`px-4`, `md:px-7`).
+- Screen: `PageHead` (sticky bar, 26px title, actions on the right), dashed `ExplainNote`, then a grid. Content
+  screens get tabs under the bar automatically (`_ContentTabs`).
+- Admin buttons: `btnClass`, `btnFillClass` (38px, radius 9px), `smallClass`, `deleteClass` from `_ui.tsx`.
+- Stat tile: `rounded-xl border border-line bg-surface p-4`, `.label`, `font-head text-3xl`, 13px muted line.
+- List + detail (Enquiries): 340px list, detail card with a 3-column fact grid; phone shows one at a time.
+- Waiting / unpaid is a dashed border or dashed `.pill`; done / paid is `.pill` with `.status-dot`.
+- A refused change shows `role="alert"` box with `border-primary` at the top of the screen, in plain words.
 - Anything that deletes uses `ConfirmButton`.
+
+## Visitor forms
+- Enquiry and booking: one column up to 640px, card `rounded-2xl border border-line p-[18px] md:p-6`, fields
+  `rounded-[10px] border-line bg-surface`, 12.5px muted labels. Choice chips fill with `bg-primary` when picked.
 
 ## Pieces
 | Piece | Classes / component |

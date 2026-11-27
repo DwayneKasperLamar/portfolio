@@ -65,6 +65,11 @@ export async function updateProfile(formData: FormData) {
     for (const key of ['avatar_url', 'cover_url'] as const) extra[key] = str(formData, key, MAX.url) || null;
     extra.verified = formData.get('verified') === 'on';
   }
+  // Sent only once the form offers it (after 005_enquiries_bookings.sql).
+  if (formData.has('linkedin_url')) {
+    const linkedin = str(formData, 'linkedin_url', MAX.url);
+    extra.linkedin_url = /^https:\/\/([a-z]+\.)?linkedin\.com\//i.test(linkedin) ? linkedin : null; // anything else is left off
+  }
   check(
     (
       await getSupabase()
@@ -72,7 +77,6 @@ export async function updateProfile(formData: FormData) {
         .update({
           ...extra,
           name: str(formData, 'name', MAX.short),
-          location: str(formData, 'location', MAX.short),
           role_title: str(formData, 'role_title', MAX.short),
           current_role_text: str(formData, 'current_role_text', MAX.body),
           previous_role_text: str(formData, 'previous_role_text', MAX.body),

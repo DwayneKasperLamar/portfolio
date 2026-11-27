@@ -37,9 +37,13 @@ first time they appear. Teach in the reply; keep the *changes* narrow.
    - `/admin` and `/private` are checked twice: `middleware.ts` and `requireOwner()` inside the page or action. Keep both.
    - Private responses are `no-store` and `noindex`. Never add analytics, logging or third-party embeds to private pages.
    - Text from the admin is rendered as plain text, never HTML. Links go through `safeUrl()`.
-   - `app/actions/contact.ts` is the only action a stranger can use to write to the database. Keep its guards (trap
-     field, length caps, per-sender and daily limits, fail closed), never add a read or an echo to it, and never give
-     the `messages` table an anon policy.
+   - Only three files let someone without the login write to the database: `app/actions/enquiry.ts` and
+     `app/actions/contact.ts` (any visitor; contact only until the enquiry form is set up), and
+     `app/actions/booking.ts` (a client holding a booking link). Keep their guards (trap field, length caps, limits,
+     fail closed; for bookings: check the link every time, price and times decided by the server), never add an echo
+     of stored data, and never give `messages`, `enquiries`, `bookings` or the booking tables an anon policy.
+   - A booking link `/book/<token>` is a secret that stands in for a login: no analytics, no referrer, not indexed.
+     A client may only ever see and change their own sessions.
    - Uploads live in a PRIVATE bucket and are only served by `/media/<name>` (`isPublicMedia`). A new place that
      stores a file link must be added to `isPublicMedia`, or visitors will not see it. Never make the bucket public.
 2. **Never print, read, commit or paste secrets.** `.env*` files stay git-ignored. Check that an env file exists with `ls`,

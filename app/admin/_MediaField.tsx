@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable @next/next/no-img-element -- admin preview of an arbitrary or private file */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createUpload } from './media-actions';
 import { sendFile } from '@/lib/browser-upload';
 import { UPLOAD_TYPES, uploadProblem } from '@/lib/upload-rules';
@@ -14,11 +14,14 @@ interface MediaFieldProps {
   label: string;
   defaultValue?: string | null;
   imagesOnly?: boolean;
+  /** Told about every change, for a live preview. */
+  onValueChange?: (value: string) => void;
 }
 
 // A link box with an upload button. Uploading fills the box; pressing Save keeps it.
-export default function MediaField({ name, label, defaultValue, imagesOnly }: MediaFieldProps) {
+export default function MediaField({ name, label, defaultValue, imagesOnly, onValueChange }: MediaFieldProps) {
   const [value, setValue] = useState(defaultValue ?? '');
+  useEffect(() => onValueChange?.(value), [value, onValueChange]);
   const [status, setStatus] = useState('');
   const [busy, setBusy] = useState(false);
   const accept = Object.keys(UPLOAD_TYPES)

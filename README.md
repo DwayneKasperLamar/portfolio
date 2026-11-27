@@ -13,17 +13,31 @@ Next.js 14 (App Router) + Tailwind + Supabase. Public site on top, a private are
 | `/story` | Biography as a depth walk (web) or stacked moments (phone), plus a plain list | public moments only |
 | `/gallery` | Videos and photos: living mosaic (web) or folding mosaic (phone) | public items in public "Gallery" collections |
 | `/journal`, `/c/<slug>`, `/p/<slug>` | Journal, collections, free-form pages | public only |
+| `/enquire` | Enquiry form for prospective clients | everyone |
+| `/book/<token>` | Pick a day, time and length; price in US dollars | only the accepted client with the link |
 | `/private/*` | Everything marked private, including case study drafts | owner only (login) |
-| `/admin/*` | Editors and uploads | owner only (login) |
+| `/admin/*` | Home, Enquiries, Bookings, Profile, Content, Gallery, Settings | owner only (login) |
 
-## Admin, gallery and messages
+## Clients: enquiry, answer, booking
 
-- `/admin` is a dashboard with a side menu.
-- **Gallery:** Admin > Gallery: upload several photos or videos at once, choose private or public, add YouTube links.
+1. A visitor fills the enquiry form: who they are, company, role, country, city, what they need (100 characters or
+   more), budget and start. All required. 3 an hour per visitor, 50 a day in total.
+2. You read it in Admin > Enquiries. **Accept** creates a secret booking link, which you email from your own inbox.
+   **Decline** switches any link off.
+3. The client books a free time. The session is **unpaid** until you mark it paid in Admin > Bookings. The site takes
+   no money itself: the "Pay" button opens the payment link saved in Admin > Settings. An unpaid session keeps its
+   time until you or the client cancel it.
+4. Set the hourly rate, open days and hours, and blocked days in Admin > Bookings. No rate means booking is closed.
+
+- All of this appears after `005_enquiries_bookings.sql` has run. Until then the short message box stays.
+- The WhatsApp button appears once a number is saved in Admin > Settings. It lets people write without the form.
+- Email alerts (new enquiry, new booking) go only to you and need `RESEND_API_KEY` and `ALERT_EMAIL` (the Resend
+  account's own address, unless a domain is verified). The site never emails clients.
+
+## Gallery
+
+- Admin > Gallery: upload several photos or videos at once, choose private or public, add YouTube links.
   Public ones show on the home page and `/gallery`.
-- **Message box:** appears after `004_messages.sql` has run. Messages are read in Admin > Messages. The WhatsApp button
-  appears once a number is saved there. Email alerts need `RESEND_API_KEY` and `ALERT_EMAIL` (the Resend account's own
-  address, unless a domain is verified). A visitor can send 3 an hour; 50 a day in total.
 
 ## Home page lists
 
@@ -50,8 +64,9 @@ The menu lists only what exists and is public.
 
 ## Set up (once)
 
-1. Supabase > SQL editor: run `supabase/schema.sql`, then `supabase/002_content_model.sql`, then
-   `supabase/003_profile_and_media.sql` and `supabase/004_messages.sql` (the numbered ones are safe to run twice).
+1. Supabase > SQL editor: run `supabase/schema.sql`, then `supabase/002_content_model.sql`,
+   `supabase/003_profile_and_media.sql`, `supabase/004_messages.sql` and `supabase/005_enquiries_bookings.sql`
+   (the numbered ones are safe to run twice).
 2. Copy `.env.local.example` to `.env.local` and fill the four values. Add the same four in Vercel and redeploy.
 3. `npm install`, then `npm run seed` once (starter profile and projects).
 4. `npm run seed:content` once for the home page lists, then `npm run dev` and open `/admin/login`.
@@ -72,5 +87,7 @@ If the live site says "Content isn't set up yet", step 1, 2 or 3 is missing.
 ## Known limits
 
 - One shared password, no login rate limit yet. Use a long password.
+- A booking link has no second check: whoever holds it can book in that client's name until you switch it off.
+- A client cancelling a session does not send an alert. Unpaid sessions do not expire by themselves.
 - Deleting an entry does not delete its uploaded file from storage. A link already handed out stays valid for up to an hour.
 - Not yet built: search, RSS, drafts/scheduling, sharing a private page with a chosen person by link.

@@ -1,7 +1,7 @@
 import { safeUrl } from '@/lib/safe-url';
 import SafeImage from '@/components/SafeImage';
 
-// Opens a WhatsApp chat. The number is set in Admin > Messages.
+// Opens a WhatsApp chat. The number is set in Admin > Settings.
 const WhatsAppButton = ({ url, className = '' }: { url: string; className?: string }) => {
   const href = safeUrl(url);
   if (!href) return null;

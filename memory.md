@@ -1,31 +1,39 @@
-# Memory — Portfolio: work-first home page is live
+# Memory — Portfolio: enquiries, paid bookings and the new admin pushed
 
-Last updated: 2026-11-26
+Last updated: 2026-11-27
 
-## What was built
-- Live: pushed `963edee`, deployed and checked (routes, drafts hidden, no dead links, preview image, Kosher Spa logo fixed).
-- In that push:
-  - Uploads (private bucket, `/media/[name]`), phone-only profile header.
-  - Home page order: headline + Email, work experience, case studies, how I work with AI, what I do, work with me, about, tools, contact. New `/work`, `/cv` (prints on one page), `/about`; draft preview at `/private/work/[slug]`.
-  - Link preview image, Vercel Analytics on public pages only. GitHub widget and "Working on now" removed.
-- Database (applied): new headline/about/availability text; lists `experience`, `ai-workflow`, `work-with-me`, `contact`, empty `quotes`; three PRIVATE case study drafts; tools updated; two dead project links removed; one product description corrected.
-- Checks: types, lint, build; strangers cannot open drafts or private pages; no dead links; screenshots of web, phone, CV, preview image.
+## What was built (pushed 2026-11-27)
+- Enquiry form `/enquire` (replaces the message box once SQL 005 has run), private booking page `/book/<token>` in US
+  dollars, admin redesign: Home, Enquiries, Bookings, Profile (live phone preview, LinkedIn), Content, Gallery, Settings.
+- `supabase/005_enquiries_bookings.sql` HAS been run: tables checked present on the real database (read only).
+- Location removed from the whole site, the admin form, the description and the preview card.
+- Checks: types, lint, build; 20 database checks on a throwaway Postgres; 20 time-zone checks; 92 browser checks
+  against a stand-in database (phone and web). Not tested: a real enquiry or booking on the live database, real email
+  alerts, a real iPhone.
+- The stand-in database does not enforce column limits: compare app limits with the SQL when changing either.
 
 ## Decisions made
 - Roles: Software Architect at Kosher Spa; co-founder and Software Architect at Uncollos; previously mobile developer at Spaxe. Open to remote roles.
 - Say plainly that AI writes much of the code and Dwayne decides and checks.
-- Uncollos logo is correct as it is. Both email addresses are shown.
-- Web header stays simple text; the photo header is phone-only.
+- Only prospective clients: nobody books without an accepted enquiry. No AI assistant answers; the owner is only
+  notified. Consultations are hourly, charged in USD.
+- No payment provider yet: a saved payment link, and the owner marks sessions paid.
+- Chat (documents, audio, video) is the next phase, only for accepted clients. Mockup first. Later: an admin phone app.
 - Repository is public: no private project names, drafts or private writing in committed files.
 
 ## Next session starts with
-1. Live and checked: pushed `0f2f2ec` (floating phone menu, simpler phone header); 11 browser checks pass on the live site.
-2. NOT yet committed: admin redesign (side menu, dashboard, collection pages), Admin > Gallery with multi-upload, gallery section on the home page, approved message box + WhatsApp button + Admin > Messages. Sandbox tests of the message box pass (15); admin walk on the real database passes, test upload removed. Waiting for "push".
-3. Dwayne to do: run `supabase/004_messages.sql`; enter the WhatsApp number in Admin > Messages; Resend account + `RESEND_API_KEY`, `ALERT_EMAIL` in Vercel; upload gallery photos. Then send one real test message.
-4. Read the three case study drafts at `/private`; collect real numbers and quotes.
+1. Confirm, then build, two rules Dwayne gave when approving the push (wording to confirm):
+   a paid session starts some hours after payment, or from the next day; job offers and recruiters get answers first
+   and fast. Also still open from the review: no alert when a client cancels, "Email me" buttons bypass the form.
+2. Set rate, hours and payment link in the admin.
+3. Dwayne to do: Resend account plus `RESEND_API_KEY` and `ALERT_EMAIL` in Vercel (without it there are no alerts);
+   WhatsApp number; gallery uploads; LinkedIn.
+4. Design the chat phase (mockup).
+5. Read the three case study drafts at `/private`; collect real numbers and quotes.
 
 ## Open questions
+- Which payment service takes US dollars from abroad and pays out to Dwayne?
 - Case study drafts need a read-through and sign-off before publishing.
 - Handle on the phone header comes from the X link; is that the right account?
-- Real results to add to the case studies (users, bookings).
+- The link preview picture still uses the old photo: match the new one?
 - Delete the unused 3D models and textures in `public/`?

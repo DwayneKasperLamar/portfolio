@@ -4,10 +4,12 @@ import MobileHeader from '@/components/MobileHeader';
 import PhoneDock from '@/components/PhoneDock';
 import { headerDetails } from '@/lib/profile-header';
 import MessageForm from '@/components/MessageForm';
+import EnquiryCard from '@/components/EnquiryCard';
 import WhatsAppButton from '@/components/WhatsAppButton';
 import GalleryExperience from '@/components/gallery/Experience';
 import { fromGalleryItems } from '@/components/gallery/media';
 import { messagesReady } from '@/lib/messages';
+import { enquiriesReady } from '@/lib/enquiries';
 import SiteHeader from '@/components/SiteHeader';
 import Hero from '@/components/Hero';
 import Block from '@/components/Block';
@@ -26,7 +28,7 @@ import { getProfile, getProjects, getPublicGalleryItems, getPublicList, getTechI
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [profile, projects, techItems, experience, caseStudies, ai, whatIDo, offers, quotes, contact, gallery, canMessage] = await Promise.all([
+  const [profile, projects, techItems, experience, caseStudies, ai, whatIDo, offers, quotes, contact, gallery, canMessage, canEnquire] = await Promise.all([
     getProfile(),
     getProjects(),
     getTechItems(),
@@ -39,6 +41,7 @@ export default async function Home() {
     getPublicList(LISTS.contact),
     getPublicGalleryItems(),
     messagesReady(),
+    enquiriesReady(),
   ]);
 
   if (!profile) {
@@ -55,11 +58,12 @@ export default async function Home() {
   // Only changes a button label; no private content is loaded on this page.
   const owner = await isValidSession(cookies().get(ADMIN_SESSION_COOKIE)?.value);
 
-  // The WhatsApp link (set in Admin > Messages) gets a button; other contact links are rows.
+  // The WhatsApp link (set in Admin > Settings) gets a button; other contact links are rows.
   const isWhatsApp = (url: string | null) => Boolean(url?.startsWith('https://wa.me/'));
   const whatsapp = contact.find((c) => isWhatsApp(c.url))?.url;
   const contactRows = contact.filter((c) => !isWhatsApp(c.url));
-  const showForm = canMessage || owner;
+  // The enquiry form replaces the message box once its database script has been run.
+  const showForm = canEnquire || canMessage || owner;
 
   // The web menu jumps to sections of this page; each appears only if the section exists.
   const webLinks = [
@@ -116,9 +120,15 @@ export default async function Home() {
           {offers.length > 0 && (
             <Block label="Work with me" webLabel="Services" title="Work with me" className="md:order-1">
               <Offers items={offers} />
-              <EmailButton email={profile.email} subject="Working together" className="mt-4 w-full md:hidden">
-                Email me about it
-              </EmailButton>
+              {canEnquire ? (
+                <Link href="/enquire" className="btn btn-fill mt-4 w-full md:mt-6 md:w-auto">
+                  Start an enquiry
+                </Link>
+              ) : (
+                <EmailButton email={profile.email} subject="Working together" className="mt-4 w-full md:hidden">
+                  Email me about it
+                </EmailButton>
+              )}
             </Block>
           )}
         </div>
@@ -185,7 +195,9 @@ export default async function Home() {
 
             {showForm && (
               <div className="md:col-start-2 md:row-span-2 md:row-start-1">
-                {canMessage ? (
+                {canEnquire ? (
+                  <EnquiryCard />
+                ) : canMessage ? (
                   <MessageForm />
                 ) : (
                   <p className="rounded-2xl border border-dashed border-line bg-base p-4 text-sm text-muted">
@@ -206,7 +218,7 @@ export default async function Home() {
         <footer className="hidden px-10 md:order-5 md:block">
           <div className="mx-auto flex max-w-[1080px] justify-between gap-4 py-6 text-[13px] text-muted">
             <span>
-              {profile.name} &middot; {profile.role_title} &middot; {profile.location}
+              {profile.name} &middot; {profile.role_title}
             </span>
             <span className="flex gap-4">
               <Link href="/cv" className="hover:text-primary">

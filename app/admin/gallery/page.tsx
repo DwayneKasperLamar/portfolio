@@ -6,12 +6,14 @@ import { ExplainNote, PageHead, VisibilityBadge, VisibilitySelect, cardClass, fi
 import { fromGalleryItems } from '@/components/gallery/media';
 import Frame from '@/components/gallery/Frame';
 import { getOwnerCollections, getOwnerItems } from '@/lib/content';
+import { requireOwner } from '@/lib/owner';
 
 export const dynamic = 'force-dynamic';
 
 const small = 'rounded-lg border border-line px-3 py-1.5 text-xs text-primary hover:border-muted';
 
 export default async function AdminGalleryPage() {
+  await requireOwner();
   const [collections, items] = await Promise.all([getOwnerCollections(), getOwnerItems()]);
   const galleries = collections.filter((c) => c.kind === 'carousel');
   const hidden = new Set(galleries.filter((c) => c.visibility !== 'public').map((c) => c.slug));
